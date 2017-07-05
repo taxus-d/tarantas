@@ -5,9 +5,10 @@ for `tarantas' bundle]
 \RequirePackage{etoolbox}
 
 
-\DeclareOption{toggle}{
+\DeclareOption{togl}{
   \let\tro@bl@new\newtoggle
   \let\tro@bl@true\toggletrue
+  \let\tro@bl@if\iftoggle
 }
 % namespace hint:
 % tro :         tarantas options stuff
@@ -16,27 +17,32 @@ for `tarantas' bundle]
 \DeclareOption{bool}{
   \let\tro@bl@new\newbool
   \let\tro@bl@true\booltrue
+  \let\tro@bl@if\ifbool
 }
 %% Fallback                                  
 \DeclareOption*{
   \PackageError{trcophand}{does not know about `\CurrentOption'.
   Please, clarify your intentions.}
 }
-
+\ExecuteOptions{togl}
 \ProcessOptions\relax
 
-\newcommand*\decl@bool@opt[1]{
+\newcommand*{\decl@bool@opt}[1]{
   \tro@bl@new{#1}
   \DeclareOption{#1}{\tro@bl@true{#1}}
 }
 % require \@baseclass variable in the outer scope
-\newcommand*\decl@passing@opt[1]{
+\newcommand*{\decl@pass@opt}[1]{
   \DeclareOption{#1}{\PassOptionsToClass{\CurrentOption}{\@baseclass}}
+}
+\newcommand*{\decl@pack@opt}[1]{
+  \DeclareOption{#1}{\RequirePackage{#1}}
 }
 
 % we need bit of plain tex parsing here
-% \def\proc@bool@opt\present#1\then{
-%
-% }
+% less `{'/`}' -> less forgotten ones
+\def\flagset#1\then #2\done{
+  \tro@bl@if{#1}{#2}{}
+}
 
-
+\endinput
