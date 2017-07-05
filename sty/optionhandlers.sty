@@ -1,0 +1,42 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{trcophand}[2017/07/05 Class/package option handlers 
+for `tarantas' bundle]
+
+\RequirePackage{etoolbox}
+
+
+\DeclareOption{toggle}{
+  \let\tro@bl@new\newtoggle
+  \let\tro@bl@true\toggletrue
+}
+% namespace hint:
+% tro :         tarantas options stuff
+%     : bl      well, it's kind of boolean
+% cause a trouble for sure
+\DeclareOption{bool}{
+  \let\tro@bl@new\newbool
+  \let\tro@bl@true\booltrue
+}
+%% Fallback                                  
+\DeclareOption*{
+  \PackageError{trcophand}{does not know about `\CurrentOption'.
+  Please, clarify your intentions.}
+}
+
+\ProcessOptions\relax
+
+\newcommand*\decl@bool@opt[1]{
+  \tro@bl@new{#1}
+  \DeclareOption{#1}{\tro@bl@true{#1}}
+}
+% require \@baseclass variable in the outer scope
+\newcommand*\decl@passing@opt[1]{
+  \DeclareOption{#1}{\PassOptionsToClass{\CurrentOption}{\@baseclass}}
+}
+
+% we need bit of plain tex parsing here
+% \def\proc@bool@opt\present#1\then{
+%
+% }
+
+
