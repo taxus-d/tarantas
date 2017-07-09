@@ -19,7 +19,9 @@ At the moment, there are only stripped classes from
 * [X] Think about possible features
 * [X] Create a checklist of them
 
-
+#### Now, serious
+* [X] Ease option handling
+* [ ] Add more `key=val` stuff to entry above. 
 * [ ] style-selection machinery
 * [ ] separate package for numbering theorems
 * [ ] `ifluatex`, `ifxetex`
