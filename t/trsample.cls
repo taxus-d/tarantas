@@ -2,13 +2,22 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{trsample}
 \RequirePackage{../src/sty/trcophand}
-\decl@bool@opt{kek}
+
+\DeclFlagOpt{kek,pep}
+\DeclFlagOpt{tikz}
+
 
 \ProcessOptions\relax
 \LoadClass{article}
 
-\flagset kek\then
-\AtBeginDocument{kek \\}
-\done
+\HasFlag{kek}{
+  \AtBeginDocument{\noindent kek \\}
+}
 
+\HasFlag{pep}{
+  \AtBeginDocument{\noindent pep \\}
+}
+\HasFlag{tikz}{
+  \RequirePackage{tikz}
+}
 \endinput

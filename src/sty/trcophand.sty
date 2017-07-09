@@ -1,9 +1,9 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{trcophand}[2017/07/05 Class/package option handlers 
-for `tarantas' bundle]
+\ProvidesPackage{trcophand}[2017/07/05 
+  Class/package option handlers for `tarantas' bundle]
 
 \RequirePackage{etoolbox}
-
+\let\ex@f\expandafter
 
 \DeclareOption{togl}{
   \let\tro@bl@new\newtoggle
@@ -13,7 +13,7 @@ for `tarantas' bundle]
 % namespace hint:
 % tro :         tarantas options stuff
 %     : bl      well, it's kind of boolean
-% cause a trouble for sure
+% will cause a trouble, surely
 \DeclareOption{bool}{
   \let\tro@bl@new\newbool
   \let\tro@bl@true\booltrue
@@ -27,22 +27,55 @@ for `tarantas' bundle]
 \ExecuteOptions{togl}
 \ProcessOptions\relax
 
-\newcommand*{\decl@bool@opt}[1]{
-  \tro@bl@new{#1}
-  \DeclareOption{#1}{\tro@bl@true{#1}}
-}
-% require \@baseclass variable in the outer scope
-\newcommand*{\decl@pass@opt}[1]{
-  \DeclareOption{#1}{\PassOptionsToClass{\CurrentOption}{\@baseclass}}
-}
-\newcommand*{\decl@pack@opt}[1]{
-  \DeclareOption{#1}{\RequirePackage{#1}}
+\def\tro@hnd@new#1#2{
+  \gdef#1##1{
+    \def\do####1{
+      \def\@opt{####1}
+      #2
+    }
+    \docsvlist{##1}
+  }
 }
 
-% we need bit of plain tex parsing here
-% less `{'/`}' -> less forgotten ones
-\def\flagset#1\then #2\done{
-  \tro@bl@if{#1}{#2}{}
+\tro@hnd@new{\DeclFlagOpt}{
+ \tro@bl@new{\@opt}
+ \DeclareOption{\@opt}{\tro@bl@true{\CurrentOption}}
 }
+
+% \newcommand*{\DeclBoolOpt}[1]{
+%   \def\tro@proc@one##1{
+%     \tro@bl@new{##1}
+%     \DeclareOption{##1}{\tro@bl@true{##1}}
+%   }
+%   \forcsvlist{\tro@proc@one}{#1}
+% }
+% require \@baseclass variable in the outer scope
+\tro@hnd@new{\DeclPassOpt}{
+  \DeclareOption{\@opt}%
+  {\PassOptionsToClass{\CurrentOption}{\@baseclass}}
+}
+% there should be a workaround
+% \tracingmacros=1
+% \tro@hnd@new{\DeclPackOpt}{
+%   \DeclareOption{\@opt}{\RequirePackage{\CurrentOption}}
+% }
+
+% with braces and brackets
+% \HasFlag{flagname}{if-present}[if-missing]
+\newcommand{\HasFlag}[3][\relax]{
+  \ifx #1\relax \tro@bl@if{#2}{#3}{} 
+  \else         \tro@bl@if{#2}{#3}{#1}
+  \fi
+}
+
+% plain tex variation, for special occasions
+% we need bit of tex argument parsing here
+% less `{'/`}' -> less forgotten ones
+% \long\def\hasflag#1\then #2\done{
+%   \tro@bl@if{#1}{#2}{}
+% }
+%
+% should be \newif -- don't think this is useful enough.
+% but can implement if anyone wishes
 
 \endinput
