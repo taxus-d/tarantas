@@ -1,23 +1,20 @@
 % Sample class
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{trsample}
-\RequirePackage{../src/sty/trcophand}
+\RequirePackage{../../src/sty/trcophand}
+\def\@baseclass{article}
 
 \DeclFlagOpt{kek,pep}
-\DeclFlagOpt{tikz}
+\DeclPackOpt{microtype,tikz}
+\DeclPassOpt{a4paper}
 
-
-\ProcessOptions\relax
-\LoadClass{article}
+\ProcOpts
+\LoadCls{article}
 
 \HasFlag{kek}{
   \AtBeginDocument{\noindent kek \\}
 }
-
 \HasFlag{pep}{
   \AtBeginDocument{\noindent pep \\}
-}
-\HasFlag{tikz}{
-  \RequirePackage{tikz}
 }
 \endinput
