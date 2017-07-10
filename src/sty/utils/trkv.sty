@@ -1,0 +1,71 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{trkv}[2017/07/10
+  Key=Val parser for `tarantas' bundle]
+
+\RequirePackage{etoolbox}
+\let\ex@f\expandafter
+
+%% Fallback                                  
+\DeclareOption*{
+  \PackageError{trkv}{does not know about `\CurrentOption'.
+  Please, clarify your intentions.}
+}
+\ExecuteOptions{togl}
+\ProcessOptions\relax
+
+% namespace hint
+% trkv  @        -- package abbreviation (=name)
+%       @ pair   -- {key=value} pair
+%       @ kv     -- key=value
+\edef\@trkv@kv@sep{=}
+\edef\@trkv@pair@sep{\@trkv@kv@sep}
+
+
+% wrapper around \def
+% to reduce expandafter's
+\edef\trkv@kvparse@def#1#{%
+  \noexpand\def#1##1\@trkv@kv@sep##2\noexpand\nil%
+}
+
+%  #1 -- pair, like {alpha=beta}
+%  #2 -- what to get, like \@v\@v
+\def\trkv@rawpair@get#1#2{%
+  % inside a group
+  {% <-- terribly important, no extra spaces
+    % holders of key and value
+    \def\@k{}\def\@v{}%  <--
+    \trkv@kvparse@def\kvparse{\def\@k{##1}\def\@v{##2}}%
+    \kvparse#1\nil% <--
+    #2% <--
+  }%
+}
+
+\newtoks\@trkv@toks@temp
+% and now, strip all spaces around `='
+% stores stuff in GLOBAL TEMPORARY token list register
+% this is very evil, but no other hope
+\def\trt@rawspcstrip#1#2{%
+  \begingroup%
+    \def\proc##1{%
+      \ifx ##1\nil\let\next=\relax%
+      \else\ex@f\toks@\ex@f{\the\toks@##1}\let\next=\proc%
+      \fi%
+      \next%
+    }%
+    \proc#1\nil%
+    \global#2=\toks@%
+  \endgroup%
+}
+
+\def\trkv@pair@get#1#2{%
+  \begingroup%
+  \toks@={}%
+  \trt@rawspcstrip{#1}{\@trkv@toks@temp}%
+  \toks@=\@trkv@toks@temp%
+  \ex@f\trkv@rawpair@get\ex@f{\the\toks@}{#2}%
+  \endgroup%
+}
+
+\def\trkv@pair@key#1{\trkv@pair@get{#1}{\@k}}
+
+\endinput

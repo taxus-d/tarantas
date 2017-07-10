@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage{../../src/sty/utils/trkv}
+\usepackage{etoolbox} 
+\makeatletter
+
+\newsavebox{\resKKV}
+\newsavebox{\res}
+\newsavebox{\resVKV}
+\newsavebox{\resLoop}
+
+\savebox{\resKKV}{
+%   \fbox{\trkv@kv@key a=b }
+%   \fbox{\trkv@kv@key {a,b,c}=b }
+%   \fbox{\trkv@kv@key a={b,c,d} }
+}
+
+\savebox{\resVKV}{
+%   \fbox{\trkv@kv@val a=b }
+%   \fbox{\trkv@kv@val {a,b,c}=b }
+%   \fbox{\trkv@kv@val a={b,c,d} }
+}
+\savebox{\resLoop}{
+  % \forcsvlist{\trkv@pair@key}{{1=2},{a=b}}
+}
+
+\savebox{\res}{
+%   \fbox{\trkv@rawpair@get{a = b}{\@k---\@v}}
+  \tracingall%
+  \fbox{\trkv@pair@get{ a = b  }{\@k---\@v}}
+  \forcsvlist{\trkv@pair@key}{{a=b},{c=d}}
+}
+\makeatother
+\begin{document}
+keys:\usebox{\resKKV} \par
+values:\usebox{\resVKV} \par
+etc:\usebox{\res}\par
+% \usebox{\resLoop} \par
+\end{document}
+% TEX program = TEXINPUTS=../..//:: pdflatex
