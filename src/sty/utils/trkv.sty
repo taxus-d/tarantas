@@ -20,52 +20,100 @@
 \edef\@trkv@kv@sep{=}
 \edef\@trkv@pair@sep{\@trkv@kv@sep}
 
+\def \trt@arg@debug#1{
+  \newtoks\f \f={#1}
+  \showthe\f
+}
 
 % wrapper around \def
 % to reduce expandafter's
 \edef\trkv@kvparse@def#1#{%
-  \noexpand\def#1##1\@trkv@kv@sep##2\noexpand\nil%
+  \noexpand\def#1##1\@trkv@kv@sep##2\noexpand\@nil%
 }
 
 %  #1 -- pair, like {alpha=beta}
 %  #2 -- what to get, like \@v\@v
-\def\trkv@rawpair@get#1#2{%
+\def\trkv@pair@get#1#2{%
   % inside a group
   {% <-- terribly important, no extra spaces
     % holders of key and value
-    \def\@k{}\def\@v{}%  <--
-    \trkv@kvparse@def\kvparse{\def\@k{##1}\def\@v{##2}}%
-    \kvparse#1\nil% <--
+    \def\k{}%
+    \def\v{}%
+%     \tracingmacros=2
+    \trkv@kvparse@def\kvparse{%
+      \trt@str@rmSpcSur{##1}-T>{\toks@}%
+      \ex@f\def\ex@f\k\ex@f{\the\toks@}%
+      \trt@str@rmSpcSur{##2}-T>{\toks@}%
+      \ex@f\def\ex@f\v\ex@f{\the\toks@}%
+    }%
+    \kvparse#1\@nil% <--
     #2% <--
   }%
 }
 
-\newtoks\@trkv@toks@temp
-% and now, strip all spaces around `='
-% stores stuff in GLOBAL TEMPORARY token list register
-% this is very evil, but no other hope
-\def\trt@rawspcstrip#1#2{%
+% criminal stuff.
+\def\trt@toks@smuggle#1\endgroup{%
+  \ex@f\endgroup\ex@f#1\ex@f{\the#1}%
+} 
+\def\trt@macro@smuggle#1\endgroup{%
+  \ex@f\endgroup\ex@f\def\ex@f#1\ex@f{#1}%
+} 
+\let\smuggle=\trt@macro@smuggle
+\let\smuggleT=\trt@toks@smuggle
+% many thanks to pgf authors for a nice name and idea
+
+% and now, strip all spaces near `='
+\def\trt@str@rmSpc#1-T>#2{%
   \begingroup%
+    \toks@={}%
     \def\proc##1{%
       \ifx ##1\nil\let\next=\relax%
-      \else\ex@f\toks@\ex@f{\the\toks@##1}\let\next=\proc%
+      \else \ex@f\toks@\ex@f{\the\toks@##1}\let\next=\proc%
       \fi%
       \next%
     }%
     \proc#1\nil%
-    \global#2=\toks@%
+    \trt@toks@smuggle#2%
   \endgroup%
 }
 
-\def\trkv@pair@get#1#2{%
+\def\trt@str@rmSpcSur#1-T>#2{%
   \begingroup%
-  \toks@={}%
-  \trt@rawspcstrip{#1}{\@trkv@toks@temp}%
-  \toks@=\@trkv@toks@temp%
-  \ex@f\trkv@rawpair@get\ex@f{\the\toks@}{#2}%
+    \def\procbeg##1{##1}%
+    \toks@=\ex@f{\procbeg#1}%
+    % #1 -- separator, \@nil, for example
+    % can't be passed literally, cs's gobble space
+    \def\procend@def##1{%
+      \def\procend####1 ##1####2\@end{%
+        \def\@empty{}%
+        \def\@temp{####2}%
+        \ifx\@temp\@empty % no spaces at all
+        \else \toks@={####1}%
+        \fi%
+      }%
+      \ex@f\procend\the\toks@##1 ##1\@end%
+    }%
+    \procend@def{\@nil}%
+    \trt@toks@smuggle#2%
   \endgroup%
 }
 
-\def\trkv@pair@key#1{\trkv@pair@get{#1}{\@k}}
 
+% \def\trkv@pair@get#1#2{%
+%   \begingroup%
+%   \toks@={}%
+%   \trt@str@rmSpc{#1}-T>{\toks@}%
+%   \ex@f\trkv@rawpair@get\ex@f{\the\toks@}{#2}%
+%   \endgroup%
+% }
+
+% new pair getter
+% #1 -- name
+% #2 -- expr
+\def\trkv@pairparser@def#1#2{%
+  \def#1##1{\trkv@pair@get{##1}{#2}}%
+}
+\let\newPairParser=\trkv@pairparser@def
+\newPairParser{\getKey}{\k}
+\newPairParser{\getVal}{\v}
 \endinput
