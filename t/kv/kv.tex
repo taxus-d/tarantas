@@ -1,20 +1,31 @@
 \documentclass{article}
 \usepackage{../../src/sty/utils/trkv}
 \usepackage{etoolbox} 
-% \usepackage{keyval}
 
-\newPairParser{\getKEK}{\fbox{\fbox{\k}+\fbox{\v}}}
+\newPairParser{\getPrettyPair}{\ [\k=\v]\ }
 \def\testlist{}
 % for unknown reasons, etoolbox expands braces around key
 % i checked in the log, this is not my problem
-\forcsvlist{\listadd\testlist}{a=b,{c. lf}={d k l}, \TeX=\TeX}
+%
+% however, it is a problem anly if you want a key
+%+ with spaces around. 
+% Use {{..}} then
+\forcsvlist{\listadd\testlist}{{formulas, math, etc}
+=
+$b$,{{  c. lf}}
+=
+{d k l}, \TeX    =\TeX}
 
 \begin{document}
 %\show\testlist
 keys: \forlistloop{$|$\getKey}{\testlist}$|$ \par
 values: \forlistloop{$|$\getVal}{\testlist}$|$ \par
-keks: \forlistloop{\getKEK}{\testlist} \par
-
+pairs: \forlistloop{\getPrettyPair}{\testlist} \par
+\getPrettyPair{hek = \def\hek#1{\bf#1}\hek{kek}}\par
 % \fbox{\testrmsur{ aa dfjhdg \TeX{} dsf  }}
+\storePair{/kek/color/.ini = deep red with bits of blue}
+\fbox{\getByKey{/kek/color/.ini}}\par
+\storePairs{sigma = $\sigma$, exit = no way, coding in = \TeX}
+\fbox{\getByKeys{sigma,exit, coding in}}
 \end{document}
 % TEX program = TEXINPUTS=../..//:: pdflatex
