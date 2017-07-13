@@ -1,0 +1,1 @@
+/home/iliya/projects/TeX projects/tarantas/t/.latexmkrc

@@ -1,8 +1,10 @@
 \documentclass{article}
-\usepackage{../../src/sty/utils/trkv}
+\usepackage{trkv}
 \usepackage{etoolbox} 
 
-\newPairParser{\getPrettyPair}{\ [\k=\v]\ }
+\def\prettylist{\ [\k$\to$\v]\ }
+\newPairParser{\getPrettyPair}{\prettylist}
+\newPairsParser{\getPrettyPairs}{\prettylist}
 \def\testlist{}
 % for unknown reasons, etoolbox expands braces around key
 % i checked in the log, this is not my problem
@@ -17,15 +19,22 @@ $b$,{{  c. lf}}
 {d k l}, \TeX    =\TeX}
 
 \begin{document}
-%\show\testlist
 keys: \forlistloop{$|$\getKey}{\testlist}$|$ \par
 values: \forlistloop{$|$\getVal}{\testlist}$|$ \par
 pairs: \forlistloop{\getPrettyPair}{\testlist} \par
-\getPrettyPair{hek = \def\hek#1{\bf#1}\hek{kek}}\par
+\getPrettyPairs{hek = \def\hek#1{\bf#1}\hek{kek}}\par
 % \fbox{\testrmsur{ aa dfjhdg \TeX{} dsf  }}
 \storePair{/kek/color/.ini = deep red with bits of blue}
 \fbox{\getByKey{/kek/color/.ini}}\par
 \storePairs{sigma = $\sigma$, exit = no way, coding in = \TeX}
-\fbox{\getByKeys{sigma,exit, coding in}}
+\fbox{\getByKeys{sigma,exit, coding in}} \par
+\fbox{\getKey{can i haz = ##1##2}}
+\storePair{a func! = it body! like: ##1##2}%
+\edef\ttt#1#2{\getByKey{a func!}}\fbox{\ttt {$\int$} {{{$\sum$}}}}
+
+\setPairSep{:}
+\setListSep{;}
+\getPrettyPairs{ with = sign: can store them!; and this: too}
+\getPrettyPair{ 1:1 }  
 \end{document}
 % TEX program = TEXINPUTS=../..//:: pdflatex

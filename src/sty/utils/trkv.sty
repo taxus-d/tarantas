@@ -2,8 +2,7 @@
 \ProvidesPackage{trkv}[2017/07/10
   Key=Val parser for `tarantas' bundle]
 
-\RequirePackage{etoolbox}
-\let\ex@f\expandafter
+\RequirePackage{trtools}
 
 %% Fallback                                  
 \DeclareOption*{
@@ -15,126 +14,48 @@
 % namespace hint
 % trkv  @        -- package abbreviation (=name)
 %       @ pair   -- {key=value} pair
-\edef\@trkv@pair@sep{=}
 
-\def \trt@arg@debug#1{
-  \newtoks\f \f={#1}
-  \showthe\f
-}
+% variables
+\def\@trkv@pair@sep{=}
+\def\trkv@prefix{trkv@keys@}
 
-% wrapper around \def
-% to reduce expandafter's 
+% wrapper around \def to reduce expandafter's 
 % in defining macro with macro in arglist
-\edef\trkv@kvparse@def#1#{%
-  \noexpand\def#1##1\@trkv@pair@sep##2\noexpand\@nil%
+% #1 -- pair separator
+% #2 -- macro name
+\def\trkv@kvparse@withsepdef#1#2#{%
+  \def#2##1#1##2\@nil%
 }
 
-%  #1 -- pair, like {alpha=beta}
-%  #2 -- what to get, like \@v\@v
 \newtoks \trkv@pair@kT
 \newtoks \trkv@pair@vT
+%  #1 -- pair, like {alpha=beta}
+%  #2 -- what to get, like \k:\v
 \def\trkv@pair@get#1#2{%
   \if\relax\detokenize{#1}\relax
   \errmessage{\noexpand\trkv@pair@get Nothing to parse}%
   \else%
   \begingroup% 
     % holders of key and value
-    \let\kT\trkv@pair@kT 
-    \let\vT\trkv@pair@vT 
-    %parsing routine
-    \trkv@kvparse@def\kvparse{%
-      % and now, strip all spaces near `='
-      % heavy usage of \toks@ as a placeholder for stripped strings
+    \let\kT\trkv@pair@kT% 
+    \let\vT\trkv@pair@vT%
+    % parsing routine
+    \ex@f\trkv@kvparse@withsepdef\@trkv@pair@sep\kvparse{%
+      % heavy usage of token lists 
+      %+ as a placeholders for stripped strings
       % may be reduced
       \trt@str@rmSpcSur{##1}-T>{\kT}%
-%       \ex@f\def\ex@f\k\ex@f{\the\toks@}%
       % same with value
       \trt@str@rmSpcSur{##2}-T>{\vT}%
-%       \ex@f\def\ex@f\v\ex@f{\the\toks@}%
     }%
-    \kvparse#1\@nil% <--
+    \kvparse#1\@nil%
     \def\k{\the\kT}%
     \def\v{\the\vT}%
-    #2% <--
+    #2% <-- user code
   \endgroup%
   \fi%
 }
 
-% criminal stuff.
-% #1 -- name
-% #2 macro def type (def, csdef..)
-\def\trt@macrosmuggler@new#1#2#3{
-  \def#1##1 as ##2\endgroup{%
-    \ex@f\endgroup\ex@f#2\ex@f{\ex@f##2\ex@f}\ex@f{##1}%
-  } 
-}
-\def\trt@toks@smuggle#1 as #2\endgroup{%
-  \ex@f\endgroup\ex@f#2\ex@f{\the#1}%
-} 
-\def\trt@macro@smuggle#1 as #2\endgroup{%
-  \ex@f\endgroup\ex@f\def\ex@f#2\ex@f{#1}%
-}
-\def\trt@csmacro@smuggle#1 as #2\endgroup{%
-  \expShortOn%
-  \bgroup%
-  \def \wrap@smugglin##1{%
-    \egroup%
-    \>\trt@macro@smuggle\>{\csname #1\endcsname} as {##1}%
-    \endgroup%
-  }
-  \>\wrap@smugglin\>{\csname #2\endcsname}%
-  \expShortOff%
-} 
-
-\def\smuggle#1{\trt@macro@smuggle{#1} as {#1}}
-\def\cssmuggle#1{\trt@csmacro@smuggle{#1} as {#1}}
-\def\smuggleT#1{\trt@toks@smuggle{#1} as {#1}}
-% many thanks to pgf authors for a nice name and idea
-
-\def\trt@expShort@On{%
-  \let\trt@oldless=\>%
-  \let\>=\expandafter%
-}
-\def\trt@expShort@Off{%
-  \let\>=\trt@oldless%
-}
-\let\expShortOn=\trt@expShort@On
-\let\expShortOff=\trt@expShort@Off
-
-
-\def\trt@str@rmSpc#1-T>#2{%
-  \begingroup%
-    \toks@={}%
-    \def\proc##1{%
-      \ifx ##1\nil\let\next=\relax%
-      \else \ex@f\toks@\ex@f{\the\toks@##1}\let\next=\proc%
-      \fi%
-      \next%
-    }%
-    \proc#1\nil%
-    \trt@toks@smuggle{\toks@} as {#2}%
-  \endgroup%
-}
-
-\def\trt@empty{}%
-\def\trt@str@rmSpcSur#1-T>#2{%
-  \begingroup%
-    \def\procbeg##1{##1}%
-    \toks@=\ex@f{\procbeg#1}%
-    % #1 -- separator, \@nil, for example
-    % can't be passed literally, cs's gobble space
-    \def\procend@def##1{%
-      \def\procend####1 ##1####2\@end{%
-        \if\relax\detokenize{####2}\relax % no spaces at all
-        \else \toks@={####1}%
-        \fi%
-      }%
-      \ex@f\procend\the\toks@##1 ##1\@end%
-    }%
-    \procend@def{\@nil}%
-    \trt@toks@smuggle{\toks@} as {#2}%
-  \endgroup%
-}
 
 % new pair parser
 % #1 -- name
@@ -143,16 +64,35 @@
   \def#1##1{\trkv@pair@get{##1}{#2}}%
 }
 
+\def\trkv@pairsparser@def#1#2{%
+  \def#1##1{
+    \def\do####1{\trkv@pair@get{####1}{#2}}
+    \docsvlist{##1}
+  }%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% A kind of public API
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\setPairSep#1{\def\@trkv@pair@sep{#1}}
+\setPairSep{=}
+\def\setListSep#1{%
+  \let\docsvlist\relax\DeclareListParser{\docsvlist}{#1}%
+  \let\forcsvlist\relax\DeclareListParser*{\forcsvlist}{#1}%
+}%
+
 \let\newPairParser=\trkv@pairparser@def
+\let\newPairsParser=\trkv@pairsparser@def
 
 \newPairParser{\getKey}{\k}
 \newPairParser{\getVal}{\v}
 
-\def\trkv@prefix{trkv@keys@}
-\newPairParser{\storePair}%
-{\csedef{\trkv@prefix\k}{\v}\cssmuggle{\trkv@prefix\k}}
-\def\getByKey#1{\csname \trkv@prefix #1\endcsname}
+% keyval-like interface
+\newPairParser{\storePair}{\csedef{\trkv@prefix\k}{\v}\cssmuggle{\trkv@prefix\k}}
 \def\storePairs{\forcsvlist{\storePair}}
+
+\def\getByKey#1{\csname \trkv@prefix #1\endcsname}
 \def\getByKeys{\forcsvlist{\getByKey}}
 
 \endinput

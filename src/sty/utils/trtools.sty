@@ -1,0 +1,114 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{trtools}[2017/07/13
+  Toolbox to drive a tarantas]
+
+%% Fallback                                  
+\DeclareOption*{
+  \PackageError{trtools}{does not know about `\CurrentOption'.
+  Please, clarify your intentions.}
+}
+\ProcessOptions\relax
+
+\RequirePackage{etoolbox}
+
+%================
+% handy variables
+\def\trt@empty{}%
+
+%=================================
+% to ease expansion control
+\let\ex@f\expandafter
+\def\trt@expShort@On{%
+  \let\trt@oldless=\>%
+  \let\>=\expandafter%
+}
+\def\trt@expShort@Off{%
+  \let\>=\trt@oldless%
+}
+
+%=================================
+% debug helpers
+\def \trt@arg@debug#1{
+  \newtoks\f \f={#1}
+  \showthe\f
+}
+
+%=================================
+% to smuggle stuff outside a scope.
+
+\def\trt@toks@smuggle#1 as #2\endgroup{%
+  \ex@f\endgroup\ex@f#2\ex@f{\the#1}%
+} 
+\def\trt@macro@smuggle#1 as #2\endgroup{%
+  \ex@f\endgroup\ex@f\def\ex@f#2\ex@f{#1}%
+}
+\def\trt@csmacro@smuggle#1 as #2\endgroup{%
+  \expShortOn%
+  \bgroup%
+  \def\wrap@smugglin##1{%
+    \egroup%
+    \>\trt@macro@smuggle\>{\csname #1\endcsname} as {##1}%
+    \endgroup%
+  }
+  \>\wrap@smugglin\>{\csname #2\endcsname}%
+  \expShortOff%
+} 
+
+
+%==============================
+% strips spaces from strings
+
+% removes all spaces
+% #1 -- string
+% #2 -- token to store
+\def\trt@str@rmSpc#1-T>#2{%
+  \begingroup%
+    \toks@={}%
+    \def\proc##1{%
+      \ifx ##1\nil\let\next=\relax%
+      \else \ex@f\toks@\ex@f{\the\toks@##1}\let\next=\proc%
+      \fi%
+      \next%
+    }%
+    \proc#1\nil%
+    \trt@toks@smuggle{\toks@} as {#2}%
+  \endgroup%
+}
+
+% removes only surrouding spaces
+% #1 -- string
+% #2 -- token to store
+\def\trt@str@rmSpcSur#1-T>#2{%
+  \if\detokenize{#1 }\space
+  \else
+  \begingroup%
+    \def\procbeg##1{##1}%
+    \toks@=\ex@f{\procbeg#1}%
+    % #1 -- separator, \@nil, for example
+    % can't be passed literally, cs's gobble space
+    \def\procend@def##1{%
+      \def\procend####1 ##1####2\@end{%
+        \if\relax\detokenize{####2}\relax % no spaces at all
+        \else \toks@={####1}%
+        \fi%
+      }%
+      \ex@f\procend\the\toks@##1 ##1\@end%
+    }%
+    \procend@def{\@nil}%
+    \trt@toks@smuggle{\toks@} as {#2}%
+  \endgroup%
+  \fi
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% A kind of public api 
+%%%%%%%%%%%%%%%%%%%%%%%%
+\def\smuggle#1{\trt@macro@smuggle{#1} as {#1}}
+\def\cssmuggle#1{\trt@csmacro@smuggle{#1} as {#1}}
+\def\smuggleT#1{\trt@toks@smuggle{#1} as {#1}}
+% many thanks to pgf authors for a nice name and idea
+
+\let\expShortOn=\trt@expShort@On
+\let\expShortOff=\trt@expShort@Off
+
