@@ -1,8 +1,10 @@
 \documentclass{article}
+\usepackage[utf8]{inputenc} 
+\usepackage[T2A]{fontenc} 
 \usepackage{trkv}
 \usepackage{etoolbox} 
 
-\def\prettylist{\ [\k$\to$\v]\ }
+\def\prettylist{$=\!$[\k$\to$\v]$\!=\!$}
 \newPairParser{\getPrettyPair}{\prettylist}
 \newPairsParser{\getPrettyPairs}{\prettylist}
 \def\testlist{}
@@ -10,19 +12,19 @@
 % i checked in the log, this is not my problem
 %
 % however, it is a problem anly if you want a key
-%+ with spaces around. 
+%+ with spaces around or with pair delimiter
 % Use {{..}} then
 \forcsvlist{\listadd\testlist}{{formulas, math, etc}
 =
-$b$,{{  c. lf}}
-=
-{d k l}, \TeX    =\TeX}
+$b$  ,                   {{  c .= lf}}
+              =
+{d<<=>>k l}, \TeX    =\TeX}
 
 \begin{document}
 keys: \forlistloop{$|$\getKey}{\testlist}$|$ \par
 values: \forlistloop{$|$\getVal}{\testlist}$|$ \par
 pairs: \forlistloop{\getPrettyPair}{\testlist} \par
-\getPrettyPairs{hek = \def\hek#1{\bf#1}\hek{kek}}\par
+\getPrettyPairs{hek = \def\hek#1{{\bf#1}}\hek{kek}}\par
 % \fbox{\testrmsur{ aa dfjhdg \TeX{} dsf  }}
 \storePair{/kek/color/.ini = deep red with bits of blue}
 \fbox{\getByKey{/kek/color/.ini}}\par
@@ -32,9 +34,17 @@ pairs: \forlistloop{\getPrettyPair}{\testlist} \par
 \storePair{a func! = it body! like: ##1##2}%
 \edef\ttt#1#2{\getByKey{a func!}}\fbox{\ttt {$\int$} {{{$\sum$}}}}
 
-\setPairSep{:}
+And a stressful one
+\getPrettyPairs{aa,bb, =aaa, \# =jjj}
+
+% multitoken separator is supported, to
+\setPairSep{->}
 \setListSep{;}
-\getPrettyPairs{ with = sign: can store them!; and this: too}
-\getPrettyPair{ 1:1 }  
+\getPrettyPairs{ with `=' sign->can store them!; and this-> too}
+% and
+% even
+% empty
+% one: }  \par
+%
 \end{document}
 % TEX program = TEXINPUTS=../..//:: pdflatex

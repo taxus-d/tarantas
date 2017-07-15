@@ -28,21 +28,26 @@
 
 %=================================
 % debug helpers
-\def \trt@arg@debug#1{
-  \newtoks\f \f={#1}
-  \showthe\f
+\def \trt@arg@debug#1{%
+  \begingroup%
+  \toks@={#1}%
+  \showthe\toks@%
+  \endgroup%
 }
-
+%================================
+% extra tests
+\def \trt@if@isempty#1{\if\relax\detokenize{#1}\relax}
+\def \trt@if@isspaceorempty#1{\if\relax \detokenize{#1}\relax}
 %=================================
 % to smuggle stuff outside a scope.
 
-\def\trt@toks@smuggle#1 as #2\endgroup{%
+\def \trt@toks@smuggle#1 as #2\endgroup{%
   \ex@f\endgroup\ex@f#2\ex@f{\the#1}%
 } 
-\def\trt@macro@smuggle#1 as #2\endgroup{%
+\def \trt@macro@smuggle#1 as #2\endgroup{%
   \ex@f\endgroup\ex@f\def\ex@f#2\ex@f{#1}%
 }
-\def\trt@csmacro@smuggle#1 as #2\endgroup{%
+\def \trt@csmacro@smuggle#1 as #2\endgroup{%
   \expShortOn%
   \bgroup%
   \def\wrap@smugglin##1{%
@@ -79,7 +84,7 @@
 % #1 -- string
 % #2 -- token to store
 \def\trt@str@rmSpcSur#1-T>#2{%
-  \if\detokenize{#1 }\space
+  \trt@if@isspaceorempty{#1}%
   \else
   \begingroup%
     \def\procbeg##1{##1}%
