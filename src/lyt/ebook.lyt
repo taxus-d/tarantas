@@ -1,0 +1,23 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Targeted for ebook readers
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesFile{ebook.lyt}[2017/07/16 `Ebook' layout]
+
+\RequirePackage{etoolbox}
+
+\RequirePackage{geometry}
+\storePairsDefault{paperwidth=10cm, paperheight=20cm}
+\geometry{
+  paperwidth=\getByKey{paperwidth},
+  paperheight=\getByKey{paperheight},
+  top=0.3cm,
+  bottom=0.3cm,
+  right=0.3cm,
+  left=0.3cm
+}
+
+\newcommand{\note}[1]{\footnote{#1}}
+\endinput
+% vim: ft=tex

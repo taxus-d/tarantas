@@ -4,68 +4,48 @@
 %+ и настроены(вроде) перекрёстные ссылки
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
 \NeedsTeXFormat{LaTeX2e}
 % plain notes have only sections
 % long notes are more like a report, with chapters and paragraphs
-\ProvidesClass{longnotes}[2017/05/27 Long version of notes]
+\ProvidesClass{trlnotes}[2017/05/27 Long version of notes]
+
+\RequirePackage{trtools}
+\RequirePackage{calc} % TODO: numexpr's
+% hspace somehow not fixed by calc, fixing it here
+\def\@hspace#1{\begingroup\setlength\dimen@{#1}\hskip\dimen@\endgroup}
+\RequirePackage{trcophand}
+\RequirePackage{trly}
+
+%%% ===========
+%%%  Variables
+%%% ===========
+
 \def\@baseclass{report}
-\def\@styles{timbord,ebook,hardcopy}
-\def\@stylesfs{12pt,timbord,12pt,ebook,10pt,hardcopy}
+\listdef\@complyt{timbord,ebook,hardcopy} % compatible layouts
 
-%language setting to handle cyrrilic in expansions
+%%% =================
+%%% language settings
+%%% =================
 
-%% pdf search
-\RequirePackage{cmap}
-\RequirePackage{etoolbox}
+\RequirePackage{cmap} %% pdf search & copy
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[T2A]{fontenc}
 \RequirePackage[english,russian]{babel}
-\RequirePackage[a4paper]{geometry}
 
-% \RequirePackage{trace}
-
-\newcommand\for@expnd@list[2]{\expandafter\forcsvlist\expandafter#1\expandafter{#2}}
-\newcommand\do@expnd@list[1]{\expandafter\docsvlist\expandafter\expandafter{#1}}
-\newcommand*\set@bool@opt[1]{
-  \newtoggle{#1}
-  \DeclareOption{#1}{\toggletrue{#1}}
-}
-\for@expnd@list{\set@bool@opt}{tikz,draft,exam}
-
-% hackery, no variants here
-\newtoggle{parseopt}\toggletrue{parseopt}
-\def\tmp@def#1#2{
-  \newtoggle{#2}
-  \DeclareOption{#2}{\PassOptionsToClass{#1}{\@baseclass}\toggletrue{#2}}
-} % too much \expandafters's, hence additional macro above
-\let\ex@f\expandafter
-\newcommand*\set@sty@opt[1]{
-  \iftoggle{parseopt}
-  {\def\@opt{#1}\togglefalse{parseopt}}
-  {\ex@f\tmp@def\ex@f{\@opt}{#1}\toggletrue{parseopt}}
-}
-\for@expnd@list{\set@sty@opt}{\@stylesfs}
-% one can only increase a font in opts, seems to be temporary limitation
-
-\newcommand*\set@passing@opt[1]{
-  \DeclareOption{#1}{\PassOptionsToClass{\CurrentOption}{\@baseclass}}
-}
-\forcsvlist{\set@passing@opt}{10pt,12pt}
+\DeclFlagOpt{tikz,draft,exam}
+\DeclPassOpt{10pt,12pt}
 
 %% Fallback                                  
 \DeclareOption*{
-    \ClassWarning{notes}{'Notes' class don't know about '\CurrentOption'}
+    \ClassWarning{notes}{does not know about `\CurrentOption'. 
+    Please, clarify your intentions}{}
     \PassOptionsToClass{\CurrentOption}{\@baseclass}
 }
 
-\ProcessOptions\relax
+\ProcOpts
 
-\LoadClass{\@baseclass}
-
-% processing style toggles
-\newcommand*\req@pkg@opt[1]{\iftoggle{#1}{\RequirePackage{#1}}{}}
-\for@expnd@list{\req@pkg@opt}{\@styles}
-
+\LoadCls{\@baseclass}
 
 \RequirePackage[pdftex]{graphicx}
 \RequirePackage{xcolor}
@@ -78,17 +58,13 @@
 \RequirePackage{booktabs}
 \RequirePackage{array}
 
-
-\RequirePackage{calc}
-% hspace somehow not fixed by calc, fixing it here
-\def\@hspace#1{\begingroup\setlength\dimen@{#1}\hskip\dimen@\endgroup}
-
+% manage lists
 \RequirePackage[shortlabels]{enumitem}
 
 \iftoggle{tikz}{
   \RequirePackage{tikz}
   \usetikzlibrary{calc,babel,arrows}
-  \usetikzlibrary{arrows,decorations.markings,quotes,angles}
+  \usetikzlibrary{decorations.markings,quotes,angles}
 }{}
 
 \iftoggle{draft}{
@@ -163,7 +139,7 @@
     colorlinks=true,
     linkcolor=blue, 
     citecolor=green!50!black
-    %linkbordercolor=blue,% hyperlink borders will be red
+    %linkbordercolor=blue,
     %pdfborderstyle={/S/U/W 1}% border style will be underline of width 1pt
 }}
 
@@ -172,7 +148,7 @@
 % \setlength{\marginparwidth}{3cm}
 % due to their nature, notes are usually placed in free space. And free space
 %+ heavily depends on page orientation. Hence:
-% : see style files for \note
+% : see layout files for \note
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

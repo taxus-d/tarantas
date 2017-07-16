@@ -7,9 +7,9 @@
 %% Fallback                                  
 \DeclareOption*{
   \PackageError{trkv}{does not know about `\CurrentOption'.
-  Please, clarify your intentions.}
+  Please, clarify your intentions.}{}
 }
-\ProcessOptions\relax
+\ProcessOptions*\relax
 
 % namespace hint
 % trkv  @        -- package abbreviation (=name)
@@ -36,7 +36,8 @@
 %  #2 -- what to get, like \k:\v
 \def\trkv@pair@get#1#2{%
   \if\relax\detokenize{#1}\relax%
-  \errmessage{\noexpand\trkv@pair@get Nothing to parse}%
+  \PackageError{trkv}{\noexpand\trkv@pair@get Nothing to parse}%
+  {Provide a nonempty string. Or invent a workaround}%
   \else%
   \begingroup% 
     % holders of key and value
@@ -78,12 +79,16 @@
 % A kind of public API
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\def\setPairSep#1{\def\@trkv@pair@sep{#1}}
+\def \setPairSep#1{\def\@trkv@pair@sep{#1}}
 \setPairSep{=}
-\def\setListSep#1{%
+
+\def \setListSep#1{%
   \let\docsvlist\relax\DeclareListParser{\docsvlist}{#1}%
   \let\forcsvlist\relax\DeclareListParser*{\forcsvlist}{#1}%
 }%
+
+\def \trkv@prefix@set#1{\def\trkv@prefix{#1}}
+\let\setStorePrefix=\trkv@prefix@set
 
 \let\newPairParser=\trkv@pairparser@def
 \let\newPairsParser=\trkv@pairsparser@def
@@ -93,9 +98,28 @@
 
 % keyval-like interface
 \newPairParser{\storePair}{\csedef{\trkv@prefix\k}{\v}\cssmuggle{\trkv@prefix\k}}
-\def\storePairs{\forcsvlist{\storePair}}
+\def \storePairs{\forcsvlist{\storePair}}
 
-\def\getByKey#1{\csname \trkv@prefix #1\endcsname}
-\def\getByKeys{\forcsvlist{\getByKey}}
+\def \ifKeySet#1{\ifcsname \trkv@prefix#1\endcsname}
+\def \getByKey#1{%
+  \ifKeySet{#1}\csname \trkv@prefix#1\endcsname%
+  \else \PackageError{trkv}{Pair with key `#1' not stored, sorry}%
+    {How about \noexpand\storePair ?}
+  \fi%
+}
+\def \getByKeys{\forcsvlist{\getByKey}}
+
+\def \getPairByKey#1{#1\@trkv@pair@sep\getByKey{#1}}
+\def \getPairsByKey{\forcsvlist{\getPairByKey}}
+
+\newPairParser{\storePairDefault}{%
+  \ifcsname \trkv@prefix\k\endcsname%
+  \else \csedef{\trkv@prefix\k}{\v}
+  \fi
+  \cssmuggle{\trkv@prefix\k}%
+}
+\def \storePairsDefault{\forcsvlist{\storePairDefault}}
+  
 
 \endinput
+% vim:ft=tex

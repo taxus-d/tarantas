@@ -1,0 +1,32 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{trly}[2017/07/05 
+  Layout selection machinery for `tarantas' bundle]
+
+\RequirePackage{trtools}
+\RequirePackage{trkv}
+
+%% Fallback                                  
+\DeclareOption*{
+  \PackageError{trly}{does not know about `\CurrentOption'.
+  Please, clarify your intentions.}
+}
+\ProcessOptions*
+
+% #1 -- layout options, optional
+% #2 -- layout name
+\newcommand*{\trly@layt@select}[2][ ]{
+  \ifinlist{#2}{\@complyt}{
+    \setStorePrefix{tarantas/layout}
+    \setPairSep{=}
+    \storePairs{#1}
+    \storePair{name = #2}
+    \input{#2.lyt}
+  } 
+  {
+    \PackageError{trly}{Layout not compatible}%
+    {May be you forgot to declare \noexpand\@complyt
+    in your class?}
+  }
+}
+\let\setlayout=\trly@layt@select
+\endinput

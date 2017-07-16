@@ -14,11 +14,9 @@
 
 %% pdf search
 \RequirePackage{cmap}
-\RequirePackage{etoolbox}
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[T2A]{fontenc}
 \RequirePackage[english,russian]{babel}
-\RequirePackage[a4paper]{geometry}
 
 \def\@baseclass{article}
 
