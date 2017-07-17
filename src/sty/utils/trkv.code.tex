@@ -1,0 +1,68 @@
+%% `variables'
+\def \@trkv@pair@sep{}
+\def \@trkv@prefix{}
+
+%% `functions'
+
+%%% setting variables
+\def \trkv@prefix@set#1{\def\@trkv@prefix{#1}}
+\def \trkv@pair@sep@set#1{\def\@trkv@pair@sep{#1}}
+
+%%% real parsing
+% wrapper around \def to reduce expandafter's 
+% in defining macro with macro in arglist
+% #1 -- pair separator
+% #2 -- macro name
+\def \trkv@kvparse@withsepdef#1#2#{%
+  \def#2##1#1##2#1##3\@nil%
+}
+\def \trkv@kvparse@withseuse#1#2{%
+  \kvparse#2#1#1\@nil%
+}
+
+\newtoks \trkv@pair@kT
+\newtoks \trkv@pair@vT
+%  #1 -- pair, like {alpha=beta}
+%  #2 -- what to get, like \k:\v
+\def\trkv@pair@get#1#2{%
+  \if\relax\detokenize{#1}\relax%
+  \PackageError{trkv}{\noexpand\trkv@pair@get Nothing to parse}%
+  {Provide a nonempty string. Or invent a workaround}%
+  \else%
+  \begingroup% 
+    % holders of key and value
+    \let\kT\trkv@pair@kT% 
+    \let\vT\trkv@pair@vT%
+    % parsing routine
+    \ex@f\trkv@kvparse@withsepdef\ex@f{\@trkv@pair@sep}\kvparse{%
+      % heavy usage of token lists 
+      %+ as a placeholders for stripped strings
+      % may be reduced
+      \trt@str@rmSpcSur{##1}-T>{\kT}%
+      % same with value
+      \trt@str@rmSpcSur{##2}-T>{\vT}%
+    }%
+    \ex@f\trkv@kvparse@withseuse\ex@f{\@trkv@pair@sep}{#1}%
+    \def\k{\the\kT}%
+    \def\v{\the\vT}%
+    #2% <-- user code
+  \endgroup%
+  \fi%
+}
+
+
+% new pair parser
+% #1 -- name
+% #2 -- expr
+\def\trkv@pairparser@def#1#2{%
+  \def#1##1{\trkv@pair@get{##1}{#2}}%
+}
+
+\def\trkv@pairsparser@def#1#2{%
+  \def#1##1{%
+    \def\do####1{\trkv@pair@get{####1}{#2}}%
+    \docsvlist{##1}%
+  }%
+}
+
+% vim: ft=plaintex

@@ -21,9 +21,12 @@
 \def\trt@expShort@On{%
   \let\trt@oldless=\>%
   \let\>=\expandafter%
+  \let\trt@oldquote='%
+  \let'=\noexpand%
 }
 \def\trt@expShort@Off{%
   \let\>=\trt@oldless%
+  \let'=\trt@oldquote%
 }
 
 %=================================
@@ -41,22 +44,20 @@
 %=================================
 % to smuggle stuff outside a scope.
 
-\def \trt@toks@smuggle#1 as #2\endgroup{%
-  \ex@f\endgroup\ex@f#2\ex@f{\the#1}%
+\def \trt@toks@smuggle#1\as#2\drop#3\endgroup{%
+  #3\ex@f\endgroup\ex@f#2\ex@f{\the#1}%
 } 
-\def \trt@macro@smuggle#1 as #2\endgroup{%
-  \ex@f\endgroup\ex@f\def\ex@f#2\ex@f{#1}%
+\def \trt@macro@smuggle#1\as#2\drop#3\endgroup{%
+  #3\ex@f\endgroup\ex@f\def\ex@f#2\ex@f{#1}%
 }
-\def \trt@csmacro@smuggle#1 as #2\endgroup{%
-  \expShortOn%
+\def \trt@csmacro@smuggle#1\as#2\drop#3\endgroup{%
   \bgroup%
   \def\wrap@smugglin##1{%
     \egroup%
-    \>\trt@macro@smuggle\>{\csname #1\endcsname} as {##1}%
+    \ex@f\trt@macro@smuggle\ex@f{\csname #1\endcsname}\as {##1}\drop %
     \endgroup%
   }
-  \>\wrap@smugglin\>{\csname #2\endcsname}%
-  \expShortOff%
+  #3\ex@f\wrap@smugglin\ex@f{\csname #2\endcsname}%
 } 
 
 
@@ -76,7 +77,7 @@
       \next%
     }%
     \proc#1\nil%
-    \trt@toks@smuggle{\toks@} as {#2}%
+    \trt@toks@smuggle{\toks@}\as{#2}\drop%
   \endgroup%
 }
 
@@ -100,28 +101,42 @@
       \ex@f\procend\the\toks@##1 ##1\@end%
     }%
     \procend@def{\@nil}%
-    \trt@toks@smuggle{\toks@} as {#2}%
+    \trt@toks@smuggle{\toks@}\as{#2}\drop%
   \endgroup%
   \fi
 }
 
 %==========================
-% to handle list variables
+% lists
 %==========================
 \def \trt@list@def#1#2{
   \def#1{}
   \forcsvlist{\listadd#1}{#2}
 }
+\def \trt@macro@makemultiple#1<*>#2\@nil{%
+  \trt@if@blank{#1}%
+    \csletcs{#1#2@old}{#1#2}
+    \csdef{#1#2}{
+      \ex@f\forcsvlist\ex@f{\csname #1#2@old\endcsname}
+    }
+  \else%
+    \csdef{#1s#2}{%
+      \ex@f\forcsvlist\ex@f{\csname #1#2\endcsname}
+    }%
+  \fi%
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%
-% A kind of public api 
+% A kind of api 
 %%%%%%%%%%%%%%%%%%%%%%%%
-\def\smuggle#1{\trt@macro@smuggle{#1} as {#1}}
-\def\cssmuggle#1{\trt@csmacro@smuggle{#1} as {#1}}
-\def\smuggleT#1{\trt@toks@smuggle{#1} as {#1}}
+\def\smuggle#1{\trt@macro@smuggle{#1}\as {#1}\drop }
+\def\cssmuggle#1{\trt@csmacro@smuggle{#1}\as {#1}\drop }
+\def\smuggleT#1{\trt@toks@smuggle{#1}\as {#1}\drop}
 % many thanks to pgf authors for a nice name and idea
 
 \let \listdef=\trt@list@def
+\def \makeMultiple#1{\trt@macro@makemultiple#1\@nil}
+\makeMultiple{<*>makeMultiple}
 
 \let\expShortOn=\trt@expShort@On
 \let\expShortOff=\trt@expShort@Off

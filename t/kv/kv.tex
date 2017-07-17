@@ -25,7 +25,6 @@ keys: \forlistloop{$|$\getKey}{\testlist}$|$ \par
 values: \forlistloop{$|$\getVal}{\testlist}$|$ \par
 pairs: \forlistloop{\getPrettyPair}{\testlist} \par
 \getPrettyPairs{hek = \def\hek#1{{\bf#1}}\hek{kek}}\par
-% \fbox{\testrmsur{ aa dfjhdg \TeX{} dsf  }}
 \storePair{/kek/color/.ini = deep red with bits of blue}
 \fbox{\getByKey{/kek/color/.ini}}\par
 \storePairs{sigma = $\sigma$, exit = no way, coding in = \TeX}
@@ -34,7 +33,7 @@ pairs: \forlistloop{\getPrettyPair}{\testlist} \par
 \storePair{a func! = it body! like: ##1##2}%
 \edef\ttt#1#2{\getByKey{a func!}}\fbox{\ttt {$\int$} {{{$\sum$}}}}
 
-And a stressful one
+% And a stressful one
 \getPrettyPairs{aa,bb, =aaa, \# =jjj}
 
 % multitoken separator is supported, to
@@ -42,9 +41,10 @@ And a stressful one
 \setListSep{;}
 \getPrettyPairs{ with `=' sign->can store them!; and this-> too}
 
-% \storePairDefault{sigma-> $\sigma e$}
+\storePairDefault{sigma-> $\sigma e$}
 \storePairsDefault{sigme -> $\sigma e$; sigmo -> $\sigma o$}
-\getByKeys{sigme; sigma; sigmo}
+\setPairSep{:}
+\getPairsByKey{sigme; sigma; sigmo}
 % and
 % even
 % empty
