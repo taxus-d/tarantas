@@ -45,6 +45,14 @@ pairs: \forlistloop{\getPrettyPair}{\testlist} \par
 \storePairsDefault{sigme -> $\sigma e$; sigmo -> $\sigma o$}
 \setPairSep{:}
 \getPairsByKey{sigme; sigma; sigmo}
+
+
+\def\kek#1{(#1)}
+\kek{1;2;3}
+\show\kek
+\makeMultiple{<*>kek}
+\kek{1;2;3}
+\show\do
 % and
 % even
 % empty

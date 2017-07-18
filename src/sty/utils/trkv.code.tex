@@ -38,9 +38,9 @@
       % heavy usage of token lists 
       %+ as a placeholders for stripped strings
       % may be reduced
-      \trt@str@rmSpcSur{##1}-T>{\kT}%
+      \trt@str@rmSpcSur{##1}->T{\kT}%
       % same with value
-      \trt@str@rmSpcSur{##2}-T>{\vT}%
+      \trt@str@rmSpcSur{##2}->T{\vT}%
     }%
     \ex@f\trkv@kvparse@withseuse\ex@f{\@trkv@pair@sep}{#1}%
     \def\k{\the\kT}%
