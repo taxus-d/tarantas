@@ -1,0 +1,52 @@
+\documentclass{article}
+\usepackage{trtools} 
+
+\makeatletter
+\let\getDefT\trt@macro@getdef
+\newtoks\deftox
+\newtoks\tooltox
+\def\bar#1{#1::bar\_}
+\def\stuff#1{#1::stuff\_}
+\makeatother
+
+\begin{document}
+
+\long\def \safescantokens#1#2{%
+  \begingroup
+    \everyeof{\noexpand}%
+    \endlinechar=-1
+    #1={\scantokens{#2}}%
+    \smuggleT#1
+  \endgroup
+}
+
+\makeMultiple{bar<*>,ba<*>r}
+\bar{1}
+\bars{1,2,3}
+\basr{1,2,3}
+% \getDefT{\bar}->T{\tooltox}
+% \edef\foo#1{\the\tooltox}
+% \foo
+
+\stuff{1}
+\makeMultiple{<*>stuff}
+\fbox{\stuff{1,2,3}}
+
+\begingroup
+\def\var{0}
+\cssmuggle{var}
+\endgroup 
+
+\csshow{var}
+
+
+\makeatletter
+\trt@str@rmSpcSur{  kek ?   }->T{\toks@}
+\trt@str@rmSpcSur{     }->T{\toks@}
+\showthe\toks@
+\makeatother
+
+
+
+\LaTeX
+\end{document}

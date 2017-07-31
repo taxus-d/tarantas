@@ -11,151 +11,10 @@
 
 \RequirePackage{etoolbox}
 
-%================
-% handy variables
-\def\trt@empty{}%
+% `code'
+\input{trtools.code.tex}
 
-%=================================
-% to ease expansion control
-\let\ex@f\expandafter
-\def\trt@expShort@On{%
-  \let\trt@oldless=\>%
-  \let\>=\expandafter%
-  \let\trt@oldquote='%
-  \let'=\noexpand%
-}
-\def\trt@expShort@Off{%
-  \let\>=\trt@oldless%
-  \let'=\trt@oldquote%
-}
-
-%=================================
-% debug helpers
-\def \trt@arg@debug#1{%
-  \begingroup%
-  \toks@={#1}%
-  \showthe\toks@%
-  \endgroup%
-}
-%================================
-% extra tests
-\def \trt@if@empty#1{\if\relax\detokenize{#1}\relax}
-\def \trt@if@blank#1{\if\relax \detokenize{#1}\relax}
-
-%==========================
-%% macro managment
-
-\def \trt@macro@getdef#1->T#2{
-  \begingroup%
-  \def \parsemean##1->##2\@nil{%
-    \endgroup% 
-    #2={##2}%
-  }%
-  \ex@f\parsemean\meaning#1\@nil
-}
-
-\def \trt@csmacro@makemultiple#1<*>#2\@nil{%
-  \trt@if@blank{#1}%
-    \begingroup% <-does not spoil external token lists:)
-    \ex@f\trt@macro@getdef\ex@f{\csname #1#2\endcsname}->T{\toks@}%
-    \showthe\toks@
-    \toks@=\ex@f{\ex@f\def\ex@f\do\ex@f#\ex@f#\ex@f1\ex@f{\the\toks@}}
-    \showthe\toks@
-    \def\defhelper##1{
-      \trt@arg@debug{##1}
-      \endgroup
-      \csdef{#1#2}####1{
-        ##1
-        \docsvlist{####1}
-        \show\do
-      }
-      \csshow{#1#2}
-    }
-    \ex@f\defhelper\ex@f{\the\toks@}
-  \else%
-    \csdef{#1s#2}##1{%
-      \ex@f\forcsvlist\ex@f{\csname #1#2\endcsname}{##1}
-    }%
-  \fi%
-}
-
-%=================================
-%% to smuggle stuff outside a scope.
-
-\def \trt@toks@smuggle#1\as#2\drop#3\endgroup{%
-  #3\ex@f\endgroup\ex@f#2\ex@f{\the#1}%
-} 
-\def \trt@macro@smuggle#1\as#2\drop#3\endgroup{%
-  #3\ex@f\endgroup\ex@f\def\ex@f#2\ex@f{#1}%
-}
-\def \trt@csmacro@smuggle#1\as#2\drop#3\endgroup{%
-  \bgroup%
-  \def\wrap@smugglin##1{%
-    \egroup%
-    \ex@f\trt@macro@smuggle\ex@f{\csname #1\endcsname}\as {##1}\drop %
-    \endgroup%
-  }
-  #3\ex@f\wrap@smugglin\ex@f{\csname #2\endcsname}%
-} 
-
-
-%==============================
-% strips spaces from strings
-
-% removes all spaces
-% #1 -- string
-% #2 -- token to store
-\def\trt@str@rmSpc#1->T#2{%
-  \begingroup%
-    \toks@={}%
-    \def\proc##1{%
-      \ifx ##1\nil\let\next=\relax%
-      \else \ex@f\toks@\ex@f{\the\toks@##1}\let\next=\proc%
-      \fi%
-      \next%
-    }%
-    \proc#1\nil%
-    \trt@toks@smuggle{\toks@}\as{#2}\drop%
-  \endgroup%
-}
-
-% removes only surrouding spaces
-% #1 -- string
-% #2 -- token to store
-\def\trt@str@rmSpcSur#1->T#2{%
-  \trt@if@blank{#1}%
-  \else
-  \begingroup%
-    \def\procbeg##1{##1}%
-    \toks@=\ex@f{\procbeg#1}%
-    % #1 -- separator, \@nil, for example
-    % can't be passed literally, cs's gobble space
-    \def\procend@def##1{%
-      \def\procend####1 ##1####2\@end{%
-        \if\relax\detokenize{####2}\relax % no spaces at all
-        \else \toks@={####1}%
-        \fi%
-      }%
-      \ex@f\procend\the\toks@##1 ##1\@end%
-    }%
-    \procend@def{\@nil}%
-    \trt@toks@smuggle{\toks@}\as{#2}\drop%
-  \endgroup%
-  \fi
-}
-
-
-%==========================
-% lists
-%==========================
-\def \trt@list@def#1#2{
-  \def#1{}
-  \forcsvlist{\listadd#1}{#2}
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%
-% A kind of api 
-%%%%%%%%%%%%%%%%%%%%%%%%
+% `api'
 \def\smuggle#1{\trt@macro@smuggle{#1}\as {#1}\drop }
 \def\cssmuggle#1{\trt@csmacro@smuggle{#1}\as {#1}\drop }
 \def\smuggleT#1{\trt@toks@smuggle{#1}\as {#1}\drop}
@@ -163,8 +22,7 @@
 
 \let \listdef=\trt@list@def
 \def \makeMultiple#1{\trt@csmacro@makemultiple#1\@nil}
-% \makeMultiple{<*>makeMultiple}
+\makeMultiple{<*>makeMultiple}
 
 \let\expShortOn=\trt@expShort@On
 \let\expShortOff=\trt@expShort@Off
-% vim: ft=plaintex 

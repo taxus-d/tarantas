@@ -21,11 +21,9 @@
 % A kind of public API
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\let\setPairSep=\trkv@pair@sep@set
-\setPairSep{=}
+\let \setPairSep=\trkv@pair@sep@set
 
 \let \setStorePrefix=\trkv@prefix@set
-\setStorePrefix{trkv@keys@}
 
 \def \setListSep#1{%
   \let\docsvlist\relax\DeclareListParser{\docsvlist}{#1}%
@@ -33,15 +31,16 @@
 }%
 
 
-\let\newPairParser=\trkv@pairparser@def
-\let\newPairsParser=\trkv@pairsparser@def
+\let \newPairParser=\trkv@pairparser@def
+\let \newPairsParser=\trkv@pairsparser@def
 
 \newPairParser{\getKey}{\k}
 \newPairParser{\getVal}{\v}
 
 % keyval-like interface
-\newPairParser{\storePair}{\csedef{\@trkv@prefix\k}{\v}\cssmuggle{\@trkv@prefix\k}}
-\def \storePairs{\forcsvlist{\storePair}}
+\newPairParser{\storePair}{%
+  \csedef{\@trkv@prefix\k}{\v}\cssmuggle{\@trkv@prefix\k}%
+}
 
 \def \ifKeySet#1{\ifcsname \@trkv@prefix#1\endcsname}
 \def \getByKey#1{%
@@ -50,11 +49,8 @@
     {How about \noexpand\storePair ?}
   \fi%
 }
-% \def \getByKeys{\forcsvlist{\getByKey}}
-\makeMultiple{getByKey<*>}
 
 \def \getPairByKey#1{#1\@trkv@pair@sep\getByKey{#1}}
-\def \getPairsByKey{\forcsvlist{\getPairByKey}}
 
 \newPairParser{\storePairDefault}{%
   \ifcsname \@trkv@prefix\k\endcsname%
@@ -62,8 +58,11 @@
   \fi
   \cssmuggle{\@trkv@prefix\k}%
 }
-\def \storePairsDefault{\forcsvlist{\storePairDefault}}
-  
+
+\makeMultiple{getByKey<*>, storePair<*>, storePair<*>Default,
+getPair<*>ByKey}
+
+\input{trkv.def}
 
 \endinput
 % vim:ft=tex
