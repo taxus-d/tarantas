@@ -1,4 +1,3 @@
-\NeedsTeXFormat{LaTeX2e}
 \ProvidesFile{trkv.def}[2017/07/10
   Key=Val parser defaults for `tarantas' bundle]
 

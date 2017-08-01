@@ -5,10 +5,18 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesFile{ebook.lyt}[2017/07/16 `Ebook' layout]
 
-\RequirePackage{etoolbox}
-
+\RequirePackage{trkv}
 \RequirePackage{geometry}
-\storePairsDefault{paperwidth=10cm, paperheight=20cm}
+\RequirePackage{microtype}
+
+
+\storePairDef{note=\footnote}
+\storePairDef{size=10}
+
+\setfont
+
+% pocketbook screen size
+\storePairsDef{paperwidth=90mm, paperheight=115mm}
 \geometry{
   paperwidth=\getByKey{paperwidth},
   paperheight=\getByKey{paperheight},
@@ -18,6 +26,5 @@
   left=0.3cm
 }
 
-\newcommand{\note}[1]{\footnote{#1}}
 \endinput
 % vim: ft=tex

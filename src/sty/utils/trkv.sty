@@ -44,22 +44,22 @@
 
 \def \ifKeySet#1{\ifcsname \@trkv@prefix#1\endcsname}
 \def \getByKey#1{%
-  \ifKeySet{#1}\csname \@trkv@prefix#1\endcsname%
-  \else \PackageError{trkv}{Pair with key `#1' not stored, sorry}%
-    {How about \noexpand\storePair ?}
-  \fi%
+  \ifcsdef{\@trkv@prefix#1}
+    {\csname \@trkv@prefix#1\endcsname}%
+    {\PackageError{trkv}{Pair with key `#1' not stored, sorry}%
+      {How about \noexpand\storePair ?}}%
 }
 
 \def \getPairByKey#1{#1\@trkv@pair@sep\getByKey{#1}}
 
-\newPairParser{\storePairDefault}{%
+\newPairParser{\storePairDef}{%
   \ifcsname \@trkv@prefix\k\endcsname%
   \else \csedef{\@trkv@prefix\k}{\v}
   \fi
   \cssmuggle{\@trkv@prefix\k}%
 }
 
-\makeMultiple{getByKey<*>, storePair<*>, storePair<*>Default,
+\makeMultiple{getByKey<*>, storePair<*>, storePair<*>Def,
 getPair<*>ByKey}
 
 \input{trkv.def}

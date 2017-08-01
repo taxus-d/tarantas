@@ -12,15 +12,19 @@
 }
 \ProcessOptions*
 
+\def \@trly@store@prefix{tarantas/layout}
 % #1 -- layout options, optional
 % #2 -- layout name
 \newcommand*{\trly@layt@select}[2][ ]{
   \ifinlist{#2}{\@complyt}{
-    \setStorePrefix{tarantas/layout}
+    \ex@f\setStorePrefix\ex@f{\@trly@store@prefix}
     \setPairSep{=}
     \storePairs{#1}
     \storePair{name = #2}
+    \makeatletter
     \input{#2.lyt}
+    \makeatother
+    \setStorePrefix{usr/}
   } 
   {
     \PackageError{trly}{Layout not compatible}%
@@ -28,5 +32,28 @@
     in your class?}
   }
 }
+
+\def \trly@font@apply#1{
+  \let\orignewcommand\newcommand
+  \let\newcommand\renewcommand
+  \input{size#1.clo}%
+  \let\newcommand\orignewcommand
+}
+
+\def\trly@font@set{
+\begingroup
+\edef\defhelper{\endgroup \noexpand\trly@font@apply{\getByKey{size}}}
+\defhelper
+}
+
+\def\note#1{
+  \begingroup
+  \ex@f\setStorePrefix\ex@f{\@trly@store@prefix}
+  \getByKey{note}{#1}
+  \endgroup
+}
+
+
 \let\setlayout=\trly@layt@select
+\let\setfont=\trly@font@set
 \endinput

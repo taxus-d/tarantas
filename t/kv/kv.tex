@@ -41,16 +41,36 @@ pairs: \forlistloop{\getPrettyPair}{\testlist} \par
 \setListSep{;}
 \getPrettyPairs{ with `=' sign->can store them!; and this-> too}
 
-\storePairDefault{sigma-> $\sigma e$}
-\storePairsDefault{sigme -> $\sigma e$; sigmo -> $\sigma o$}
+\storePairDef{sigma-> $\sigma\!\sigma$}
+\storePairsDef{sigme -> $\sigma\!e$; sigmo -> $\sigma\!o$}
 \setPairSep{:}
 \getPairsByKey{sigme; sigma; sigmo}
 
+\storePair{
+ and
+ even
+ empty
+ one: }  
+\par
 
-% and
-% even
-% empty
-% one: }  \par
-%
+\input{trkv.def}
+
+\storePairDef{note=foot}
+\storePairs{
+  notes/foot   = 0, 
+  notes/end    = 1, 
+  notes/margin = 2 
+}
+\getByKey{note}
+\edef\foo{
+\noexpand\toks0={\getByKey{note}}
+}\foo
+\showthe\toks0
+% \def \defhelper#1{
+%   \getByKey{notes/#1}
+% }
+% \expandafter \defhelper \getByKey{note}
+
+
 \end{document}
 % TEX program = TEXINPUTS=../..//:: pdflatex
