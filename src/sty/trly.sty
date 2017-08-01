@@ -40,17 +40,17 @@
   \let\newcommand\orignewcommand
 }
 
-\def\trly@font@set{
-\begingroup
-\edef\defhelper{\endgroup \noexpand\trly@font@apply{\getByKey{size}}}
-\defhelper
+\def \trly@font@set{
+  \begingroup
+  \edef\defhelper{\endgroup \noexpand\trly@font@apply{\getByKey{size}}}
+  \defhelper
 }
 
-\def\note#1{
-  \begingroup
-  \ex@f\setStorePrefix\ex@f{\@trly@store@prefix}
-  \getByKey{note}{#1}
-  \endgroup
+\protected\def \note#1{%
+  \begingroup%
+  \ex@f\setStorePrefix\ex@f{\@trly@store@prefix}%
+  \getByKey{note}{#1}%
+  \endgroup%
 }
 
 
