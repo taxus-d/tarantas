@@ -1,5 +1,6 @@
 %%% chamlessly copied from stackoverflow
-%%% "credited to Ulrich Dirr:"
+%%% "credited to Ulrich Dirr:" as said there
+%%% https://tex.stackexchange.com/questions/8452/making-endnotes-clickable-links-with-hyperref/255453
 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{trenotes}[2017/07/05 
@@ -15,7 +16,6 @@
 \RequirePackage{endnotes}
 
 %%% hyperendnotes.sty
-\makeatletter
 \newif\ifenotelinks
 \newcounter{Hendnote}
 % Redefining portions of endnotes-package:
@@ -165,7 +165,6 @@
   }%
 }%
 % stop redefining portions of endnotes-package:
-\makeatother
 % Toggle switch in order to turn on/off back-links in the
 % endnote-section:
 \enotelinkstrue

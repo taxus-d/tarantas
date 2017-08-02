@@ -3,7 +3,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesFile{ebook.lyt}[2017/07/16 `Ebook' layout]
+\ProvidesFile{ebook.lyt}[2017/08/01 `Ebook' layout]
 
 \RequirePackage{trkv}
 \RequirePackage{geometry}

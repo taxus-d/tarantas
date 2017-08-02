@@ -1,9 +1,29 @@
 \documentclass{trlnotes}
+\usepackage{cussymb} 
+\usepackage{amssymb}
 
 \usepackage{blindtext} 
 \setlayout[note=\endnote, size=10]{ebook}
 \begin{document}
+some random text\note{rather conventional}
+
 \blinddocument
 
 \section{$\mathcal{M\!AT\!H}$\note{patched one}}
+\makeatletter
+
+
+\makeatother
+\def\proofname{$\square$}
+\def\qedsymbol{$\blacksquare$}
+\begin{tproof}[kek?]
+  $\sin\pi=0$ (o'rly?)
+  \begin{lproof}[nested]
+    another one
+    \begin{sproof}[another crazy statement]
+      $\Pi\neq\pi$
+    \end{sproof}
+  \end{lproof}
+\end{tproof}
+
 \end{document}

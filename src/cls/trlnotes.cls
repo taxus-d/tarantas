@@ -141,7 +141,8 @@
     citecolor=green!50!black
     %linkbordercolor=blue,
     %pdfborderstyle={/S/U/W 1}% border style will be underline of width 1pt
-}}
+  }
+}
 
 \reversemarginpar
 %for margin notes
@@ -189,7 +190,7 @@
   \expandafter\def\csname the#1\endcsname{\arabic{#1}}%
 }
 % hoped to be fastest loop
-% if have any proofs of contrary, make me know 
+% if have any proofs of contrary, let me know 
 \docsvlist{thrm,lem,stat,prop,imp,cor,defn,exmp,rem}
 
 \renewcommand*{\do}[1]{

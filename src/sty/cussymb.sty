@@ -17,12 +17,12 @@
 \RequirePackage{marvosym}
 
 \let\ex@f\expandafter
-\newcommand\createSubstSym[3]{
+\newcommand{\createSubstSym}[3]{
   \ex@f\newcommand\csname #1@\endcsname{#2}
   \ex@f\newcommand\csname #1@subst\endcsname{#3}
 }
 
-\newcommand*\subst@at@pdf@toc[1]{
+\newcommand*{\subst@at@pdf@toc}[1]{
   \iftoggle{draft}{
     \expandafter\newcommand\csname #1\endcsname{\csname #1@\endcsname}
   }%else
@@ -32,7 +32,7 @@
 
 \newcommand\savedesc[2]{\expandafter\newcommand\csname @desc@#1\endcsname{#2}}
 \newcommand*\descsym[1]{\csname @desc@#1\endcsname}
-\newcommand\newsym[4]{
+\newcommand{\newsym}[4]{
   \createSubstSym{#1}{#2}{#3}
   \savedesc{#1}{#4}
 }
@@ -101,17 +101,42 @@
 
 % care your eyes
 % will rewrite it this summer
-\newenvironment{tproof}[1][\noskip]{\noindent$\square$\ifx\noskip#1\relax\else~(\textit{#1})\fi~\nopagebreak}%
-{\nopagebreak\noindent$\blacksquare$\par}
-\newenvironment{lproof}[1][\noskip]{\noindent$\blacktriangledown$\ifx\noskip#1\relax\else~(\textit{#1})\fi\\* }%
-{\nopagebreak\par\noindent\nopagebreak$\blacktriangle$\par}
+% \newenvironment{tproof}[1][\noskip]{\noindent$\square$\ifx\noskip#1\relax\else~(\textit{#1})\fi~\nopagebreak}%
+% {\nopagebreak\noindent$\blacksquare$\par}
+% \newenvironment{lproof}[1][\noskip]{\noindent$\blacktriangledown$\ifx\noskip#1\relax\else~(\textit{#1})\fi\\* }%
+% {\nopagebreak\par\noindent\nopagebreak$\blacktriangle$\par}
+
+\newenvironment{trgenproof}[4]{\par
+  \pushQED{{\def\qedsymbol{#3}\qed}}%
+  \normalfont \topsep6\p@\@plus6\p@\relax
+  \trivlist
+  \item[\hskip\labelsep#2
+    \ifstrempty{#1}{}{/{\itshape #1}\thinspace/}]\ignorespaces
+    #4
+}{%
+  \popQED\endtrivlist\@endpefalse
+}
+
+% 
+% #1 -- optional code to be placed after proof ``header''
+% #2 -- proof env name
+% #3 -- code at the beginning of proof, something like ``Proof:''
+% #4 -- code at the end of proof, something like ``\qed''
+\newcommand{\newproof}[4][]{
+\newenvironment{#2}[1][]
+  {\begin{trgenproof}{##1}{#3}{#4}{#1}}
+  {\end{trgenproof}}
+}
+
+\newproof{tproof}{$\square$}{$\blacksquare$}
+\newproof[${}$\\]{lproof}{$\blacktriangledown$}{$\blacktriangleleft$}
+\newproof{sproof}{$\blacktriangleright$}{$\blacktriangleleft$}
 
 %for adjustwidth
 \RequirePackage{changepage}
-\newenvironment{aux}[1][1cm]{\begin{small}%
-\begin{adjustwidth}{#1}{}}{\end{adjustwidth}%
-\end{small}%
-}
+\newenvironment{aux}[1][1cm]
+  {\begin{small}\begin{adjustwidth}{#1}{}}
+  {\end{adjustwidth}\end{small}}
 
 
 %\endinput
