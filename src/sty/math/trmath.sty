@@ -1,0 +1,95 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{trmath}[2017/05/28 tmath package]
+
+\DeclareOption*{
+  \PackageError{trmath}{does not know about `\CurrentOption'.
+  Please, clarify your intentions.}
+}
+\ProcOpts
+
+% leaking abstractions, here they come
+% crutchy fix for amsmath error
+%-----%<-------
+\let\dddot\relax
+\let\ddddot\relax
+%-----%<-------
+\RequirePackage{amsmath}
+\RequirePackage{amsfonts,amssymb}
+\RequirePackage{mathtools}
+\RequirePackage{esint} %AAA overrides my limits setup :(
+\RequirePackage{bbm}      %} more math fonts
+\RequirePackage{mathrsfs} %}
+\RequirePackage{accents}  % extra syms above another syms
+\RequirePackage{nicefrac}
+
+\RequirePackage{trthm}
+
+% if you know faster\cheaper\simplier alternative, you are welcome
+\newcommand*{\ov}[2]{%
+  \providecommand\EqCase[3]{\ifstrequal{#1}{##1}{##2}{##3}}%
+  \EqCase{~}{\widetilde{#2}}       {%
+  \EqCase{-}{\overline{#2}}        {%
+  \EqCase{^}{\widehat{#2}}         {%
+  \EqCase{0}{\overset\circ{#2}}    {%
+  \EqCase{v}{\check{#2}}           {%
+  \EqCase{->}{\overrightarrow{#2}} {%
+  \EqCase{<-}{\overleftarrow{#2}}  {%
+  \PackageError{trmath}{Undefined option to ov: `#1'}%
+}}}}}}}
+}
+
+
+\newcommand*{\und}[2]{%
+  \providecommand\EqCase[3]{\ifstrequal{#1}{##1}{##2}{##3}}%
+  \EqCase{-}{\underline{#2}}     {% 
+{\PackageError{trmath}{Undefined option to ov: `#1'}} }%
+}%
+
+%\RequirePackage{xstring}
+%\IfEqCase{..}[..default..]
+% causes long compilation time
+
+
+\def\lfrac#1#2{\nicefrac{#1}{#2}}
+
+\def\dint{\displaystyle\int}
+\def\dsum{\displaystyle\sum}
+
+% make dots a bit more visible
+\renewcommand*{\dot}[1]{\accentset{\mbox{\bfseries .}}{#1}}
+\renewcommand*{\ddot}[1]{\accentset{\mbox{\bfseries .\hspace{-0.1ex}.}}{#1}}
+\renewcommand*{\dddot}[1]{\accentset{\mbox{\bfseries .\hspace{-0.1ex}.\hspace{-0.1ex}.}}{#1}}
+
+% fixes a small inconvinience
+\edef\bigcup{\bigcup\limits}
+\edef\bigcap{\bigcap\limits}
+
+% \v command to rule vectors and \v* for linear forms
+\let\old@v=\v
+\def\v{\@ifstar\v@star\v@choice}
+\def\v@choice#1{\ifmmode \v@vec{#1} \else \old@v{#1} \fi}
+\def\v@star#1{\v@lin{#1}}
+\def\v@vec#1{\boldsymbol{#1}}
+\def\v@lin#1{\mathrm{#1}}
+
+
+% sets
+\input{trmsets.def}
+
+% algebra
+\input{trmalg.def}
+
+\newcommand{\gen@der@fr}[4][\relax]{
+  \ensuremath 
+  \ifx#1\relax \frac{#4 #2}{#4 #3}
+  \else        \frac{{#4}^{#1} #2}{#4 {#3}^{#1}}
+  \fi
+}
+\let \derfrac=\gen@der@fr
+\input{trmcalc.def}
+
+% probability theory
+\input{trmstat.def}
+
+
+

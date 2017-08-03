@@ -30,8 +30,8 @@
 
 \RequirePackage{cmap} %% pdf search & copy
 \RequirePackage[utf8]{inputenc}
-\RequirePackage[T2A]{fontenc}
-\RequirePackage[english,russian]{babel}
+\RequirePackage[OT1, T2A]{fontenc}
+\RequirePackage[english,main=russian]{babel}
 
 \DeclFlagOpt{tikz,draft,exam}
 \DeclPassOpt{10pt,12pt}
@@ -67,9 +67,6 @@
   \usetikzlibrary{decorations.markings,quotes,angles}
 }{}
 
-\iftoggle{draft}{
-  \newcommand\texorpdfstring[2]{#1}
-}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Sectioning styles (ToC, numbering,etc)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -128,88 +125,25 @@
 \RequirePackage{perpage}
 \MakePerPage{footnote}
 
-\iftoggle{draft}{}{
-  % nice hyperlinks
-  \RequirePackage{hyperref}
-  % fixes bookmark level
-  \RequirePackage{bookmark}
-  \hypersetup{%
-    pdfencoding=auto,
-    unicode=true,
-    colorlinks=true,
-    linkcolor=blue, 
-    citecolor=green!50!black
-    %linkbordercolor=blue,
-    %pdfborderstyle={/S/U/W 1}% border style will be underline of width 1pt
-  }
+% nice hyperlinks
+\RequirePackage{hyperref}
+% fixes bookmark level
+\RequirePackage{bookmark}
+\hypersetup{%
+  pdfencoding=auto,
+  unicode=true,
+  colorlinks=true,
+  linkcolor=blue, 
+  citecolor=green!50!black
+  %linkbordercolor=blue,
+  %pdfborderstyle={/S/U/W 1}% border style will be underline of width 1pt
 }
 
 \reversemarginpar
 %for margin notes
-% \setlength{\marginparwidth}{3cm}
 % due to their nature, notes are usually placed in free space. And free space
 %+ heavily depends on page orientation. Hence:
 % : see layout files for \note
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% math envs setup
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\RequirePackage{amsthm}
-\theoremstyle{plain}
-\newtheorem{thrm}{Теорема}[paragraph]
-\newtheorem{lem}[thrm]{Лемма}
-\newtheorem{stat}[thrm]{Утверждение}
-\newtheorem{prop}[thrm]{Утверждение}
-\newtheorem{imp}{Следствие}[thrm]
-\newtheorem{cor}{Следствие}[thrm]
-\newtheorem*{cor*}{Следствие}
-
-\theoremstyle{definition}
-\newtheorem{defn}{Определение}[paragraph]
-\newtheorem*{denot}{Обозначение}
-\newtheorem{exmp}{Пример}[defn]
-\newtheorem*{exmp*}{E.g}
-
-\theoremstyle{remark}
-\newtheorem{rem}{Замечание}[defn]
-\newtheorem*{rem*}{Замечание}
-
-% \@addtoreset{imp}{lem}
-% \@addtoreset{imp}{stat}
-\counterwithin*{rem}{thrm}
-\counterwithin*{equation}{paragraph}
-
-% % we are redefining a macro that is used by a loop
-% % to redefine 9 another macros that have been defined
-% % when have defined them by a macro from amsmath
-% % which uses 4 another nested macros, last of which
-% % finally defines this evil counter we are trying to redefine
-\renewcommand*{\do}[1]{
-  \expandafter\def\csname the#1\endcsname{\arabic{#1}}%
-}
-% hoped to be fastest loop
-% if have any proofs of contrary, let me know 
-\docsvlist{thrm,lem,stat,prop,imp,cor,defn,exmp,rem}
-
-\renewcommand*{\do}[1]{
-  \expandafter\edef\csname p@#1\endcsname{%
-    \noexpand\arabic\noexpand{chapter}.\noexpand\arabic\noexpand{paragraph}.%
-\expandafter\noexpand\csname the#1\endcsname\noexpand\expandafter\noexpand\@gobble}
-}
-\docsvlist{thrm,defn,exmp}
-
-\renewcommand{\p@equation}{\theequation\expandafter\@gobble}
-
-%manual resetting
-\newcommand*{\re@setter}[1]{
-  \expandafter\newcommand\csname reset#1\endcsname{
-    \setcounter{#1}{0}
-  }
-}
-\forcsvlist{\re@setter}{defn,thrm,rem}
-\newcommand\resetall{\resetdefs \resetthrm \resetrem}
 
 
 \endinput

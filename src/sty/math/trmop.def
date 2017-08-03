@@ -1,0 +1,20 @@
+\ProvidesFile{trmop.def}[
+  2017/08/03 Collection of various math operators]
+
+
+% patched arrows
+
+\let\old@to\to \let\to\relax
+\newcommand\to{\ensuremath \mathop{\old@to}\limits}
+\newcommand\xto[1]{\ensuremath \xrightarrow[#1]{}}
+\newcommand\unito{\ensuremath \mathop{\rightrightarrows}\limits}
+
+
+%% extra extensible arrows 
+\providecommand{\xRightarrow}[2][]{\mathop{\Longrightarrow}\limits_{#1}^{#2}}
+%%% and equal sign
+\providecommand{\xequal}[2][]{\mathop{=}\limits_{#1}^{#2}}
+
+% big slash for factorspaces
+\newcommand{\bigslant}[2]{{\raisebox{.2em}{$#1$}\big/\raisebox{-.2em}{$#2$}}}
+% vim:ft=tex

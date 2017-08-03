@@ -5,7 +5,7 @@
 \RequirePackage{trtools}
 
 \DeclareOption{togl}{
-  \let\tro@bl@new\newtoggle
+  \let\tro@bl@new\providetoggle
   \let\tro@bl@true\toggletrue
   \let\tro@bl@if\iftoggle
 }
@@ -16,7 +16,7 @@
 %     @ hnd     option handler
 %     @ tmp     temporary routines
 \DeclareOption{bool}{
-  \let\tro@bl@new\newbool
+  \let\tro@bl@new\providebool
   \let\tro@bl@true\booltrue
   \let\tro@bl@if\ifbool
 }
@@ -52,7 +52,7 @@
 % custom option handler builder
 % before `do'ing stuff performs an optional check
 % see below for meaningful example
-\newcommand\tro@hnd@new[3][\relax]{
+\newcommand{\tro@hnd@new}[3][\relax]{
   \providetoggle{accept}
   \gdef#2##1{
     \ifx #1\relax \toggletrue{accept}
