@@ -19,7 +19,7 @@ reduce margins. See `tex/lyt` subdirectory for sample ones.
 * [X] Home-made programmable `key=val` parser.
 * [X] style-selection machinery
 * [X] a nicely organized set of predefined math symbols and hacks
-* [ ] `key=val`-style options handler
+* [X] `key=val`-style options handler
 * [X] separate package for theorem and proof styles
 * [ ] develop a nice keyval-based numbering machinery
 * [ ] `ifluatex`, `ifxetex`
