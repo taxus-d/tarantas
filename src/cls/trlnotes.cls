@@ -30,7 +30,7 @@
 
 \RequirePackage{cmap} %% pdf search & copy
 \RequirePackage[utf8]{inputenc}
-\RequirePackage[OT1, T2A]{fontenc}
+\RequirePackage[OT1,T2A]{fontenc}
 \RequirePackage[english,main=russian]{babel}
 
 \DeclFlagOpt{tikz,draft,exam}
@@ -38,7 +38,7 @@
 
 %% Fallback                                  
 \DeclareOption*{
-    \ClassWarning{notes}{does not know about `\CurrentOption'. 
+    \ClassWarning{trlnotes}{does not know about `\CurrentOption'. 
     Please, clarify your intentions}{}
     \PassOptionsToClass{\CurrentOption}{\@baseclass}
 }
@@ -117,7 +117,6 @@
 \RequirePackage{tocloft}
 \cftsetindents{paragraph}{3.0em}{\widthof{\theparagraph--\arabic{paragraph}}+1em}
 
-
 \setcounter{secnumdepth}{4}
 \setcounter{tocdepth}{4}
 
@@ -130,8 +129,7 @@
 % fixes bookmark level
 \RequirePackage{bookmark}
 \hypersetup{%
-  pdfencoding=auto,
-  unicode=true,
+  pdfencoding=auto, unicode=true,
   colorlinks=true,
   linkcolor=blue, 
   citecolor=green!50!black
@@ -142,9 +140,7 @@
 \reversemarginpar
 %for margin notes
 % due to their nature, notes are usually placed in free space. And free space
-%+ heavily depends on page orientation. Hence:
-% : see layout files for \note
-
+%+ heavily depends on page orientation. Hence, see layout files for \note
 
 \endinput
 % vim: nofoldenable

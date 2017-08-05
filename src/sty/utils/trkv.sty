@@ -45,7 +45,7 @@
 \def \ifKeySet#1{\ifcsname \@trkv@prefix#1\endcsname}
 \def \getByKey#1{%
   \ifcsdef{\@trkv@prefix#1}
-    {\csname \@trkv@prefix#1\endcsname}%
+    {\toks@={\csname \@trkv@prefix#1\endcsname}\the\toks@}%
     {\PackageError{trkv}{Pair with key `#1' not stored, sorry}%
       {How about \noexpand\storePair ?}}%
 }

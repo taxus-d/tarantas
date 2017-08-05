@@ -58,7 +58,9 @@
   #3\ex@f\endgroup\ex@f#2\ex@f{\the#1}%
 } 
 \def \trt@macro@smuggle#1\as#2\drop#3\endgroup{%
-  #3\ex@f\endgroup\ex@f\def\ex@f#2\ex@f{#1}%
+%   \trt@arg@debug{#1 \as #2 \drop #3}
+  \toks@={#3}
+  \ex@f\the\ex@f\toks@\ex@f\endgroup\ex@f\def\ex@f#2\ex@f{#1}%
 }
 \def \trt@csmacro@smuggle#1\as#2\drop#3\endgroup{%
   \bgroup%

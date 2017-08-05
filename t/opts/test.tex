@@ -1,9 +1,10 @@
-\documentclass[kek,tikz,microtype]{trsample}
-\usepackage[paperwidth=10cm]{geometry} 
+\documentclass[kek=true,microtype]{trsample}
+\geometry{top=0pt, paperwidth=10cm, paperheight=20cm}
+\usepackage{samplepack} 
 \usepackage{blindtext}
 \begin{document}
 ls
 \def\tcirc{\tikz \draw (0,0) circle (0.1);}
-$\tcirc+\tcirc=2\*\,\tcirc$
+$\tcirc+\tcirc=2\*\,\tcirc$ 
 \blindtext
 \end{document}

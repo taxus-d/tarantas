@@ -1,18 +1,26 @@
 % Sample class
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{trsample}
-\RequirePackage{../../src/sty/trcophand}
+\RequirePackage{tropt}
 \def\@baseclass{article}
 
 \DeclFlagOpt{kek,pep}
 \DeclPackOpt{microtype,tikz}
 \DeclPassOpt{a4paper}
 
+\DeclareOption*{
+  \ClassWarning{trsample}{Undefined option: \CurrentOption}{}
+  \PassOptionsToClass{article}{\CurrentOption}
+}
+
 \ProcOpts
 \LoadCls{article}
 
+\RequirePackage{hyperref}
+\RequirePackage{geometry}
+
 \HasFlag{kek}{
-  \AtBeginDocument{\noindent kek \\}
+%   \AtBeginDocument{kek}
 }
 \HasFlag{pep}{
   \AtBeginDocument{\noindent pep \\}
