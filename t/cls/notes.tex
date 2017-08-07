@@ -1,22 +1,21 @@
-\documentclass[draft]{trlnotes}
-\usepackage{trthm} 
-\usepackage{trsym} 
-\usepackage{trmath} 
+\documentclass{trlnotes}
+\usepackage{trthm}
+\usepackage{trsym}
+\usepackage{trmath}
 \usepackage{amsmath} 
 \usepackage{amssymb}
 
 \usepackage{blindtext} 
-\setlayout[note=\endnote, size=10]{ebook}
+\setlayout[note=\endnote, size=12]{hardcopy}
 \begin{document}
-some random text\note{rather conventional}
+some random tex t\note{rather conventional}
 
 \blinddocument
 
-\section{$\mathcal{M\!AT\!H}$\note{patched one} \underdev}
+\section{$\mathcal{M\!AT\!H}$\note{patched one} \protect\underdev}
 
 \subsection{Proofs}
 \label{sub:proofs}
-
 
 
 \begin{tproof}[kek?]
@@ -40,5 +39,7 @@ some random text\note{rather conventional}
 \section{ETC}
 ,,ls`` "`ls"' <<ls>> "<ls">
 
+\appendix
+\chapter{letter}
 
 \end{document}

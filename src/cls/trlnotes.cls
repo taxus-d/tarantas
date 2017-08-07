@@ -14,7 +14,7 @@
 \RequirePackage{calc} % TODO: numexpr's
 % hspace somehow not fixed by calc, fixing it here
 \def\@hspace#1{\begingroup\setlength\dimen@{#1}\hskip\dimen@\endgroup}
-\RequirePackage{trcophand}
+\RequirePackage{tropt}
 \RequirePackage{trly}
 
 %%% ===========
@@ -31,7 +31,7 @@
 \RequirePackage{cmap} %% pdf search & copy
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[OT1,T2A]{fontenc}
-\RequirePackage[english,main=russian]{babel}
+\RequirePackage[english,russian]{babel}
 
 \DeclFlagOpt{tikz,draft,exam}
 \DeclPassOpt{10pt,12pt}
@@ -63,8 +63,10 @@
 
 \iftoggle{tikz}{
   \RequirePackage{tikz}
+  \usetikzlibrary{external}
   \usetikzlibrary{calc,babel,arrows}
   \usetikzlibrary{decorations.markings,quotes,angles}
+  \tikzexternalize
 }{}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -76,7 +78,7 @@
 
 \titleformat{\chapter}%
 {\normalfont\LARGE\bfseries}%
-{Глава \ \thechapter:}%
+{\chaptertitlename \ \thechapter:}%
 {1ex}%
 {\normalfont\LARGE\bfseries}{}
 

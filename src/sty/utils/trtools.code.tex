@@ -8,12 +8,15 @@
 \def\trt@expShort@On{%
   \let\trt@oldless=\>%
   \let\>=\expandafter%
-  \let\trt@oldquote='%
+  \edef\@trt@old@quotecatcode{\the\catcode`\'}%
+  \catcode`\'=\active%
+  \let\trt@oldquote='% 
   \let'=\noexpand%
 }
 \def\trt@expShort@Off{%
   \let\>=\trt@oldless%
-  \let'=\trt@oldquote%
+%   \let'=\trt@oldquote%
+  \catcode`\'=\@trt@old@quotecatcode
 }
 
 %=================================
@@ -118,6 +121,18 @@
   }%
 }
 
+
+%=========================
+% remove string prefix
+
+% #1 -- string
+% #2 -- prefix
+% #3 -- toks to spoil
+\def \trt@prefix@rm#1#2->T#3{%
+  \begingroup%
+  \def\procbeg#2##1\@nil{\endgroup #3={##1}}%
+  \procbeg#1\@nil%
+}
 
 %==========================
 % list-like arguments

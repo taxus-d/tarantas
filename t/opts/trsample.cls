@@ -5,6 +5,7 @@
 \def\@baseclass{article}
 
 \DeclFlagOpt{kek,pep}
+\DeclCompOpt{draft<>final}
 \DeclPackOpt{microtype,tikz}
 \DeclPassOpt{a4paper}
 
@@ -20,7 +21,7 @@
 \RequirePackage{geometry}
 
 \HasFlag{kek}{
-%   \AtBeginDocument{kek}
+  \AtBeginDocument{kek}
 }
 \HasFlag{pep}{
   \AtBeginDocument{\noindent pep \\}

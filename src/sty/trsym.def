@@ -25,3 +25,4 @@
 \newcommand{\circlearound}[1]{%
   \trsym@boxes@center{#1}{\ensuremath \bigcirc}%
 }
+% vim:ft=tex

@@ -1,20 +1,25 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Стиль `hardcopy'
-%% пытается сделать документ удобнее
-%% для печати
+%% for hard copies
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{hardcopy}[2017/06/04 Hardcopy style]
+\ProvidesFile{hardcopy.lyt}[2017/08/06 `Hardcopy' layout]
+
+\storePairDef{size=10}
+
+\setfont
 
 \RequirePackage{geometry}
 \geometry{
+  a4paper,
   left=1cm,
   right=1cm,
   top=1cm,
   bottom=1.3cm,
   bindingoffset=0cm
 }
-\newcommand{\note}[1]{\footnote{#1}}
+\protected\def\note{\footnote}
 \patchcmd{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi}{}{}{}
 
+\endinput
+% vim: ft=tex

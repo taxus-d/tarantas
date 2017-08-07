@@ -2,7 +2,6 @@
 \ProvidesPackage{trly}[2017/07/05 
   Layout selection machinery for `tarantas' bundle]
 
-\RequirePackage{trtools}
 \RequirePackage{trkv}
 
 %% Fallback                                  
@@ -46,13 +45,13 @@
   \defhelper
 }
 
+\storePairDef{note=\footnote}
 \protected\def \note#1{%
   \begingroup%
   \ex@f\setStorePrefix\ex@f{\@trly@store@prefix}%
   \getByKey{note}{#1}%
   \endgroup%
 }
-
 
 \let\setlayout=\trly@layt@select
 \let\setfont=\trly@font@set

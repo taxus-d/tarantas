@@ -5,7 +5,8 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesFile{ebook.lyt}[2017/08/01 `Ebook' layout]
 
-\RequirePackage{trkv}
+\RequirePackage{trly}
+
 \RequirePackage{geometry}
 \RequirePackage{microtype}
 \RequirePackage{trenotes}
@@ -23,8 +24,7 @@
   top=0.3cm,
   bottom=0.3cm,
   right=0.3cm,
-  left=0.3cm,
-  includemp=false
+  left=0.3cm
 }
 
 \endinput
