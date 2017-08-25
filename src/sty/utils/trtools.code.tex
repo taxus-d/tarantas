@@ -10,7 +10,7 @@
   \let\>=\expandafter%
   \edef\@trt@old@quotecatcode{\the\catcode`\'}%
   \catcode`\'=\active%
-  \let\trt@oldquote='% 
+  \let\trt@oldquote='%
   \let'=\noexpand%
 }
 \def\trt@expShort@Off{%
@@ -48,7 +48,7 @@
 \def \trt@macro@getdef#1->T#2{
   \begingroup%
   \def \parsemean##1->##2\@nil{%
-    \endgroup% 
+    \endgroup%
     #2={##2}
   }%
   \ex@f\parsemean\meaning#1\@nil
@@ -59,7 +59,7 @@
 
 \def \trt@toks@smuggle#1\as#2\drop#3\endgroup{%
   #3\ex@f\endgroup\ex@f#2\ex@f{\the#1}%
-} 
+}
 \def \trt@macro@smuggle#1\as#2\drop#3\endgroup{%
 %   \trt@arg@debug{#1 \as #2 \drop #3}
   \toks@={#3}
@@ -96,26 +96,30 @@
   \endgroup%
 }
 
+\let \trt@aux@procbeg=\@firstofone%
+
+% #1 -- separator, \@nil, for example
+% can't be passed literally, cs's gobble space
+\def \trt@aux@procendef#1{%
+  \def \trt@aux@procend##1 #1##2\@end{%
+    \trt@if@empty{##2}% no spaces at all
+      \else \toks@={##1}%
+      \fi%
+}}\trt@aux@procendef{\@nil}
+
+\def \trt@aux@procenduse#1{%
+  \ex@f\trt@aux@procend\the\toks@#1 #1\@end%
+}
+
 % removes only surrounding spaces
 % #1 -- string
 % #2 -- token to store
-\def \trt@str@rmSpcSur#1->T#2{%
+\def \trt@str@trim#1->T#2{%
   \ifblank{#1}{}%from etoolbox
   {%
     \begingroup%
-    \def\procbeg##1{##1}%
-    \toks@=\ex@f{\procbeg#1}%
-    % #1 -- separator, \@nil, for example
-    % can't be passed literally, cs's gobble space
-    \def\procend@def##1{%
-      \def\procend####1 ##1####2\@end{%
-        \trt@if@empty{####2}% no spaces at all
-        \else \toks@={####1}%
-        \fi%
-      }%
-      \ex@f\procend\the\toks@##1 ##1\@end%
-    }%
-    \procend@def{\@nil}%
+    \toks@=\ex@f{\trt@aux@procbeg#1}%
+    \trt@aux@procenduse{\@nil}%
     \trt@toks@smuggle{\toks@}\as{#2}\drop%
     \endgroup%
   }%
@@ -136,7 +140,7 @@
 
 %==========================
 % list-like arguments
-%==========================
+
 \def \trt@list@def#1#2{
   \def#1{}
   \forcsvlist{\listadd#1}{#2}
@@ -170,4 +174,9 @@
   \fi%
 }
 
+%=================================
+% control structures 
+
+\def\trt@cases@process{}
+\def\trt@case@def{}
 % vim:ft=plaintex

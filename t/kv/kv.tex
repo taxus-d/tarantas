@@ -55,6 +55,14 @@ pairs: \forlistloop{\getPrettyPair}{\testlist} \par
 
 \input{trkv.def}
 
+\newPairsParser{\getKeysList}{
+  \expandafter\listgadd\expandafter\keylist \expandafter{\romannumeral-`X\k}
+}
+\def\keylist{}
+\getPrettyPairs{$\sin'$=$\cos$, $\tan'$=$\frac{1}{\cos^2}$}
+\getKeysList{$\sin'$=$\cos$, $\tan'$ = $\frac{1}{\cos^2}$}
+\show\keylist
+
 \storePairDef{note=foot}
 \storePairs{
   notes/foot   = 0, 
@@ -65,7 +73,7 @@ pairs: \forlistloop{\getPrettyPair}{\testlist} \par
 \edef\foo{
 \noexpand\toks0={\getByKey{note}}
 }\foo
-\showthe\toks0
+% \showthe\toks0
 % \def \defhelper#1{
 %   \getByKey{notes/#1}
 % }

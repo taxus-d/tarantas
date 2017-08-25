@@ -4,40 +4,41 @@
   \tro@xprocess@ptions% starred version made default
 }
 
+\newPairsParser{\tro@procClsOptions}{
+  \edef \CurrentOption{\k}
+  \edef \CurrentValue{\v}
+  \smuggle \CurrentOption \smuggle \CurrentValue
+  \endgroup
+  \ifx\CurrentOption\@empty%
+  \else
+  \@expandtwoargs\in@{,\CurrentOption,}{,\@declaredoptions,}%
+  \ifin@
+  \@use@ption
+  \expandafter\let\csname ds@\CurrentOption\endcsname\@empty
+  \fi
+  \fi
+  \begingroup% to pair inner \endgroup
+}%
 \def\tro@xprocess@ptions{%
   \ifx\@currext\@clsextension\else
-  \newPairsParser{\tro@procClsOptions}{
-    \edef \CurrentOption{\k}
-    \edef \CurrentValue{\v}
-    \smuggle \CurrentOption \smuggle \CurrentValue
-    \endgroup
-    \ifx\CurrentOption\@empty%
-    \else
-      \@expandtwoargs\in@{,\CurrentOption,}{,\@declaredoptions,}%
-      \ifin@
-        \@use@ption
-        \expandafter\let\csname ds@\CurrentOption\endcsname\@empty
-      \fi
-    \fi
-    \begingroup% to pair inner \endgroup
-  }%
   \ex@f\tro@procClsOptions\ex@f{\@classoptionslist}
   \fi%
   \tro@process@pti@ns%
 }
 
 \@onlypreamble\@xprocess@ptions
+
+\newPairsParser{\tro@procOptions}{
+  \edef \CurrentOption{\k}
+  \edef \CurrentValue{\v}
+  \smuggle \CurrentOption \smuggle \CurrentValue
+  \endgroup
+  \@ifundefined{ds@\CurrentOption}
+  {\@use@ption \default@ds}%
+  \@use@ption%
+  \begingroup% to pair inner \endgroup
+}%
 \def\tro@process@pti@ns{%
-  \newPairsParser{\tro@procOptions}{
-    \edef \CurrentOption{\k}
-    \edef \CurrentValue{\v}
-    \smuggle \CurrentOption \smuggle \CurrentValue
-    \endgroup
-    \@ifundefined{ds@\CurrentOption}
-      {\@use@ption \default@ds}%
-      \@use@ption%
-    \begingroup% to pair inner \endgroup
-  }%
   \ex@f\tro@procOptions\ex@f{\@curroptions}
   \@for\CurrentOption:=\@declaredoptions\do{%
   \expandafter\let\csname ds@\CurrentOption\endcsname\relax}%

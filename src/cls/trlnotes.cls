@@ -17,6 +17,15 @@
 \RequirePackage{tropt}
 \RequirePackage{trly}
 
+%%% =================
+%%% language packages
+%%% =================
+
+\RequirePackage{cmap} %% pdf search & copy
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[OT1,T2A]{fontenc}
+\RequirePackage[english,russian]{babel}
+
 %%% ===========
 %%%  Variables
 %%% ===========
@@ -24,14 +33,10 @@
 \def\@baseclass{report}
 \listdef\@complyt{timbord,ebook,hardcopy} % compatible layouts
 
-%%% =================
-%%% language settings
-%%% =================
 
-\RequirePackage{cmap} %% pdf search & copy
-\RequirePackage[utf8]{inputenc}
-\RequirePackage[OT1,T2A]{fontenc}
-\RequirePackage[english,russian]{babel}
+%%% =======================
+%%% Option processing stuff
+%%% =======================
 
 \DeclFlagOpt{tikz,draft,exam}
 \DeclPassOpt{10pt,12pt}
@@ -47,8 +52,9 @@
 
 \LoadCls{\@baseclass}
 
-\RequirePackage[pdftex]{graphicx}
+\RequirePackage{graphicx}
 \RequirePackage{xcolor}
+
 \RequirePackage{verbatim}
 \RequirePackage{epigraph}
 
@@ -78,7 +84,7 @@
 
 \titleformat{\chapter}%
 {\normalfont\LARGE\bfseries}%
-{\chaptertitlename \ \thechapter:}%
+{\chaptertitlename\ \thechapter:}%
 {1ex}%
 {\normalfont\LARGE\bfseries}{}
 
