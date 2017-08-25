@@ -37,16 +37,24 @@
 \cssmuggle{var}
 \endgroup 
 
-\csshow{var}
+\var
 
 
 \makeatletter
-\trt@str@rmSpcSur{  kek ?   }->T{\toks@}
-\trt@str@rmSpcSur{     }->T{\toks@}
-\showthe\toks@
+\trt@str@trim{  kek ?   }->T{\toks@}
+\trt@str@trim{     }->T{\toks@}
+\the\toks@
 \makeatother
 
 
+\newcase{!}{1}
+\newcase{@}{2}
+\newcase{^}{6}
+\newcase{&}{7}
+\defaultcase{?}
+
+\def\temp{&}
+\expandafter\selectcaseby \expandafter{\temp}
 
 \LaTeX
 \end{document}

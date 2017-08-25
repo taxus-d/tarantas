@@ -177,6 +177,18 @@
 %=================================
 % control structures 
 
-\def\trt@cases@process{}
-\def\trt@case@def{}
+\def \trt@cases@list{}
+\def \trt@cases@new#1#2{%
+  \toks@={trt@case@custom#1}%
+  \csdef{\the\toks@}{#2}%
+  \listeadd\trt@cases@list{\the\toks@}%
+}
+\def \trt@cases@default#1{%
+  \csdef{trt@case@default}{#1}%
+}
+\def \trt@cases@process#1{%
+  \ifcsdef{trt@case@custom#1}{\csuse{trt@case@custom#1}}{\csuse{trt@case@default}}%
+  \forlistloop{\csundef}{\trt@cases@list}%
+  \csundef{trt@case@default}%
+}
 % vim:ft=plaintex
