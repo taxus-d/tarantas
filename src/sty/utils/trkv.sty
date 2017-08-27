@@ -24,6 +24,8 @@
 \let \setPairSep=\trkv@pair@sep@set
 
 \let \setStorePrefix=\trkv@prefix@set
+\let \pushStorePrefix=\trkv@prefix@push
+\let \popStorePrefix=\trkv@prefix@pop
 
 \def \setListSep#1{%
   \let\docsvlist\relax\DeclareListParser{\docsvlist}{#1}%
@@ -39,28 +41,60 @@
 
 % keyval-like interface
 \newPairParser{\storePair}{%
-  \csedef{\@trkv@prefix\k}{\v}\cssmuggle{\@trkv@prefix\k}%
+  \kT=\ex@f\ex@f\ex@f{\ex@f\detokenize\ex@f{\the\kT}}%
+  \smuggleT{\trkv@pair@kT}\smuggleT{\trkv@pair@vT}%
+  \endgroup%
+  \csedef{\@trkv@prefix \the\trkv@pair@kT}{\the\trkv@pair@vT}%
+  \begingroup%
 }
 
 \def \ifKeySet#1{\ifcsname \@trkv@prefix#1\endcsname}
 \def \getByKey#1{%
-  \ifcsdef{\@trkv@prefix#1}
-    {\csname \@trkv@prefix#1\endcsname}%
-    {\PackageError{trkv}{Pair with key `#1' not stored, sorry}%
-      {How about \noexpand\storePair ?}}%
+  \ifcsdef{\@trkv@prefix\detokenize{#1}}%
+    {\ex@f\expandonce\ex@f{\csname \@trkv@prefix\detokenize{#1}\endcsname}}%
+    {\noexpand\PackageError{trkv}{Pair with key `#1' not stored, sorry}%
+      {How about \string\storePair ?}}%
 }
 
 \def \getPairByKey#1{#1\@trkv@pair@sep\getByKey{#1}}
 
 \newPairParser{\storePairDef}{%
   \ifcsname \@trkv@prefix\k\endcsname%
-  \else \csedef{\@trkv@prefix\k}{\v}
-  \fi
-  \cssmuggle{\@trkv@prefix\k}%
+  \else
+  \kT=\ex@f\ex@f\ex@f{\ex@f\detokenize\ex@f{\the\kT}}%
+  \smuggleT{\trkv@pair@kT}\smuggleT{\trkv@pair@vT}%
+  \endgroup%
+  \csedef{\@trkv@prefix \the\trkv@pair@kT}{\the\trkv@pair@vT}%
+  \fi%
+  \begingroup%
 }
+
+
+\def\dictdef#1#2{%
+  \pushStorePrefix%
+  \setStorePrefix{tarantas/data/#1}%
+  \storePairs{#2}%
+  \popStorePrefix%
+}
+\def \trt@macro@fullexpand#1->T#2{%
+  \edef\trt@expander{\noexpand#2={#1}}%
+  \trt@expander%
+}
+%   #2=\ex@f{\romannumeral-`X#1}%
+
+\def\dictget#1#2{%
+  \pushStorePrefix%
+  \setStorePrefix{tarantas/data/#1}%
+  \trt@macro@fullexpand{\getByKey{#2}}->T{\toks@}%
+  \popStorePrefix%
+  \the\toks@
+}
+
+
 
 \makeMultiple{getByKey<*>, storePair<*>, storePair<*>Def,
 getPair<*>ByKey}
+
 
 \input{trkv.def}
 

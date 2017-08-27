@@ -1,6 +1,8 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{trmath}[2017/05/28 tmath package]
 
+\RequirePackage{trkv}
+
 \DeclareOption*{
   \PackageError{trmath}{does not know about `\CurrentOption'.
   Please, clarify your intentions.}
@@ -25,19 +27,24 @@
 \RequirePackage{trthm}
 
 % if you know faster\cheaper\simplier alternative, you are welcome
-\newcommand*{\ov}[2]{%
-  \providecommand\EqCase[3]{\ifstrequal{#1}{##1}{##2}{##3}}%
-  \EqCase{~}{\widetilde{#2}}       {%
-  \EqCase{-}{\overline{#2}}        {%
-  \EqCase{^}{\widehat{#2}}         {%
-  \EqCase{0}{\overset\circ{#2}}    {%
-  \EqCase{v}{\check{#2}}           {%
-  \EqCase{->}{\overrightarrow{#2}} {%
-  \EqCase{<-}{\overleftarrow{#2}}  {%
-  \PackageError{trmath}{Undefined option to ov: `#1'}%
-}}}}}}}
+\dictdef{math hats}{
+  ~  = \widetilde,
+  -  = \overline,
+  .  = \dot,
+  .. = \ddot,
+  :  = \ddot,
+  ^  = \widehat,
+  0  = \overset\circ,
+  v  = \check,
+  -> = \overrightarrow,
+  <- = \overleftarrow
 }
 
+\newcommand*{\ov}[1]{%
+  \dictget{math hats}{#1}%
+}
+
+%   \PackageError{trmath}{Undefined option to ov: `#1'}%
 
 \newcommand*{\und}[2]{%
   \providecommand\EqCase[3]{\ifstrequal{#1}{##1}{##2}{##3}}%

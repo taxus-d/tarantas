@@ -2,7 +2,6 @@
 \usepackage[utf8]{inputenc} 
 \usepackage[T2A]{fontenc} 
 \usepackage{trkv}
-\usepackage{etoolbox} 
 
 \def\prettylist{$=\!$[\k$\to$\v]$\!=\!$}
 \newPairParser{\getPrettyPair}{\prettylist}
@@ -20,6 +19,7 @@ $b$  ,                   {{  c .= lf}}
               =
 {d<<=>>k l}, \TeX    =\TeX}
 
+
 \begin{document}
 keys: \forlistloop{$|$\getKey}{\testlist}$|$ \par
 values: \forlistloop{$|$\getVal}{\testlist}$|$ \par
@@ -29,9 +29,12 @@ pairs: \forlistloop{\getPrettyPair}{\testlist} \par
 \fbox{\getByKey{/kek/color/.ini}}\par
 \storePairs{sigma = $\sigma$, exit = no way, coding in = \TeX}
 \fbox{\getByKeys{sigma,exit, coding in}} \par
-\fbox{\getKey{can i haz = ##1##2}}
-\storePair{a func! = it body! like: ##1##2}%
-\edef\ttt#1#2{\getByKey{a func!}}\fbox{\ttt {$\int$} {{{$\sum$}}}}
+\fbox{\getKey{can i haz = #1#2}}
+
+\storePair{a func! = its body! like: #1#2}%
+\edef\x{\def\noexpand\ttt##1##2{\getByKey{a func!}}}\x
+\fbox{\ttt {$\int$} {{{$\sum$}}}}
+\relax
 
 % And a stressful one
 \getPrettyPairs{aa,bb, =aaa, \# =jjj}
@@ -61,24 +64,39 @@ pairs: \forlistloop{\getPrettyPair}{\testlist} \par
 \def\keylist{}
 \getPrettyPairs{$\sin'$=$\cos$, $\tan'$=$\frac{1}{\cos^2}$}
 \getKeysList{$\sin'$=$\cos$, $\tan'$ = $\frac{1}{\cos^2}$}
-\show\keylist
 
-\storePairDef{note=foot}
+\storePairDef{note=\footnote}
 \storePairs{
   notes/foot   = 0, 
   notes/end    = 1, 
   notes/margin = 2 
 }
-\getByKey{note}
+% \getByKey{note}
 \edef\foo{
 \noexpand\toks0={\getByKey{note}}
 }\foo
-% \showthe\toks0
 % \def \defhelper#1{
 %   \getByKey{notes/#1}
 % }
 % \expandafter \defhelper \getByKey{note}
 
+% \def \storehats{\storePairs}%
+\def \storehats{\dictdef{hats}}
+% \def \gethats{\getByKey}
+\def \gethats{\dictget{hats}}
+\dictdef{math hats}{
+  ~ = \widetilde,
+  ^ = \widehat,
+  - = \overline, 
+  . = \dot
+}
+\def\ov#1{\dictget{math hats}{#1}}
+
+$\ov~{\alpha}, \ov^ \beta, \ov. \gamma$
+
+
+
+% \showthe\toks0
 
 \end{document}
 % TEX program = TEXINPUTS=../..//:: pdflatex

@@ -58,11 +58,11 @@
 %% to smuggle stuff outside a scope.
 
 \def \trt@toks@smuggle#1\as#2\drop#3\endgroup{%
-  #3\ex@f\endgroup\ex@f#2\ex@f{\the#1}%
+  \def\trt@temp{#3}%
+  \ex@f\trt@temp\ex@f\endgroup\ex@f#2\ex@f{\the#1}%
 }
 \def \trt@macro@smuggle#1\as#2\drop#3\endgroup{%
-%   \trt@arg@debug{#1 \as #2 \drop #3}
-  \toks@={#3}
+  \toks@={#3}%
   \ex@f\the\ex@f\toks@\ex@f\endgroup\ex@f\def\ex@f#2\ex@f{#1}%
 }
 \def \trt@csmacro@smuggle#1\as#2\drop#3\endgroup{%
@@ -102,9 +102,9 @@
 % can't be passed literally, cs's gobble space
 \def \trt@aux@procendef#1{%
   \def \trt@aux@procend##1 #1##2\@end{%
-    \trt@if@empty{##2}% no spaces at all
-      \else \toks@={##1}%
-      \fi%
+    \ifstrempty{##2}%
+      {}% no spaces at all
+      {\toks@={##1}}%
 }}\trt@aux@procendef{\@nil}
 
 \def \trt@aux@procenduse#1{%
@@ -115,7 +115,7 @@
 % #1 -- string
 % #2 -- token to store
 \def \trt@str@trim#1->T#2{%
-  \ifblank{#1}{}%from etoolbox
+  \ifblank{#1}{#2={}}%from etoolbox
   {%
     \begingroup%
     \toks@=\ex@f{\trt@aux@procbeg#1}%
