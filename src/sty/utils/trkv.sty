@@ -39,13 +39,10 @@
 \newPairParser{\getKey}{\k}
 \newPairParser{\getVal}{\v}
 
-% keyval-like interface
 \newPairParser{\storePair}{%
   \kT=\ex@f\ex@f\ex@f{\ex@f\detokenize\ex@f{\the\kT}}%
-  \smuggleT{\trkv@pair@kT}\smuggleT{\trkv@pair@vT}%
-  \endgroup%
-  \csedef{\@trkv@prefix \the\trkv@pair@kT}{\the\trkv@pair@vT}%
-  \begingroup%
+  \csedef{\@trkv@prefix \k}{\v}%
+  \cssmuggle{\@trkv@prefix \k}%
 }
 
 \def \ifKeySet#1{\ifcsname \@trkv@prefix#1\endcsname}
@@ -60,36 +57,12 @@
 
 \newPairParser{\storePairDef}{%
   \ifcsname \@trkv@prefix\k\endcsname%
-  \else
-  \kT=\ex@f\ex@f\ex@f{\ex@f\detokenize\ex@f{\the\kT}}%
-  \smuggleT{\trkv@pair@kT}\smuggleT{\trkv@pair@vT}%
-  \endgroup%
-  \csedef{\@trkv@prefix \the\trkv@pair@kT}{\the\trkv@pair@vT}%
+  \else%
+    \kT=\ex@f\ex@f\ex@f{\ex@f\detokenize\ex@f{\the\kT}}%
+    \csedef{\@trkv@prefix \k}{\v}%
+    \cssmuggle{\@trkv@prefix \k}%
   \fi%
-  \begingroup%
 }
-
-
-\def\dictdef#1#2{%
-  \pushStorePrefix%
-  \setStorePrefix{tarantas/data/#1}%
-  \storePairs{#2}%
-  \popStorePrefix%
-}
-\def \trt@macro@fullexpand#1->T#2{%
-  \edef\trt@expander{\noexpand#2={#1}}%
-  \trt@expander%
-}
-%   #2=\ex@f{\romannumeral-`X#1}%
-
-\def\dictget#1#2{%
-  \pushStorePrefix%
-  \setStorePrefix{tarantas/data/#1}%
-  \trt@macro@fullexpand{\getByKey{#2}}->T{\toks@}%
-  \popStorePrefix%
-  \the\toks@
-}
-
 
 
 \makeMultiple{getByKey<*>, storePair<*>, storePair<*>Def,

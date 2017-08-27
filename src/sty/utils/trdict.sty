@@ -1,0 +1,33 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{trdict}[2017/07/05 
+  Dictionaries support  for `tarantas']
+
+\RequirePackage{tropt}
+\RequirePackage{trkv}
+
+%% Fallback                                  
+\DeclOpt*{
+  \PackageError{trcophand}{does not know about `\CurrentOption'.
+  Please, clarify your intentions.}
+}
+
+\ProcOpts
+
+\def\dictdef#1#2{%
+  \pushStorePrefix%
+  \setStorePrefix{tarantas/data/#1}%
+  \storePairs{#2}%
+  \popStorePrefix%
+}
+
+\def\dictget#1#2{%
+  \pushStorePrefix%
+  \setStorePrefix{tarantas/data/#1}%
+  \trt@macro@fullexpand{\getByKey{#2}}->T{\toks@}%
+  \popStorePrefix%
+  \the\toks@
+}
+
+
+
+\endinput

@@ -54,6 +54,13 @@
   \ex@f\parsemean\meaning#1\@nil
 }
 
+% still not expandable
+\def \trt@macro@fullexpand#1->T#2{%
+  \edef\trt@expander{\noexpand#2={#1}}%
+  \trt@expander%
+}
+%   #2=\ex@f{\romannumeral-`X#1}%
+
 %=================================
 %% to smuggle stuff outside a scope.
 
@@ -62,17 +69,19 @@
   \ex@f\trt@temp\ex@f\endgroup\ex@f#2\ex@f{\the#1}%
 }
 \def \trt@macro@smuggle#1\as#2\drop#3\endgroup{%
-  \toks@={#3}%
-  \ex@f\the\ex@f\toks@\ex@f\endgroup\ex@f\def\ex@f#2\ex@f{#1}%
+  \def\trt@temp{#3}%
+  \ex@f\trt@temp\ex@f\endgroup%
+  \ex@f\toks@\ex@f{#1}% process cargo with care
+  \edef#2{\the\toks@}%
 }
 \def \trt@csmacro@smuggle#1\as#2\drop#3\endgroup{%
   \bgroup%
   \def\wrap@smugglin##1{%
     \egroup%
-    \ex@f\trt@macro@smuggle\ex@f{\csname #1\endcsname}\as{##1}\drop%
+    \ex@f\trt@macro@smuggle\ex@f{\csname #1\endcsname}\as{##1}\drop#3%
     \endgroup%
   }%
-  #3\ex@f\wrap@smugglin\ex@f{\csname #2\endcsname}%
+  \ex@f\wrap@smugglin\ex@f{\csname #2\endcsname}%
 }
 
 

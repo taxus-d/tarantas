@@ -31,6 +31,7 @@ pairs: \forlistloop{\getPrettyPair}{\testlist} \par
 \fbox{\getByKeys{sigma,exit, coding in}} \par
 \fbox{\getKey{can i haz = #1#2}}
 
+
 \storePair{a func! = its body! like: #1#2}%
 \edef\x{\def\noexpand\ttt##1##2{\getByKey{a func!}}}\x
 \fbox{\ttt {$\int$} {{{$\sum$}}}}
@@ -66,34 +67,13 @@ pairs: \forlistloop{\getPrettyPair}{\testlist} \par
 \getKeysList{$\sin'$=$\cos$, $\tan'$ = $\frac{1}{\cos^2}$}
 
 \storePairDef{note=\footnote}
-\storePairs{
-  notes/foot   = 0, 
-  notes/end    = 1, 
-  notes/margin = 2 
-}
-% \getByKey{note}
 \edef\foo{
 \noexpand\toks0={\getByKey{note}}
-}\foo
+}\the\toks0{and this}
 % \def \defhelper#1{
 %   \getByKey{notes/#1}
 % }
 % \expandafter \defhelper \getByKey{note}
-
-% \def \storehats{\storePairs}%
-\def \storehats{\dictdef{hats}}
-% \def \gethats{\getByKey}
-\def \gethats{\dictget{hats}}
-\dictdef{math hats}{
-  ~ = \widetilde,
-  ^ = \widehat,
-  - = \overline, 
-  . = \dot
-}
-\def\ov#1{\dictget{math hats}{#1}}
-
-$\ov~{\alpha}, \ov^ \beta, \ov. \gamma$
-
 
 
 % \showthe\toks0

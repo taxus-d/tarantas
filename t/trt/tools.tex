@@ -32,13 +32,6 @@
 \makeMultiple{<*>stuff}
 \fbox{\stuff{1,2,3}}
 
-\begingroup
-\def\var{0}
-\cssmuggle{var}
-\endgroup 
-
-\var
-
 
 \makeatletter
 \trt@str@trim{  kek ?   }->T{\toks@}
@@ -55,6 +48,21 @@
 
 \def\temp{&}
 \expandafter\selectcaseby \expandafter{\temp}
+
+
+
+%%%% Macro smuggling tests
+
+\begingroup
+\toks0={#define o 1}
+\edef\cmacro{\the\toks0}
+\csedef{c macro}{\the\toks0}
+\smuggle\cmacro
+\cssmuggle{c macro}
+\endgroup
+
+\show\cmacro
+\csshow{c macro}
 
 \LaTeX
 \end{document}

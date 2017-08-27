@@ -1,0 +1,16 @@
+\documentclass{article}
+
+\usepackage{trdict}
+
+\begin{document}
+\dictdef{math hats}{
+  ~ = \widetilde,
+  ^ = \widehat,
+  - = \overline, 
+  . = \dot
+}
+\def\ov#1{\dictget{math hats}{#1}}
+
+$\ov~{\alpha}, \ov^ \beta, \ov. \gamma$
+
+\end{document}
