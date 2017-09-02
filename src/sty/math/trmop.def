@@ -2,7 +2,35 @@
   2017/08/03 Collection of various math operators]
 
 
-% patched arrows
+
+%% for double-headed arrows
+%% adapted from https://tex.stackexchange.com/a/114242
+\newcommand*{\relrelbarsep}{.386ex}
+\newcommand*{\relrelbar}{%
+  \mathrel{\mathpalette\relrelbar@create\relrelbarsep}%
+}
+\newcommand*{\relrelbar@create}[2]{%
+  \raise#2\hbox to 0pt{$\m@th#1\relbar$}%
+  \lower#2\hbox{$\m@th#1\relbar$}%
+}
+
+% beware of long lines!
+
+
+\trm@arrow@makex{longrightarrow}     [\relbar\relbar\rightarrow]             {00{15}{20}}
+\trm@arrow@makex{longleftarrow}      [\leftarrow\relbar\relbar]              {00{20}{15}}
+\trm@arrow@makex{rightrightarrows}   [\relrelbar\relrelbar\rightrightarrows] {0359}
+\trm@arrow@makex{leftleftarrows}     [\leftleftarrows\relrelbar\relrelbar]   {3095}
+\trm@arrow@makex{leftrightarrow}                                             {0199}
+\trm@arrow@makex{longleftrightarrow} [\leftarrow\relbar\rightarrow]          {01{20}{20}}
+\trm@arrow@makex{Leftrightarrow}                                             {0199}
+\trm@arrow@makex{Longleftrightarrow} [\Leftarrow\Relbar\Rightarrow]          {00{20}{20}}
+\trm@arrow@makex{equal}              [\Relbar\Relbar\Relbar]                 {0023}
+\trm@arrow@makex{Rightarrow}                                                 {3979}
+\trm@arrow@makex{Longrightarrow}     [\Relbar\Relbar\Rightarrow]             {39{15}{20}}
+\trm@arrow@makex{Leftarrow}                                                  {9397}
+\trm@arrow@makex{Longleftarrow}      [\Leftarrow\Relbar\Relbar]              {93{20}{15}}
+
 
 \let\old@to\to \let\to\relax
 \newcommand\to{\ensuremath \mathop{\old@to}\limits}
@@ -10,10 +38,6 @@
 \newcommand\unito{\ensuremath \mathop{\rightrightarrows}\limits}
 
 
-%% extra extensible arrows 
-\providecommand{\xRightarrow}[2][]{\mathop{\Longrightarrow}\limits_{#1}^{#2}}
-%%% and equal sign
-\providecommand{\xequal}[2][]{\mathop{=}\limits_{#1}^{#2}}
 
 % big slash for factorspaces
 \newcommand{\bigslant}[2]{{\raisebox{.2em}{$#1$}\big/\raisebox{-.2em}{$#2$}}}

@@ -1,9 +1,9 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{trmath}[2017/05/28 tmath package]
 
-\RequirePackage{trkv}
+\RequirePackage{tropt}
 
-\DeclareOption*{
+\DeclOpt*{
   \PackageError{trmath}{does not know about `\CurrentOption'.
   Please, clarify your intentions.}
 }
@@ -17,7 +17,7 @@
 %-----%<-------
 \RequirePackage{amsmath}
 \RequirePackage{amsfonts,amssymb}
-\RequirePackage{mathtools}
+\RequirePackage{mathtools} %silently defines extra arrows, with bad spacing
 \RequirePackage{esint} %AAA overrides my limits setup :(
 \RequirePackage{bbm}      %} more math fonts
 \RequirePackage{mathrsfs} %}
@@ -25,6 +25,7 @@
 \RequirePackage{nicefrac}
 
 \RequirePackage{trthm}
+\RequirePackage{trdict}
 
 % if you know faster\cheaper\simplier alternative, you are welcome
 \dictdef{math hats}{
@@ -79,6 +80,14 @@
 \def\v@vec#1{\boldsymbol{#1}}
 \def\v@lin#1{\mathrm{#1}}
 
+% symbolic operators
+
+%% patched arrows
+\input{trmarrows.code.tex}
+\input{trmop.def}
+\let\newarrowfill=\trm@arrowfill@new
+\let\newxarrow=\trm@xarrow@new
+\let\makearrowex=\trm@arrow@makex
 
 % sets
 \input{trmsets.def}

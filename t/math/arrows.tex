@@ -1,0 +1,49 @@
+\documentclass[preview]{standalone}
+\usepackage{trmath}
+
+
+
+\begin{document}
+
+\def \parsearrowformat#1/#2/#3\nil{
+  \ensuremath A &#1{} B
+  \ifstrempty{#3}
+  {&A&#1[overm]{underm}B&A&#1[\mathrm{overm}]{\mathrm{underm}}B}
+    {&&#2}
+  \\
+}
+\def \displarrow#1{%
+  \parsearrowformat#1//\nil
+}
+\listdef \matharrows{
+  \xrightrightarrows,
+  \xrightarrow,  
+  \xlongrightarrow,\longrightarrow/,
+  \xleftleftarrows,
+  \xleftarrow, 
+  \xlongleftarrow, \longleftarrow/,
+  \xleftrightarrow,
+  \xlongleftrightarrow,\longleftrightarrow/,
+  \xequal,
+  \xRightarrow,
+  \xLongrightarrow,\Longrightarrow/,
+  \xLeftarrow,
+  \xLongleftarrow,\Longleftarrow/,
+  \xLeftrightarrow,
+  \xLongleftrightarrow,\Longleftrightarrow/
+}
+\begin{align*}
+\forlistloop\displarrow \matharrows
+\end{align*}
+
+
+$
+ {A \xrightrightarrows[under]{over} B
+  A \xrightarrow[under]{over} B
+\xleftleftarrows[under]{over} C}
+\quad 
+A \xequal[not]{\rm def} B \xRightarrow{nonene} L \xLeftarrow{oooo} O
+\quad
+$
+
+\end{document}
