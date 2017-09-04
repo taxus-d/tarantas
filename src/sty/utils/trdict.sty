@@ -7,27 +7,42 @@
 
 %% Fallback                                  
 \DeclOpt*{
-  \PackageError{trcophand}{does not know about `\CurrentOption'.
+  \PackageError{trdict}{does not know about `\CurrentOption'.
   Please, clarify your intentions.}
 }
 
 \ProcOpts
 
-\def\dictdef#1#2{%
-  \pushStorePrefix%
-  \setStorePrefix{tarantas/data/#1}%
-  \storePairs{#2}%
-  \popStorePrefix%
+\def \@trd@dict@prefix{tarantas/data}
+
+% #1 -- dict macro name
+% #2 -- macro header
+% #3 -- code in environment
+% #4 -- code after popPrefix
+\def \trd@dict@newmacro#1#2#3#4{%
+  \def#1#2{
+    \pushStorePrefix%
+    \setStorePrefix{tarantas/data/##1}%
+    #3%
+    \popStorePrefix%
+    #4%
+  }%
 }
 
-\def\dictget#1#2{%
-  \pushStorePrefix%
-  \setStorePrefix{tarantas/data/#1}%
-  \trt@macro@fullexpand{\getByKey{#2}}->T{\toks@}%
-  \popStorePrefix%
-  \the\toks@
-}
+\trd@dict@newmacro \trd@dict@def{#1#2}
+{\storePairs{#2}}{}
 
+\trd@dict@newmacro \trd@dict@get{#1#2}
+{\trt@macro@fullexpand{\getByKey{#2}}->T{\toks@}}
+{\the\toks@}
+
+\trd@dict@newmacro \trd@dict@haskey{#1#2}
+{\toks@=\ex@f\ex@f\ex@f{\ex@f\@trkv@prefix\detokenize{#2}}}
+{\ifcsdef{\the\toks@}}
+
+\let \dictdef=\trd@dict@def 
+\let \dictget=\trd@dict@get 
+\let \dictkeyp=\trd@dict@haskey 
 
 
 \endinput
