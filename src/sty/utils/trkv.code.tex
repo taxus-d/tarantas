@@ -23,7 +23,7 @@
   \ex@f\proc\trkv@prefix@stack\@nil%
 }
 \catcode`\|=12
-\def \trkv@pair@sep@set#1{\def\@trkv@pair@sep{#1} \trkv@kvparser@init}
+\def \trkv@pair@sepset#1{\def\@trkv@pair@sep{#1} \trkv@kvparser@init}
 
 
 %% naming hint
@@ -82,15 +82,63 @@
 % new pair parser
 % #1 -- name
 % #2 -- expr
-\def\trkv@pairparser@def#1#2{%
-  \def#1##1{\trkv@pair@parse{##1}{#2}}%
+% \def\trkv@pairparser@def#1#2{%
+%   \def#1##1##2{\trkv@pair@parse{##2}{#2}}%
+% }
+
+\newcommand*{\trkv@pairparser@def}[1]{%
+  \@ifnextchar[{\trkv@pairparser@def@i{#1}}{\trkv@pairparser@def@i{#1}[{1}]}%
 }
+
+\def\trkv@pairparser@def@i#1[#2]#3{%
+  \newcommand*{#1}[#2]{\trkv@pair@parse{###2}{#3}}
+}
+
+
+\def\trkv@epairparser@def#1#2{%
+  \def#1##1{%
+    \trt@macro@fullexpand{##1}->T{\toks@}%
+    \ex@f\trkv@pair@parse\ex@f{\the\toks@}{#2}%
+  }%
+}
+
 
 \def\trkv@pairsparser@def#1#2{%
   \def#1##1{%
     \def\do####1{\trkv@pair@parse{####1}{#2}}%
-    \docsvlist{##1}%
+    \dokvlist{##1}%
   }%
+}
+
+\def\trkv@epairsparser@def#1#2{%
+  \def#1##1{%
+    \trt@macro@fullexpand{##1}->T{\toks@}%
+    \def\do####1{\trkv@pair@parse{####1}{#2}}%
+    \ex@f\dokvlist\ex@f{\the\toks@}%
+  }%
+}
+
+% #1-#4 --- parser names
+% #5 --- code
+\def \trkv@fullpairparser@def#1#2#3#4#5{
+  \trkv@pairparser@def{#1}{#5}
+  \trkv@pairsparser@def{#2}{#5}
+  \trkv@epairparser@def{#3}{#5}
+  \trkv@epairsparser@def{#4}{#5}
+}
+
+\def \trkv@list@nospacetrim{%
+\patchcmd{\etb@listitem}{\@firstofone}{\trt@empty}{}{}
+}
+
+\def \trkv@list@sepset#1{%
+  \let \trt@etblistitem@old=\etb@listitem%
+  \trkv@list@nospacetrim%
+  \let \dokvlist=\relax 
+  \let \forkvlist=\relax
+  \DeclareListParser{\dokvlist}{#1}%
+  \DeclareListParser*{\forkvlist}{#1}%
+  \let \etb@listitem=\trt@etblistitem@old%
 }
 
 % vim: ft=plaintex

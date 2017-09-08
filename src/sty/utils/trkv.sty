@@ -21,41 +21,48 @@
 % A kind of public API
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\let \setPairSep=\trkv@pair@sep@set
+\let \setPairSep=\trkv@pair@sepset
 
 \let \setStorePrefix=\trkv@prefix@set
 \let \pushStorePrefix=\trkv@prefix@push
 \let \popStorePrefix=\trkv@prefix@pop
 
-\def \setListSep#1{%
-  \let\docsvlist\relax\DeclareListParser{\docsvlist}{#1}%
-  \let\forcsvlist\relax\DeclareListParser*{\forcsvlist}{#1}%
-}%
-
+\let \setKvListSep=\trkv@list@sepset
 
 \let \newPairParser=\trkv@pairparser@def
 \let \newPairsParser=\trkv@pairsparser@def
+\let \newEpairParser=\trkv@epairparser@def
+\let \newEpairsParser=\trkv@epairsparser@def
+\let \newFullParser=\trkv@fullpairparser@def
 
 \newPairParser{\getKey}{\k}
 \newPairParser{\getVal}{\v}
 
-\newPairParser{\storePair}{%
+
+\newFullParser \storePair \storePairs \estorePair \estorePairs%
+{%
   \kT=\ex@f\ex@f\ex@f{\ex@f\detokenize\ex@f{\the\kT}}%
   \csedef{\@trkv@prefix \k}{\v}%
   \cssmuggle{\@trkv@prefix \k}%
 }
 
-\def \ifKeySet#1{\ifcsname \@trkv@prefix#1\endcsname}
+\def \ifKeySet#1{\ifcsdef{\@trkv@prefix#1}}
+\def \rawgetByKey#1#2{%
+\csexpandonce{#1\detokenize{#2}}
+}
+
 \def \getByKey#1{%
   \ifcsdef{\@trkv@prefix\detokenize{#1}}%
-    {\ex@f\expandonce\ex@f{\csname \@trkv@prefix\detokenize{#1}\endcsname}}%
-    {\noexpand\PackageError{trkv}{Pair with key `#1' not stored, sorry}%
+    {\rawgetByKey{\@trkv@prefix}{#1}}%
+    {\PackageError{trkv}{Pair with key `#1' not stored, sorry}%
       {How about \string\storePair ?}}%
 }
 
 \def \getPairByKey#1{#1\@trkv@pair@sep\getByKey{#1}}
 
-\newPairParser{\storePairDef}{%
+\newFullParser \storePairDef \storePairsDef \estorePairDef%
+\estorePairsDef
+{%
   \ifcsname \@trkv@prefix\k\endcsname%
   \else%
     \kT=\ex@f\ex@f\ex@f{\ex@f\detokenize\ex@f{\the\kT}}%
@@ -64,10 +71,7 @@
   \fi%
 }
 
-
-\makeMultiple{getByKey<*>, storePair<*>, storePair<*>Def,
-getPair<*>ByKey}
-
+\makeMultiple{getByKey<*>, getPair<*>ByKey}
 
 \input{trkv.def}
 

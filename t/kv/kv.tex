@@ -1,18 +1,14 @@
 \documentclass{article}
-\usepackage[utf8]{inputenc} 
-\usepackage[T2A]{fontenc} 
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
 \usepackage{trkv}
 
 \def\prettylist{$=\!$[\k$\to$\v]$\!=\!$}
 \newPairParser{\getPrettyPair}{\prettylist}
 \newPairsParser{\getPrettyPairs}{\prettylist}
 \def\testlist{}
-% for unknown reasons, etoolbox expands braces around key
-% i checked in the log, this is not my problem
-%
-% however, it is a problem anly if you want a key
-%+ with spaces around or with pair delimiter
-% Use {{..}} then
+% coersed etoolbox to produce special list parser for trkv
+% no braces problem now
 \forcsvlist{\listadd\testlist}{{formulas, math, etc}
 =
 $b$  ,                   {{  c .= lf}}
@@ -28,6 +24,7 @@ pairs: \forlistloop{\getPrettyPair}{\testlist} \par
 \storePair{/kek/color/.ini = deep red with bits of blue}
 \fbox{\getByKey{/kek/color/.ini}}\par
 \storePairs{sigma = $\sigma$, exit = no way, coding in = \TeX}
+\tracingcommands=2 \tracingmacros=2
 \fbox{\getByKeys{sigma,exit, coding in}} \par
 \fbox{\getKey{can i haz = #1#2}}
 
@@ -42,13 +39,13 @@ pairs: \forlistloop{\getPrettyPair}{\testlist} \par
 
 % multitoken separator is supported, to
 \setPairSep{->}
-\setListSep{;}
+\setKvListSep{;}
 \getPrettyPairs{ with `=' sign->can store them!; and this-> too}
 
 \storePairDef{sigma-> $\sigma\!\sigma$}
 \storePairsDef{sigme -> $\sigma\!e$; sigmo -> $\sigma\!o$}
 \setPairSep{:}
-\getPairsByKey{sigme; sigma; sigmo}
+\getPairsByKey{sigme, sigma, sigmo}
 
 \storePair{
  and

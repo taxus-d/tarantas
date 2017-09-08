@@ -2,7 +2,7 @@
   Key=Val parser defaults for `tarantas' bundle]
 
 \setPairSep{=}
-\setListSep{,}
+\setKvListSep{,}
 \setStorePrefix{trkv@keys@}
 
 % vim:ft=tex
