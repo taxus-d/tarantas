@@ -38,7 +38,6 @@
 \newPairParser{\getKey}{\k}
 \newPairParser{\getVal}{\v}
 
-
 \newFullParser \storePair \storePairs \estorePair \estorePairs%
 {%
   \kT=\ex@f\ex@f\ex@f{\ex@f\detokenize\ex@f{\the\kT}}%
@@ -48,7 +47,7 @@
 
 \def \ifKeySet#1{\ifcsdef{\@trkv@prefix#1}}
 \def \rawgetByKey#1#2{%
-\csexpandonce{#1\detokenize{#2}}
+\csexpandonce{#1\detokenize{#2}}%
 }
 
 \def \getByKey#1{%

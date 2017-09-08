@@ -7,24 +7,29 @@
 \newPairParser{\getPrettyPair}{\prettylist}
 \newPairsParser{\getPrettyPairs}{\prettylist}
 \def\testlist{}
-% coersed etoolbox to produce special list parser for trkv
+% coerced etoolbox to produce special list parser for trkv
 % no braces problem now
-\forcsvlist{\listadd\testlist}{{formulas, math, etc}
+\def\do#1{\listadd\testlist{#1}}
+\dokvlist{{formulas, math, etc}
 =
-$b$  ,                   {{  c .= lf}}
+$b$  ,                   {  c .= lf}
               =
 {d<<=>>k l}, \TeX    =\TeX}
-
-
+\makeatletter
+\newPairParser{\storeto}[2]{
+  \kT=\ex@f\ex@f\ex@f{\ex@f\detokenize\ex@f{\the\kT}}%
+  \csedef{#1\k}{\v}%
+  \cssmuggle{#1\k}%
+}
+\makeatother
 \begin{document}
 keys: \forlistloop{$|$\getKey}{\testlist}$|$ \par
 values: \forlistloop{$|$\getVal}{\testlist}$|$ \par
 pairs: \forlistloop{\getPrettyPair}{\testlist} \par
-\getPrettyPairs{hek = \def\hek#1{{\bf#1}}\hek{kek}}\par
+\getPrettyPairs{guk=1,hek = \def\hek#1{{\bf#1}}\hek{kek}}\par
 \storePair{/kek/color/.ini = deep red with bits of blue}
 \fbox{\getByKey{/kek/color/.ini}}\par
 \storePairs{sigma = $\sigma$, exit = no way, coding in = \TeX}
-\tracingcommands=2 \tracingmacros=2
 \fbox{\getByKeys{sigma,exit, coding in}} \par
 \fbox{\getKey{can i haz = #1#2}}
 
@@ -72,8 +77,9 @@ pairs: \forlistloop{\getPrettyPair}{\testlist} \par
 % }
 % \expandafter \defhelper \getByKey{note}
 
+\storeto{eleven crabs}{next crab=taxus}
+\rawgetByKey{eleven crabs}{next crab}
 
-% \showthe\toks0
 
 \end{document}
-% TEX program = TEXINPUTS=../..//:: pdflatex
+% TEX program = TEXINPUTS=../..//:: 

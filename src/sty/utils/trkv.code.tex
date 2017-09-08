@@ -79,44 +79,38 @@
 }
 
 
-% new pair parser
-% #1 -- name
-% #2 -- expr
-% \def\trkv@pairparser@def#1#2{%
-%   \def#1##1##2{\trkv@pair@parse{##2}{#2}}%
-% }
-
-\newcommand*{\trkv@pairparser@def}[1]{%
-  \@ifnextchar[{\trkv@pairparser@def@i{#1}}{\trkv@pairparser@def@i{#1}[{1}]}%
-}
-
-\def\trkv@pairparser@def@i#1[#2]#3{%
-  \newcommand*{#1}[#2]{\trkv@pair@parse{###2}{#3}}
-}
-
-
-\def\trkv@epairparser@def#1#2{%
-  \def#1##1{%
-    \trt@macro@fullexpand{##1}->T{\toks@}%
-    \ex@f\trkv@pair@parse\ex@f{\the\toks@}{#2}%
+% pair parser definitions factory..\sour
+% {<str>/macro name/} {<tl>/code/} ->
+%    new pair parser definition
+\def \trkv@pairparser@defhelper#1#2{
+  \csdef{#1}##1{%
+    \@ifnextchar[%]
+    {\@nameuse{#1@i}{##1}}%
+    {\@nameuse{#1@i}{##1}[{1}]}%
+  }
+  \csdef{#1@i}##1[##2]##3{%
+    \newcommand*{##1}[##2]{#2}%
   }%
 }
 
-
-\def\trkv@pairsparser@def#1#2{%
-  \def#1##1{%
-    \def\do####1{\trkv@pair@parse{####1}{#2}}%
-    \dokvlist{##1}%
-  }%
+\trkv@pairparser@defhelper{trkv@pairparser@def}{%
+  \trkv@pair@parse{###2}{#3}%
+}
+\trkv@pairparser@defhelper{trkv@epairparser@def}{%
+  \trt@macro@fullexpand{###2}->T{\toks@}%
+  \ex@f\trkv@pair@parse\ex@f{\the\toks@}{#3}%
+}
+\trkv@pairparser@defhelper{trkv@pairsparser@def}{%
+  \def\do####1{\trkv@pair@parse{####1}{#3}}%
+  \dokvlist{###2}%
+}
+\trkv@pairparser@defhelper{trkv@epairsparser@def}{%
+  \trt@macro@fullexpand{###2}->T{\toks@}%
+  \def\do####1{\trkv@pair@parse{####1}{#3}}%
+  \ex@f\dokvlist\ex@f{\the\toks@}%
 }
 
-\def\trkv@epairsparser@def#1#2{%
-  \def#1##1{%
-    \trt@macro@fullexpand{##1}->T{\toks@}%
-    \def\do####1{\trkv@pair@parse{####1}{#2}}%
-    \ex@f\dokvlist\ex@f{\the\toks@}%
-  }%
-}
+
 
 % #1-#4 --- parser names
 % #5 --- code
@@ -127,18 +121,60 @@
   \trkv@epairsparser@def{#4}{#5}
 }
 
-\def \trkv@list@nospacetrim{%
-\patchcmd{\etb@listitem}{\@firstofone}{\trt@empty}{}{}
+
+\long\def \trkv@listitem#1#2{%
+  \ifblank{#2}%
+    {}%
+    {#1{#2}}%
 }
 
+\edef\trt@ampcode{\the\catcode`\&}
+\catcode`\&=3
+
+\def\trkv@defparser@do#1#2{%
+  \begingroup
+  \edef\@tempa{\endgroup
+    \long\def\noexpand#1####1{%
+      \expandafter\noexpand
+      \csname etb@lst@\expandafter\@gobble\string#1\endcsname
+      \space####1\noexpand#2&}%
+    \long\csdef{etb@lst@\expandafter\@gobble\string#1}####1\noexpand#2####2&{%
+      \noexpand\trkv@listitem\noexpand\do{####1}%
+      \noexpand\ifblank{####2}
+        {\noexpand\listbreak}
+        {\expandafter\noexpand
+         \csname etb@lst@\expandafter\@gobble\string#1\endcsname
+	 \space####2}&}}%
+  \@tempa}
+
+\def\trkv@defparser@arg#1#2{%
+  \begingroup
+  \edef\@tempa{\endgroup
+    \long\def\noexpand#1####1####2{%
+      \expandafter\noexpand
+      \csname etb@lst@\expandafter\@gobble\string#1\endcsname
+      {####1}\space####2\noexpand#2&}%
+    \long\csdef{etb@lst@\expandafter\@gobble\string#1}####1####2\noexpand#2####3&{%
+      \noexpand\trkv@listitem{####1}{####2}%
+      \noexpand\ifblank{####3}
+        {\noexpand\listbreak}
+        {\expandafter\noexpand
+         \csname etb@lst@\expandafter\@gobble\string#1\endcsname
+	 {####1}\space####3}&}}%
+  \@tempa}
+
+\catcode`\&=\trt@ampcode
+
 \def \trkv@list@sepset#1{%
-  \let \trt@etblistitem@old=\etb@listitem%
-  \trkv@list@nospacetrim%
+  \let \etb@defparser@do@old=\etb@defparser@do
+  \let \etb@defparser@arg@old=\etb@defparser@arg
+  \let \etb@defparser@do=\trkv@defparser@do
+  \let \etb@defparser@arg=\trkv@defparser@arg
   \let \dokvlist=\relax 
   \let \forkvlist=\relax
   \DeclareListParser{\dokvlist}{#1}%
   \DeclareListParser*{\forkvlist}{#1}%
-  \let \etb@listitem=\trt@etblistitem@old%
+  \let \etb@defparser@do=\etb@defparser@do@old
+  \let \etb@defparser@arg=\etb@defparser@arg@old
 }
-
 % vim: ft=plaintex
