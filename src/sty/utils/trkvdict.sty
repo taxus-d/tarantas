@@ -1,0 +1,33 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{trkvdict}[2017/07/05 
+  Dictionaries support  for `tarantas']
+
+\RequirePackage{trkv}
+
+%% Fallback                                  
+\DeclareOption*{
+  \PackageError{trkvdict}{does not know about `\CurrentOption'.
+  Please, clarify your intentions.}
+}
+
+\ProcessOptions*\relax
+
+\def \@trd@dict@prefix{tarantas/data/}
+
+\newMultParser \dictdef \dictedef{[2]{
+    \kT=\ex@f\ex@f\ex@f{\ex@f\detokenize\ex@f{\the\kT}}%
+    \csedef{\@trd@dict@prefix\detokenize{#1}/\k}{\v}%
+    \cssmuggle{\@trd@dict@prefix\detokenize{#1}/\k}%
+}}
+\def \dictget#1#2{%
+  \ifcsdef{\@trd@dict@prefix\detokenize{#1/#2}}%
+    {\csexpandonce{\@trd@dict@prefix\detokenize{#1/#2}}}%
+    {\PackageError{trkvdict}{Value with key `\detokenize{#2}' ^^J is not stored in dictionary `\detokenize{#1}', sorry}%
+      {How about \string\dictadd ?}}%
+}
+
+\def \dictpresent#1#2{%
+  \ifcsdef{\@trd@dict@prefix#1/\detokenize{#2}}%
+}
+
+\endinput

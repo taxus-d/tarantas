@@ -3,6 +3,5 @@
 
 \setPairSep{=}
 \setKvListSep{,}
-\setStorePrefix{trkv@keys@}
 
 % vim:ft=tex
