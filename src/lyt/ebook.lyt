@@ -14,10 +14,15 @@
 \storePairDef{note=\footnote}
 \storePairDef{size=10}
 
-\setfont
+\setfont{\getByKey{size}}
 
-% pocketbook screen size
-\storePairsDef{paperwidth=90mm, paperheight=115mm}
+\storePairDef{model=pbtouch2}
+% ebook readers screen size
+\input{ebook-models.def}
+
+\dictegetto{ebook readers screen size}{\getByKey{model}}\ebooksize
+\estorePairs{\ebooksize}
+
 \geometry{
   paperwidth=\getByKey{paperwidth},
   paperheight=\getByKey{paperheight},
