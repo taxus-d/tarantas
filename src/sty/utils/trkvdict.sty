@@ -16,18 +16,72 @@
 
 \newMultParser \dictdef \dictedef{[2]{
     \kT=\ex@f\ex@f\ex@f{\ex@f\detokenize\ex@f{\the\kT}}%
-    \csedef{\@trd@dict@prefix\detokenize{#1}/\k}{\v}%
-    \cssmuggle{\@trd@dict@prefix\detokenize{#1}/\k}%
+    \edef\@dictname{\@trd@dict@prefix\detokenize{#1}}%
+    \listcseadd{\@dictname}{\k}%
+    \csedef{\@dictname /\k}{\v}%
+    \cssmuggle{\@dictname}\cssmuggle{\@dictname /\k}%
 }}
+
+\def \dictkeys#1#2{%
+  \trt@macro@fullexpand%
+{\csuse{\@trd@dict@prefix \detokenize{#1}}}->T{\toks@}
+  \edef#2{\the\toks@}%
+}
+
+
+
 \def \dictget#1#2{%
   \ifcsdef{\@trd@dict@prefix\detokenize{#1/#2}}%
     {\csexpandonce{\@trd@dict@prefix\detokenize{#1/#2}}}%
-    {\PackageError{trkvdict}{Value with key `\detokenize{#2}' ^^J is not stored in dictionary `\detokenize{#1}', sorry}%
+    {\PackageError{trkvdict}{Value with key `\detokenize{#2}'
+      is not stored in dictionary `\detokenize{#1}', sorry}%
       {How about \string\dictadd ?}}%
 }
 
-\def \dictpresent#1#2{%
-  \ifcsdef{\@trd@dict@prefix#1/\detokenize{#2}}%
+\newMultParser \dictadd \dicteadd{ [2]{
+    \kT=\ex@f\ex@f\ex@f{\ex@f\detokenize\ex@f{\the\kT}}%
+    \edef\@dictname{\@trd@dict@prefix\detokenize{#1}}%
+    \ifcsdef{\@dictname}%
+    {%
+      \ifcsdef{\@dictname/\k}
+        {\PackageError{trkvdict}%
+          {Pair with key `\k' exists}
+          {Consider using \detokenize{\dictalter{#1}}{\k=\v} }}
+        {%
+          \listcseadd{\@dictname}{\k}%
+          \csedef{\@dictname/\k}{\v}%
+          \cssmuggle{\@dictname}%
+          \cssmuggle{\@dictname/\k}}%
+    }{\PackageError{trkvdict}%
+        {Attempt to add pairs to undefined dictionary}%
+        {How about \detokenize{\dictdef{#1}}{\k=\v,...}}
+        \listbreak%
+    }%
+}}
+
+\newMultParser \dictalter \dictealter{ [2]{
+    \kT=\ex@f\ex@f\ex@f{\ex@f\detokenize\ex@f{\the\kT}}%
+    \edef\@dictname{\@trd@dict@prefix\detokenize{#1}}%
+    \ifcsdef{\@dictname}%
+    {%
+      \ifcsdef{\@dictname/\k}
+        {%
+          \csedef{\@dictname/\k}{\v}%
+          \cssmuggle{\@dictname/\k}}%
+        {\PackageError{trkvdict}%
+          {Pair with key `\k' not exists}
+          {Consider using \detokenize{\dictadd{#1}}{\k=\v} }}
+    }{\PackageError{trkvdict}%
+        {Attempt to alter pairs of undefined dictionary}%
+        {How about \detokenize{\dictdef{#1}}{\k=\v,...} }%
+        \listbreak
+    }%
+}}
+
+
+
+\def \dicthaskey#1#2{%
+  \ifcsdef{\@trd@dict@prefix\detokenize{#1/#2}}%
 }
 
 \endinput
