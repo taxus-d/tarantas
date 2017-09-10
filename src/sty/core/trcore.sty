@@ -1,0 +1,18 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{trkv}[2017/09/10
+  Tarantas core, to ease inclusion]
+
+%% Fallback                                  
+\DeclareOption*{
+  \PackageError{trcore}{does not know about `\CurrentOption'.
+  Please, clarify your intentions.}{}
+}
+\ProcessOptions*\relax
+
+\RequirePackage{trtools}
+\RequirePackage{trkv}
+\RequirePackage{trkvprefix}
+\RequirePackage{trkvdict}
+\RequirePackage{tropt}
+
+\endinput

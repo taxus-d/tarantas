@@ -15,13 +15,18 @@ reduce margins. See `tex/lyt` subdirectory for sample ones.
 * [X] Create a checklist of them
 
 #### Now, serious
-* [X] Ease option handling
+* [X] Easy package option handling.
 * [X] Home-made programmable `key=val` parser.
 * [X] style-selection machinery
-* [X] a nicely organized set of predefined math symbols and hacks
-* [X] `key=val`-style options handler
+* [X] a nicely organized set of predefined math macros
+* [X] `key=val`-style option handler
+* [ ] force all old layouts/classes to integrate inside `tarantas`.
+And make them modular. At least, no more copy-pasting.
 * [X] separate package for theorem and proof styles
-* [ ] develop a nice keyval-based numbering machinery
+* [ ] make it work with all classes
+* [ ] clean (or totally throw away) legacy files
+* [ ] develop a nice abstract syntax for counters
 * [ ] `ifluatex`, `ifxetex`
 * [ ] enhance existing layouts aestetically
 * [ ] new cool layouts
+*
