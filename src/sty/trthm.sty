@@ -2,7 +2,8 @@
 \ProvidesPackage{trthm}[2017/08/03
   Theorem-like envs setup for `tarantas' bundle]
 
-\RequirePackage{etoolbox}
+\RequirePackage{trtools}
+
 
 %% Fallback                                  
 \DeclareOption*{
@@ -12,6 +13,12 @@
 \ProcessOptions*\relax
 
 \RequirePackage{amsthm}
+\RequirePackage[utf8]{inputenc}
+
+\patchcmd{\@xnthm}
+{\let\csname end#2\endcsname\@endtheorem}
+{\def\csname end#2\endcsname{\@endtheorem\global\def\laststat{#2}}} {}{}
+
 \theoremstyle{plain}
 \newtheorem{thrm}{Теорема}[paragraph]
 \newtheorem{lem}[thrm]{Лемма}
@@ -30,6 +37,7 @@
 \theoremstyle{remark}
 \newtheorem{rem}{Замечание}[defn]
 \newtheorem*{rem*}{Замечание}
+
 
 \RequirePackage{chngcntr} % tools for counters 
 % \@addtoreset{imp}{lem}
@@ -92,6 +100,16 @@
 \newproof{tproof}{$\square$}{$\blacksquare$}
 \newproof[${}$\\]{lproof}{$\blacktriangledown$}{$\blacktriangleleft$}
 \newproof{pproof}{$\blacktriangleright$}{$\blacktriangleleft$}
+
+\def \trt@str@firstletter@proc#1{#1\trt@str@nilgobble}
+\def \trt@str@nilgobble#1\@nil{}
+\def \trt@str@firstletter#1{\trt@str@firstletter@proc#1\@nil}
+
+\newenvironment{prf}
+{%
+  \edef \@trth@curprf{\ex@f\trt@str@firstletter\ex@f{\laststat}proof}%
+  \csuse{\@trth@curprf}%
+}{\csuse{end\@trth@curprf}}
 
 \RequirePackage{changepage}% for adjustwidth
 \newenvironment{aux}[1][1cm]
