@@ -13,6 +13,7 @@
 }
 \ProcessOptions*\relax
 
+\RequirePackage{etoolbox}
 \RequirePackage{endnotes}
 
 %%% hyperendnotes.sty
@@ -146,6 +147,10 @@
   \input{\jobname.ent}%
   \endgroup
 }%
+%% Another patch by taxus
+\let \enotesectiontype=\section
+\patchcmd{\enoteheading}{\section}{\enotesectiontype}{}{}
+
 \def\enoteformat{%
   \rightskip\z@
   \leftskip1.8em
@@ -168,7 +173,6 @@
 % Toggle switch in order to turn on/off back-links in the
 % endnote-section:
 \enotelinkstrue
-
 % and patches by taxus, finally
 \AtEndDocument{
   \ifnumcomp{\value{endnote}}{>}{0}{\theendnotes}{}

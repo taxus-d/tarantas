@@ -5,7 +5,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{timbord}[2017/06/04 Timbord style]
+\ProvidesFile{timbord}[2017/06/04 Timbord layout]
+\RequirePackage{trenotes}
 
 \RequirePackage{geometry}
 \geometry{
@@ -22,4 +23,6 @@
 \renewcommand\bfdefault{sb}
 \DeclareMathAlphabet{\mathbf}{T2A}{cmbr}{sb}{n} %semibold hm?
 
-\newcommand{\note}[1]{\marginpar{\footnotesize #1}}
+\storePairDef{note=\marginpar}
+% \newcommand{\note}[1]{\marginpar{\footnotesize #1}}
+% vim: ft=tex

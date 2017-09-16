@@ -11,7 +11,7 @@
 }
 \ProcessOptions*
 
-\def \@trly@store@prefix{tarantas/layout}
+\def \@trly@store@prefix{/tarantas/layout}
 % #1 -- layout options, optional
 % #2 -- layout name
 \newcommand*{\trly@layt@select}[2][ ]{
@@ -23,7 +23,7 @@
     \makeatletter
     \input{#2.lyt}
     \makeatother
-    \setStorePrefix{usr/}
+    \setStorePrefix{/tarantas/usr/}
   } 
   {
     \PackageError{trly}{Layout not compatible}%
