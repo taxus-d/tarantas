@@ -7,7 +7,7 @@ Consider this folder as an internal machinery section of tarantas -- wheels, spo
 
 * `foo.code.tex` contains most \def's. Look here if you want to know details.
 * `foo.sty` -- sets real behaviour using tools in aforementioned file 
-    and provides a public API of package. It seems to be a convenient way to avoid name
+    and provides a public API of a package. It seems to be a convenient way to avoid name
     clushes with other packages.
 * `foo.def` -- boring definitions. Something like long list of math arrows. 
     Quite often is used to set default values (pair separator etc.)
