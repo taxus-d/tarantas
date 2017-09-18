@@ -1,0 +1,42 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{trclstools}[2017/09/11
+  Tools for classes in `tarantas' bundle]
+
+\RequirePackage{trcore}
+
+%% Fallback                                  
+\DeclareOption*{
+  \PackageError{trclstools}{does not know about `\CurrentOption'.
+  Please, clarify your intentions.}
+}
+\ProcessOptions*\relax
+
+\listdef \@trcl@packpack{}
+\newcommand*{\usepackagepack}[1]{%
+  \ifinlist\@trcl@packpack{#1}{}
+    {\input{#1.ppk}\listadd \@trcl@packpack{#1}}
+}
+\let \RequirePackagePack=\usepackagepack
+\@onlypreamble \usepackagepack
+
+\def \trcl@err@nosect{
+  \GenericError{Sectioning command intentionally cleared by
+  tarantas interior}{Consider using provided ones}
+  \@gobble
+}
+\def \firestdsections{
+  \def\do##1{\let ##1=\trcl@err@nosect
+    \toks@=\ex@f\ex@f\ex@f{\ex@f\@gobble\string##1}
+    \csundef{the\the\toks@}
+    \csundef{ttlss@\the\toks@}
+    \csundef{ttll@\the\toks@}
+  }
+  \docsvlist{
+    \part, \chapter, \section, \subsection, \subsubsection,
+    \paragraph, \subparagraph
+  }
+}
+ 
+
+\endinput
+% vim:nofoldenable

@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{trkv}[2017/09/10
+\ProvidesPackage{trcore}[2017/09/10
   Tarantas core, to ease inclusion]
 
 %% Fallback                                  
@@ -14,5 +14,10 @@
 \RequirePackage{trkvprefix}
 \RequirePackage{trkvdict}
 \RequirePackage{tropt}
+\RequirePackage{calc} % TODO: numexpr's
+% hspace somehow not fixed by calc, fixing it here
+\def\@hspace#1{\begingroup\setlength\dimen@{#1}\hskip\dimen@\endgroup}
+\RequirePackage{trenotes}
+
 
 \endinput

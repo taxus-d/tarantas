@@ -10,21 +10,15 @@
 % long notes are more like a report, with chapters and paragraphs
 \ProvidesClass{trlnotes}[2017/05/27 Long version of notes]
 
-\RequirePackage{trtools}
-\RequirePackage{calc} % TODO: numexpr's
-% hspace somehow not fixed by calc, fixing it here
-\def\@hspace#1{\begingroup\setlength\dimen@{#1}\hskip\dimen@\endgroup}
-\RequirePackage{tropt}
+\RequirePackage{trcore}
 \RequirePackage{trly}
+\RequirePackage{trclstools}
 
 %%% =================
 %%% language packages
 %%% =================
 
-\RequirePackage{cmap} %% pdf search & copy
-\RequirePackage[utf8]{inputenc}
-\RequirePackage[OT1,T2A]{fontenc}
-\RequirePackage[english,russian]{babel}
+\RequirePackagePack{trulang}
 
 %%% ===========
 %%%  Variables
@@ -42,7 +36,7 @@
 \DeclPassOpt{10pt,12pt}
 
 %% Fallback                                  
-\DeclareOption*{
+\DeclOpt*{
     \ClassWarning{trlnotes}{does not know about `\CurrentOption'. 
     Please, clarify your intentions}{}
     \PassOptionsToClass{\CurrentOption}{\@baseclass}
@@ -52,103 +46,153 @@
 
 \LoadCls{\@baseclass}
 
-\RequirePackage{graphicx}
-\RequirePackage{xcolor}
-
 \RequirePackage{verbatim}
 \RequirePackage{epigraph}
 
-% table stuff
-\RequirePackage{tabulary}
-\RequirePackage{tabularx}
-\RequirePackage{booktabs}
-\RequirePackage{array}
-
-% manage lists
+\RequirePackagePack{trtables}
 \RequirePackage[shortlabels]{enumitem}
+\RequirePackagePack{trgraphics}
 
-\iftoggle{tikz}{
-  \RequirePackage{tikz}
-  \usetikzlibrary{external}
-  \usetikzlibrary{calc,babel,arrows}
-  \usetikzlibrary{decorations.markings,quotes,angles}
-  \tikzexternalize
-}{}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Sectioning styles (ToC, numbering,etc)
+% Рубрикация. Это сложно
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\RequirePackage{titlesec}
-\RequirePackage{titletoc}
-
-\titleformat{\chapter}%
-{\normalfont\LARGE\bfseries}%
-{\chaptertitlename\ \thechapter:}%
-{1ex}%
-{\normalfont\LARGE\bfseries}{}
-
-\titlespacing{\chapter}%
-{1em}%
-{4em plus 2ex minus 1ex}%
-{1.5em plus 1ex minus 0.5ex}
-
+% is not fully compatible with biblatex and hyperref
+% consider removal
+% \RequirePackage[explicit]{titlesec}
+% \RequirePackage{titletoc}
 \RequirePackage{chngcntr} % tools for counters 
-%\@definecounter{paragraph}
 
-% still a bit hacky
-% \renewcommand{\thesection}{\arabic{section}.}
+% \providetoggle{nostdsections}
+% \toggletrue{nostdsections}
+% \iftoggle{nostdsections}{
+% \firestdsections
+% }{}
+
+% we do not need to redefine chapters a lot
+\let \enotesectiontype=\chapter
 \renewcommand{\theparagraph}{\S\thinspace\arabic{paragraph}}
-\titleformat {\paragraph}[block]%
-{\normalfont\bfseries}%
-{\theparagraph}%
-{2ex}%
-{\normalfont\bfseries}{}
+\def\@seccntformat#1{%
+  \unexpanded{\csuse{#1labelformat}}
+  {\csname the#1\endcsname}%
+  \ifcsdef{#1headsep}%
+    {\ex@f\hspace\ex@f{\csname #1headsep\endcsname}}
+    {\hspace{1em}}%
+}
+\newcommand{\paragraphheadsep}{1.4ex}
+\newcommand{\paragraphlabelformat}{\Large}
+\renewcommand{\paragraph}{
+  \@startsection{paragraph}{2}{\z@}%
+  {3.25ex \@plus1ex \@minus.2ex}%
+  {3ex}%
+  {\normalfont\large\bfseries}
+}
+\renewcommand*\l@paragraph{\@dottedtocline{2}{2em}{2em}}
 
-\titlespacing{name=\paragraph}%
-{1ex}%
-{1em plus 1ex minus 0.5ex}%
-{0.7em plus 1ex minus 0.5ex}
-\titleformat {name=\paragraph,numberless}%
-{\normalfont\bfseries}{\S*}{2ex}{\normalfont\bfseries}{}
+% \def \trr@section@define#1{
+%   \edef\@trr@cursect@name{\ex@f\@gobble\detokenize{#1}}
+%   \renewcommand{#1}{
+%   \@startsection{}{2}{\z@}%
+%   {3.25ex \@plus1ex \@minus.2ex}%
+%   {3ex}%
+%   {\normalfont\large\bfseries}
+%   }
+% }
+
+
+\newcounter{clause}
+\newcommand{\clause}{
+  \@startsection{clause}{3}{\z@}%
+  {3.25ex \@plus1ex \@minus.2ex}%
+  {-1em}%
+  {\normalfont\normalsize\bfseries}
+}
+\renewcommand\theclause{\arabic{clause}}
+\newcommand\clausemark{\@gobble}
+\newcommand*\l@clause{\@dottedtocline{3}{4em}{1em}}
+
+% \titleformat{\chapter}[hang]%
+% {\normalfont\LARGE\bfseries}%
+% {\chaptertitlename\ \thechapter\hspace{0.2ex}:}%
+% {1ex}
+% {\normalfont\LARGE\bfseries#1}
+%
+% \titlespacing{\chapter}%
+% {-1em}%
+% {4em plus 2ex minus 1ex}%
+% {1.5em plus 1ex minus 0.5ex}
+%
+%
+% \titleclass{\paragraph}{straight}[\chapter]
+% \newcommand{\theparagraph}{\S\thinspace\arabic{paragraph}}
+% \titleformat {\paragraph}[block]%
+% {\large\bfseries}%
+% {\theparagraph}%
+% {3ex}%
+% {\normalfont\bfseries#1}
+%
+% \titleformat {name=\paragraph,numberless}%
+% {\normalfont\bfseries}
+% {\S*}
+% {2ex}
+% {\normalfont\bfseries#1}
+%
+% \titlespacing{name=\paragraph}%
+% {-1em}%
+% {1.5em plus 1.2ex minus 0.8ex}%
+% {0.7em plus 1ex minus 0.5ex}
+%
+%
+% \newcounter{clause}
+% \titleclass{\clause}{straight}[\paragraph]
+% \renewcommand\theclause{\arabic{clause}.}
+%
+% \titleformat{\clause}[runin]
+% {\normalfont\bfseries} {\theclause} {1ex}
+% {\normalfont\bfseries#1}[.]
+%
+% \titlespacing{\clause}
+% {0ex}{0ex}{0ex}
+% \titlecontents{clause}{}{}{}{}
 
 \iftoggle{exam}{
   \counterwithout*{paragraph}{chapter}
-  \counterwithout*{paragraph}{section}
-  \counterwithout*{paragraph}{subsection}
-  \counterwithout*{paragraph}{subsubsection}
   \renewcommand{\theparagraph}{№\thinspace\arabic{paragraph}}
   \titleformat\paragraph[block]{\normalfont\bfseries}%
   {Билет\ \theparagraph:}{1ex}{\normalfont\bfseries}{}
 }{}
 
-\RequirePackage{tocloft}
-\cftsetindents{paragraph}{3.0em}{\widthof{\theparagraph--\arabic{paragraph}}+1em}
+% \RequirePackage{tocloft}
+% \cftsetindents{paragraph}{3.0em}{\widthof{\theparagraph--\arabic{paragraph}}+1em}
+% % \cftsetindents{clause}{3.0em}{1em}
 
-\setcounter{secnumdepth}{4}
-\setcounter{tocdepth}{4}
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
 
 
 \RequirePackage{perpage}
 \MakePerPage{footnote}
 
-% nice hyperlinks
-\RequirePackage{hyperref}
-% fixes bookmark level
-\RequirePackage{bookmark}
+% \reversemarginpar --> in layout files
+%for margin notes
+% due to their nature, notes are usually placed in free space. And free space
+%+ heavily depends on page layout. Hence, see `flex` files for \note
+
+\RequirePackagePack{trhyplinks}
+% should be overrided in layout file
+% this is nice default setup
 \hypersetup{%
-  pdfencoding=auto, unicode=true,
   colorlinks=true,
   linkcolor=blue, 
   citecolor=green!50!black
-  %linkbordercolor=blue,
-  %pdfborderstyle={/S/U/W 1}% border style will be underline of width 1pt
 }
 
-\reversemarginpar
-%for margin notes
-% due to their nature, notes are usually placed in free space. And free space
-%+ heavily depends on page orientation. Hence, see layout files for \note
+\def\toclevel@paragraph{2}
+\def\toclevel@clause{3}
 
 \endinput
 % vim: nofoldenable

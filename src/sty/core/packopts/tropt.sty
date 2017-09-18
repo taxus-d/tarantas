@@ -35,14 +35,16 @@
 \let \DeclOpt=\DeclareOption
 
 % self-made hooks
-\newcommand*{\AfterOptsProcd  } {}
-\newcommand*{\AfterLoadedClass} {}
+\def \tro@hook@afteroptsprocd{}
+\def \tro@hook@afterloadedclass{}
+\newcommand*{\AfterOptsProcd}  [1] {\appto \tro@hook@afteroptsprocd{#1}}
+\newcommand*{\AfterLoadedClass}[1] {\appto \tro@hook@afterloadedclass{#1}}
 % feel myself like a mountain climber
 
 % redefined command with hooks
-\newcommand*{\ProcOpts        } {
+\newcommand*{\ProcOpts} {
   \tro@opts@process
-  \AfterOptsProcd 
+  \tro@hook@afteroptsprocd
 }
 % another one. May limit some functionality
 %+ But looks like everything still works
@@ -50,7 +52,7 @@
   \ifx #1\relax \LoadClass{#2}
   \else         \LoadClass[#1]{#2}
   \fi
-  \AfterLoadedClass
+  \tro@hook@afterloadedclass
 }
 \@onlypreamble \ProcOpts
 \@onlypreamble \LoadCls
@@ -140,16 +142,16 @@
   {\PassOptionsToClass{\CurrentOption}{\@baseclass}}
 } 
 % as you see, lisp style can handle lots of braces gracefully
-% if there is ONE command. In lisp you have (progn..) in other case 
-% here, we need to suffer aestetically anyway
+% if there is ONE command. In lisp you have (progn..) to cure that. 
+% Here, we need to suffer aestetically anyway
 
 
-% there should be a workaround to conditional package loading
+% there should be a workaround for conditional package loading
 % looks like i have found it
 
 %% to reduce `expandafter's
 \def\tro@tmp@ex#1{
-  \appto\AfterLoadedClass%
+  \AfterLoadedClass%
   {\HasFlag{#1}{\RequirePackage{#1}}}%braces, you are hidden now
 }
 
@@ -171,6 +173,6 @@
   \tro@bl@if{#1}{#2}{#3}%
 }
 
-\input tropt.def
+\input{tropt.def}
 
 \endinput

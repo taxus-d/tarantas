@@ -7,17 +7,26 @@
 
 \usepackage{blindtext} 
 \setlayout[note=\endnote, size=10]{ebook}
+
 \begin{document}
+\tableofcontents
+\clearpage
 some random text\note{rather conventional}
 
-\blinddocument
+\chapter{Sample}
+\paragraph{Sample par}
+\blindtext
 
-\section{$\mathcal{M\!AT\!H}$\note{patched one}\underdev}
+\paragraph{Another sample par}
+\blindtext
 
-\subsection{Proofs}
+\chapter{$\mathcal{M\!AT\!H}$\note{patched one}\underdev}
+
+\paragraph{Proofs}
 \label{sub:proofs}
 
-
+hyperref
+\clause{(im)proper nesting}
 \begin{tproof}[kek?]
   $\sin\pi=0$ (o'rly?)
   \begin{lproof}[nested]
@@ -34,17 +43,18 @@ some random text\note{rather conventional}
   \end{lproof}
 \end{tproof}
 
-\subsection{Vectors (\coori, \conori)}
-\subsection{Hats}
+\paragraph{Vectors (\coori, \conori)}
+\paragraph{Hats}
 
 $\ov~{kekkkische}, \ov.{1}, \ov0a$
  
 $\ov^A \neq \ov~A$
-\section{ETC}
+\chapter{ETC}
 ,,ls`` "`ls"' <<ls>> "<ls">
 
 \appendix
 \chapter{letters}
-\section{small roman latin `a'}
+\paragraph{small roman latin `a' and its appli\-cations in 
+modern digital typography}
 
 \end{document}
