@@ -23,3 +23,17 @@ note {type:\footnote;}
 * proper css property values will appear when i learn them ;).
   Actually, dict lookup costs something.
 
+## Actual syntax
+
+### Declaration
+
+```tex
+\newflexcommand{\note}[type:\footnote;][1]{
+    \flex{type}{#1}
+}
+```
+### Call
+
+trivial
+
+
