@@ -19,21 +19,30 @@ note {type:\footnote;}
 
 * tags = .classes, html cant alias tags, we have this option.
 * no #id's and [attributes], at least for recent future. Until we solve expandability problems
-* same with cascade styles.
+* cascade style system is tricky to implement. 
 * proper css property values will appear when i learn them ;).
   Actually, dict lookup costs something.
 
 ## Actual syntax
 
-### Declaration
-
+### Description
 ```tex
-\newflexcommand{\note}[type:\footnote;][1]{
-    \flex{type}{#1}
+\flexstyle{
+multicol footnote {type:\endnote;}
+}
+```
+
+### Declaration
+```tex
+\newflexcommand{\note}{
+type:\footnote;
+}[1]{
+    \flexvar{type}{#1}
 }
 ```
 ### Call
 
-trivial
-
+```tex
+\note[id=special]{miss me?}
+```
 
