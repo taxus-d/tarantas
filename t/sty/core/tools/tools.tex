@@ -8,9 +8,12 @@
 \def\bar#1{#1::bar\_}
 \def\stuff#1{#1::stuff\_}
 \makeatother
+\protected\def \baaaz{\marginpar}
 
 \begin{document}
+\tableofcontents
 
+\vspace{3cm}
 \long\def \safescantokens#1#2{%
   \begingroup
     \everyeof{\noexpand}%
@@ -49,6 +52,8 @@
 \def\temp{&}
 \expandafter\selectcaseby \expandafter{\temp}
 
+\ifexpmode{exp}{eval}
+\section{sec with[note\ifexpmode{\baaaz}{\footnote}{k}]}
 
 
 %%%% Macro smuggling tests

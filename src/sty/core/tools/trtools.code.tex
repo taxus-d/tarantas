@@ -31,6 +31,12 @@
 % extra tests
 \def \trt@if@empty#1{\if\relax\detokenize{#1}\relax}
 
+\def \trt@arg@lastofsix#1#2#3#4#5#6{#6}
+\def \trt@if@expmode{%
+  \toks0{\iffalse}%
+  \trt@arg@lastofsix%
+  \toks0{\fi}\@firstoftwo%
+}
 %================================
 % token list managment
 \def \trt@toks@prepend#1->T#2{
@@ -200,4 +206,5 @@
   \forlistloop{\csundef}{\trt@cases@list}%
   \csundef{trt@case@default}%
 }
+
 % vim:ft=plaintex
