@@ -46,11 +46,15 @@
 }
 
 \storePairDef{note=\footnote}
-\protected\def \note#1{%
-  \begingroup%
-  \ex@f\setStorePrefix\ex@f{\@trly@store@prefix}%
-  \getByKey{note}{#1}%
-  \endgroup%
+
+\def \note#1{%
+  \ifexpmode{}%
+  {%
+    \begingroup%
+    \ex@f\setStorePrefix\ex@f{\@trly@store@prefix}%
+    \getByKey{note}{#1}%
+    \endgroup%
+  }%
 }
 
 \let\setlayout=\trly@layt@select
