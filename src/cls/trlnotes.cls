@@ -54,8 +54,6 @@
 \RequirePackagePack{trgraphics}
 
 
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Рубрикация. Это сложно
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -84,6 +82,7 @@
 }
 \newcommand{\paragraphheadsep}{1.4ex}
 \newcommand{\paragraphlabelformat}{\Large}
+\counterwithin*{paragraph}{chapter}
 \renewcommand{\paragraph}{
   \@startsection{paragraph}{2}{\z@}%
   {3.25ex \@plus1ex \@minus.2ex}%
@@ -111,6 +110,7 @@
   {\normalfont\normalsize\bfseries}
 }
 \renewcommand\theclause{\arabic{clause}}
+\counterwithin*{clause}{paragraph}
 \newcommand\clausemark{\@gobble}
 \newcommand*\l@clause{\@dottedtocline{3}{4em}{1em}}
 

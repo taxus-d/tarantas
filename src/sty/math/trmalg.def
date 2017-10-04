@@ -16,5 +16,4 @@
 \DeclareMathOperator\Res{Res}
 \DeclareMathOperator\Aut{Aut}
 \DeclareMathOperator\Stab{Stab}
-\DeclareMathOperator*{\argmin}{arg\,min}
 % vim:ft=tex

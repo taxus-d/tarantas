@@ -23,6 +23,7 @@
 \renewcommand\bfdefault{sb}
 \DeclareMathAlphabet{\mathbf}{T2A}{cmbr}{sb}{n} %semibold hm?
 
+\reversemarginpar
 \storePairDef{note=\marginpar}
 % \newcommand{\note}[1]{\marginpar{\footnotesize #1}}
 % vim: ft=tex

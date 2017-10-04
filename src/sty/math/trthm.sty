@@ -57,10 +57,14 @@
 % hoped to the best loop, but tastes matter
 \docsvlist{thrm,lem,stat,prop,imp,cor,defn,exmp,rem}
 
+% temporary hack
+\ifdef\c@chapter{
+  \def\trm@stat@headnumberformat{\arabic{chapter}.\arabic{paragraph}}
+}{
+\def\trm@stat@headnumberformat{\arabic{section}}
+}
 \renewcommand*{\do}[1]{
-  \expandafter\edef\csname p@#1\endcsname{%
-    \noexpand\arabic\noexpand{chapter}.\noexpand\arabic\noexpand{paragraph}.%
-\expandafter\noexpand\csname the#1\endcsname\noexpand\expandafter\noexpand\@gobble}
+  \csdef{p@#1}{\trm@stat@headnumberformat.\csuse{the#1}\ex@f\@gobble}
 }
 \docsvlist{thrm,defn,exmp}
 

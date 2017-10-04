@@ -30,5 +30,6 @@
 \def\conv{\ensuremath \textit{ сх }}
 \def\noconv{\ensuremath \textit{ расх }}
 \DeclareMathOperator\Vp{V.p.}
-
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\DeclareMathOperator*{\argmin}{arg\,min}
 % vim:ft=tex

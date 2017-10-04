@@ -29,4 +29,4 @@ And make them modular. At least, no more copy-pasting.
 * [ ] `ifluatex`, `ifxetex`
 * [ ] enhance existing layouts aestetically
 * [ ] new cool layouts
-*
+
