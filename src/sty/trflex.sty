@@ -12,11 +12,28 @@
 \ProcOpts
 
 \def \@trf@namespace{tarantas/flex/}
-\def \trf@cmd@new#1#2{
-  \edef \@trf@cmd@name{\@trf@namespace\ex@f\@gobble\detokenize{#1}}
-  \ex@f\setStorePrefix\ex@f{\@trf@cmd@name}
+% {name} {default parameters} newcommand args /[2][]/ {
+\def \trf@newcmd@prepare#1#2#3#{
+  \esetStorePrefix{\@trf@namespace\ex@f\@gobble\detokenize{#1}}
   \storePairsDef{#2}
-  \newcommand{#1}
+  \trf@newcmd@define{#1}{#3}
 }
+\def \trf@newcmd@define#1#2#3{
+  \newcommand{#1}#2{
+    \esetStorePrefix{\@trf@namespace\ex@f\@gobble\detokenize{#1}}
+    #3
+  }
+}
+\def \trf@newcmd@create{%
+  \ifexpmode%
+  {\unexpanded{\PackageError{trflex}{commands can't work in expansion-only mode}}}%
+  {\trf@newcmd@prepare}%
+}
+
+\def \trf@var@use#1{
+  \csuse{\@trkv@prefix#1}
+}
+
+
 
 \endinput
