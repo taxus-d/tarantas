@@ -1,0 +1,6 @@
+\ProvidesFile{trmlogic.def}[
+  2017/08/03 Collection of logic-related symbols]
+
+% `arrows'
+\let \iff=\Leftrightarrow
+% vim:ft=tex

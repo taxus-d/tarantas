@@ -2,8 +2,6 @@
   2017/08/03 Collection of algebra symbols]
 
 \DeclareMathOperator\rk{rk}
-\DeclareMathOperator\End{End}
-\DeclareMathOperator\Ker{Ker}
 \let\Re\relax
 \let\Im\relax
 \DeclareMathOperator\Re{Re}
@@ -16,4 +14,10 @@
 \DeclareMathOperator\Res{Res}
 \DeclareMathOperator\Aut{Aut}
 \DeclareMathOperator\Stab{Stab}
+
+\DeclareMathOperator\Obj{Obj}
+\DeclareMathOperator\Mor{Mor}
+\DeclareMathOperator\End{End}
+\DeclareMathOperator\Hom{Hom}
+\DeclareMathOperator\Ker{Ker}
 % vim:ft=tex

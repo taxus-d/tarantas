@@ -7,11 +7,13 @@
 
 \storePairDef{size=10}
 
-\setfont
+\setfont{\getByKey{size}}
 
 \RequirePackage{geometry}
+\storePairsDef{paper-type = a4paper, page-orient=portrait}
 \geometry{
-  a4paper,
+  \getByKey{paper-type},
+  \getByKey{page-orient},
   left=1cm,
   right=1cm,
   top=1cm,
