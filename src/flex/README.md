@@ -19,7 +19,6 @@ note {type:\footnote;}
 
 * tags = .classes, html cant alias tags, we have this option.
 * no #id's and [attributes], at least for recent future. 
-  Until we solve expandability problems
 * cascade style system is tricky to implement. 
 * proper css property values will appear when i learn them ;).
   Actually, dict lookup costs something.

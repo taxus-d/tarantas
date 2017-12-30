@@ -11,16 +11,18 @@
 }
 \ProcOpts
 
-\def \@trf@namespace{tarantas/flex/}
-% {name} {default parameters} newcommand args /[2][]/ {
+\def \@trf@defnamespace{tarantas/flex/default/}
+\def \@trf@cssnamespace{tarantas/flex/css/}
+\let \@trf@cssnamespace=\@trf@defnamespace % temporary
+% {<name>} {<default parameters>} <command-args> /[2][]/ {
 \def \trf@newcmd@prepare#1#2#3#{
-  \esetStorePrefix{\@trf@namespace\ex@f\@gobble\detokenize{#1}}
+  \esetStorePrefix{\@trf@defnamespace\ex@f\@gobble\detokenize{#1}}
   \storePairsDef{#2}
   \trf@newcmd@define{#1}{#3}
 }
 \def \trf@newcmd@define#1#2#3{
   \newcommand{#1}#2{
-    \esetStorePrefix{\@trf@namespace\ex@f\@gobble\detokenize{#1}}
+    \esetStorePrefix{\@trf@defnamespace\ex@f\@gobble\detokenize{#1}}
     #3
   }
 }
@@ -34,6 +36,28 @@
   \csuse{\@trkv@prefix#1}
 }
 
+% { desc-list }
+\let \@trt@endenv=\end
+\def \trf@desc@parse{
+  \futurelet\@trt@desc@nexttoken \trf@entry@check
+}
+\def \trf@entry@check{
+  \ifx \@trf@desc@nexttoken \@trt@endenv \ex@f \@trt@endenv
+  \else \trf@entry@parse 
+  \fi
+}
+\def \trf@entry@parse#1#{
+  \trf@entryhead@parse{#1}
+  \trf@entrybody@parse
+}
 
+\def \trf@entryhead@parse#1{
+  \esetStorePrefix{\@trf@cssnamespace\detokenize{#1}}
+}
+\def \trf@entrybody@parse#1{
+  \setPairSep{:}
+  \setKvListSep{;}
+  \storePairs{#1}
+}
 
 \endinput
