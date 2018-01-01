@@ -64,6 +64,7 @@ pairs: \forlistloop{\getPrettyPair}{\testlist} \par
 \newPairsParser{\getKeysList}{
   \expandafter\listgadd\expandafter\keylist \expandafter{\romannumeral-`X\k}
 }
+
 \def\keylist{}
 \getPrettyPairs{$\sin'$=$\cos$, $\tan'$=$\frac{1}{\cos^2}$}
 \getKeysList{$\sin'$=$\cos$, $\tan'$ = $\frac{1}{\cos^2}$}
