@@ -1,7 +1,8 @@
+\let\note\relax
 \newflexcommand{\note}{
   type:\footnote;
-}[1]{
-  \ifexpmode{}{\flexvar{type}}
+}{%
+  \ifexpmode{}{\flexvar{type}}%
 }
 
 % vim:ft=tex

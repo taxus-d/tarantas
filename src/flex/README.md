@@ -27,9 +27,9 @@ note {type:\footnote;}
 
 ### Description
 ```tex
-\flexstyle{
+\begin{flexstyle}
 multicol footnote {type:\endnote;}
-}
+\end{flexstyle}
 ```
 
 ### Declaration

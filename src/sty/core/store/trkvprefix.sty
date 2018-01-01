@@ -26,6 +26,12 @@
   \cssmuggle{\@trkv@prefix \k}%
 }}
 
+% sometimes useful
+\newPairsParser{\gstorePairs}{%
+  \kT=\ex@f\ex@f\ex@f{\ex@f\detokenize\ex@f{\the\kT}}%
+  \csxdef{\@trkv@prefix \k}{\v}% global \def
+  %\cssmuggle{\@trkv@prefix \k}% useless
+}
 
 \def \rawgetByKey#1#2{%
 \csexpandonce{#1\detokenize{#2}}}
