@@ -59,14 +59,14 @@
 
 % temporary hack
 \ifdef\c@chapter{
-  \def\trm@stat@headnumberformat{\arabic{chapter}.\arabic{paragraph}}
+  \def\trth@stat@headnumberformat{\arabic{chapter}.\arabic{paragraph}}
 }{
-\def\trm@stat@headnumberformat{\arabic{section}}
+\def\trth@stat@headnumberformat{\arabic{section}}
 }
-\renewcommand*{\do}[1]{
-  \csdef{p@#1}{\trm@stat@headnumberformat.\csuse{the#1}\ex@f\@gobble}
+\newcommand*{\trth@head@format}[1]{
+  \csdef{p@#1}{\trth@stat@headnumberformat.\csuse{the#1}\ex@f\@gobble}
 }
-\docsvlist{thrm,defn,exmp}
+\forcsvlist{\trth@head@format}{thrm,defn,exmp}
 
 \renewcommand{\p@equation}{\theequation\expandafter\@gobble}
 
