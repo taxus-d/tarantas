@@ -1,7 +1,7 @@
 \ProvidesFile{trsym.def}[2017/08/03 Predefined custom symbols]
 
 \newsym{\underdev}%
-{\thinspace$\langle${\MineSign}$\rangle$\thinspace}%
+{\mbox{\thinspace$\langle${\MineSign}$\rangle$\thinspace}}%
 {(underdev)}%
 
 \newsym{\sour}   {$\langle\ddot\sim\rangle$}              {(sour)}%
@@ -10,8 +10,8 @@
 
 \newsym{\flame}  {$\langle$\texttt{:set aflame}$\rangle$} {(:set aflame)}%
 
-\newsym{\coori}  {$\mathop{\uparrow\!\uparrow}$}            {↑↑}
-\newsym{\conori} {$\mathop{\uparrow\!\downarrow}$}          {↑↓} 
+\newsym{\coori}  {\ensuremath\mathop{\uparrow\!\uparrow}}            {↑↑}
+\newsym{\conori} {\ensuremath\mathop{\uparrow\!\downarrow}}          {↑↓} 
 
 \newcommand\plholdev[1]{\texttt{<+{#1}+>}} 
 \newcommand\intrng{\mathbin{..}} 

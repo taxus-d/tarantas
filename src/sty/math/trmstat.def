@@ -5,6 +5,7 @@
 \DeclareMathOperator{\Var}{D} 
 \DeclareMathOperator{\cov}{cov} 
 \newcommand{\av}[1]{\overline{#1}} 
+\let \averg=\av
 \newcommand{\intR}{\int_{-\infty}^{+\infty}} 
 \newcommand\alev{\relax\ifmmode\text{~п.в.~}\else п.в.\fi}
 % vim:ft=tex

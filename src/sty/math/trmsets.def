@@ -10,7 +10,7 @@
 \newcommand\Q{\ensuremath\mathbbm{Q}}
 \newcommand\Z{\ensuremath\mathbbm{Z}}
 \newcommand\N{\ensuremath\mathbbm{N}}
-
+\newcommand\Sphere[1]{\ensuremath\mathbbm{S}^#1}
 
 \DeclareFontFamily{OT1}{pzc}{}
 \DeclareFontShape{OT1}{pzc}{m}{it}{<-> s * [1.200] pzcmi7t}{}

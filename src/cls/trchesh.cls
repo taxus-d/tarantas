@@ -61,6 +61,21 @@
 \RequirePackage{chngcntr} % tools for counters 
 
 \let \enotesectiontype=\section
+
+\renewcommand{\theparagraph}{\arabic{paragraph}}
+% \newcommand{\paragraphheadsep}{1.4ex}
+% \newcommand{\paragraphlabelformat}{\Large}
+\counterwithin*{paragraph}{section}
+\renewcommand{\paragraph}{
+  \@startsection{paragraph}%
+  {2}%
+  {0em}%
+  {-\baselineskip}%
+  {0.5\baselineskip}%
+  {\normalfont\bfseries}
+}
+% no need for toc
+% \renewcommand*\l@paragraph{\@dottedtocline{2}{2em}{2em}}
 \setcounter{secnumdepth}{2}
 \setcounter{tocdepth}{2}
 
@@ -75,6 +90,8 @@
   linkcolor=blue, 
   citecolor=green!50!black
 }
+% for proper links
+\def\toclevel@paragraph{2}
 
 \everymath{\displaystyle}
 \pagenumbering{gobble}
