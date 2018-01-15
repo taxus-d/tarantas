@@ -1,0 +1,13 @@
+\ProvidesFile{trphq.def}[
+  2017/08/03 Collection of quantum-physics related symbols]
+
+\relax
+
+\providecommand{\mvert}{\mathrel{\vert}}
+\newcommand{\bra}[1]{\ensuremath \left\langle #1 \right\rvert}
+\newcommand{\ket}[1]{\ensuremath \left\lvert #1 \right\rangle}
+\newcommand{\hsclprod}[2]{\ensuremath \left\langle #1 \,\middle\vert\, #2\right\rangle}
+
+\providecommand{\tensprod}{\ensuremath \mathbin{\otimes}}
+
+% vim:ft=tex
