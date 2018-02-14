@@ -8,12 +8,13 @@
 \NeedsTeXFormat{LaTeX2e}
 % plain notes have only sections
 % long notes are more like a report, with chapters and paragraphs
-\ProvidesClass{trchesh}[2017/05/27 Short version of notes]
+\ProvidesClass{trchesh}[2017/05/27 Cheatsheet-like notes]
 
 
 \RequirePackage{trcore}
 \RequirePackage{trly}
 \RequirePackage{trclstools}
+\RequirePackage{trkvdict}
 
 %%% =================
 %%% language packages
@@ -26,7 +27,10 @@
 %%% ===========
 
 \def\@baseclass{article}
-\listdef\@complyt{timbord,ebook,hardcopy} % compatible layouts
+\listdef \@complyt{hardcopy} % compatible layouts
+\dictdef \@multicolmodes{
+*=multicols*, =multicols, 
+balanced=multicols, unbalanced=multicols*}
 
 %%% =======================
 %%% Option processing stuff
@@ -36,11 +40,14 @@
 \DeclCompOpt{final<>draft}
 \DeclPassOpt{10pt,12pt}
 
+\DeclOpt{columns}{\edef \trch@columnsquantity{\CurrentValue}}
+\DeclOpt{mode}{\dictegetto\@multicolmodes{\CurrentValue}\@trch@mulcolenv@name}
 %% Fallback
 \DeclareOption*{
     \ClassWarning{trchesh}{does not know about '\CurrentOption'}
     \PassOptionsToClass{\CurrentOption}{\@baseclass}
 }
+\ExeOpts{mode=unbalanced,columns=3}
 \ProcOpts
 
 \LoadCls{\@baseclass}
@@ -95,5 +102,11 @@
 
 \everymath{\displaystyle}
 \pagenumbering{gobble}
+
+
+\edef \trt@exphandler{
+\noexpand\AtBeginDocument{\noexpand\begin{\@trch@mulcolenv@name}{\trch@columnsquantity}}
+\noexpand\AtEndDocument{\noexpand\end{\@trch@mulcolenv@name}}
+}\trt@exphandler
 \endinput
 % vim: nofoldenable
