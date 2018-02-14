@@ -3,6 +3,7 @@
   Class/package option parser for `tarantas' bundle]
 
 \RequirePackage{trkv}
+\RequirePackage{trtools}
 
 \DeclareOption{togl}{
   \let\tro@bl@new\providetoggle
@@ -39,12 +40,21 @@
 \def \tro@hook@afterloadedclass{}
 \newcommand*{\AfterOptsProcd}  [1] {\appto \tro@hook@afteroptsprocd{#1}}
 \newcommand*{\AfterLoadedClass}[1] {\appto \tro@hook@afterloadedclass{#1}}
+\def \tro@hook@beforeoptsexec{}
+\def \tro@hook@afteroptsexec{}
+\newcommand*{\BeforeOptsExecd}[1] {\appto \tro@hook@beforeoptsexec{#1}}
+\newcommand*{\AfterOptsExecd }[1] {\appto \tro@hook@afteroptsexec{#1}}
 % feel myself like a mountain climber
 
-% redefined command with hooks
-\newcommand*{\ProcOpts} {
+% redefined commands with hooks
+\newcommand*{\ProcOpts}{
   \tro@opts@process
   \tro@hook@afteroptsprocd
+}
+\newcommand*{\ExeOpts}[1]{
+  \tro@hook@beforeoptsexec
+  \tro@opts@exec{#1}
+  \tro@hook@afteroptsexec
 }
 % another one. May limit some functionality
 %+ But looks like everything still works
@@ -55,6 +65,7 @@
   \tro@hook@afterloadedclass
 }
 \@onlypreamble \ProcOpts
+\@onlypreamble \ExeOpts
 \@onlypreamble \LoadCls
 % custom option handler builder
 % before `do'ing stuff performs an optional check

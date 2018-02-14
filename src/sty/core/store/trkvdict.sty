@@ -41,6 +41,7 @@
   \trd@dict@access{#1}{#2}%
     {\csexpandonce{\@trd@dict@prefix\detokenize{#1/#2}}}%
 }
+% {/dict name/} {/key/} {/cs to store a value/}
 \def \dictgetto#1#2#3{%
   \trd@dict@access{#1}{#2}%
     {\edef#3{\csexpandonce{\@trd@dict@prefix\detokenize{#1/#2}}}}%

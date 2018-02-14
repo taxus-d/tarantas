@@ -48,7 +48,29 @@
   \AtEndOfPackage{\let\@unprocessedoptions\relax}
 }
 
+\newPairsParser{\tro@exeOpts}{
+  \edef \CurrentOption{\k}
+  \edef \CurrentValue{\v}
+  \smuggle \CurrentOption \smuggle \CurrentValue
+  \endgroup
+  \ifcsdef{ds@\CurrentOption}
+    {\csuse{ds@\CurrentOption}}
+    {\PackageError{tropt}
+      {Option `\CurrentOption'\space is unknown}
+      {Maybe you misspelled it?}}
+  \begingroup% to pair inner \endgroup
+}
+\def \tro@opts@exec#1{%
+  %spoils them
+  \let \@trt@temp@i=\CurrentOption%
+  \let \@trt@temp@ii=\CurrentValue%
+  \tro@exeOpts{#1}%
+  \let \CurrentOption=\@trt@temp@i%
+  \let \CurrentValue=\@trt@temp@ii%
+}
+
 \@onlypreamble \tro@opts@process
 \@onlypreamble \tro@xprocess@ptions
 \@onlypreamble \tro@process@pti@ns
+\@onlypreamble \tro@opts@exec
 % vim:ft=plaintex
