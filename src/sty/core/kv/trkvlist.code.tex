@@ -13,14 +13,14 @@
   \edef\@tempa{\endgroup
     \long\def\noexpand#1####1{%
       \expandafter\noexpand
-      \csname etb@lst@\expandafter\@gobble\string#1\endcsname
+      \csname trkv@lst@\expandafter\@gobble\string#1\endcsname
       \space####1\noexpand#2&}%
-    \long\csdef{etb@lst@\expandafter\@gobble\string#1}####1\noexpand#2####2&{%
+    \long\csdef{trkv@lst@\expandafter\@gobble\string#1}####1\noexpand#2####2&{%
       \noexpand\trkv@listitem\noexpand\do{####1}%
       \noexpand\ifblank{####2}
         {\noexpand\listbreak}
         {\expandafter\noexpand
-         \csname etb@lst@\expandafter\@gobble\string#1\endcsname
+         \csname trkv@lst@\expandafter\@gobble\string#1\endcsname
 	 \space####2}&}}%
   \@tempa}
 
@@ -29,14 +29,14 @@
   \edef\@tempa{\endgroup
     \long\def\noexpand#1####1####2{%
       \expandafter\noexpand
-      \csname etb@lst@\expandafter\@gobble\string#1\endcsname
+      \csname trkv@lst@\expandafter\@gobble\string#1\endcsname
       {####1}\space####2\noexpand#2&}%
-    \long\csdef{etb@lst@\expandafter\@gobble\string#1}####1####2\noexpand#2####3&{%
+    \long\csdef{trkv@lst@\expandafter\@gobble\string#1}####1####2\noexpand#2####3&{%
       \noexpand\trkv@listitem{####1}{####2}%
       \noexpand\ifblank{####3}
         {\noexpand\listbreak}
         {\expandafter\noexpand
-         \csname etb@lst@\expandafter\@gobble\string#1\endcsname
+         \csname trkv@lst@\expandafter\@gobble\string#1\endcsname
 	 {####1}\space####3}&}}%
   \@tempa}
 

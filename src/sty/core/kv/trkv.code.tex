@@ -42,7 +42,7 @@
 
 %  #1 -- pair, like {alpha=beta}
 %  #2 -- what to get, like \k:\v
-\def \trkv@pair@parse#1#2{%
+\def \trkv@pair@declparse#1#2{%
   \if\relax\detokenize{#1}\relax%
   \PackageError{trkv}{\noexpand\trkv@pair@parse Nothing to parse}%
   {Provide a nonempty string. Or invent a workaround}%
@@ -66,8 +66,8 @@
 \def \trkv@pairparser@defhelper#1#2{
   \csdef{#1}##1{%
     \@ifnextchar[%]
-    {\@nameuse{#1@i}{##1}}%
-    {\@nameuse{#1@i}{##1}[{1}]}%
+    {\csuse{#1@i}{##1}}%
+    {\csuse{#1@i}{##1}[{1}]}%
   }
   \csdef{#1@i}##1[##2]##3{%
     \newcommand*{##1}[##2]{#2}%

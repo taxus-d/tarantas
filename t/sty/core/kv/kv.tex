@@ -10,7 +10,7 @@
 % coerced etoolbox to produce special list parser for trkv
 % no braces problem now
 \def\do#1{\listadd\testlist{#1}}
-\dokvlist{{formulas, math, etc}
+\dokvlist{{formulas={\it none}, math, etc}
 =
 $b$  ,                   {  c .= lf}
               =
@@ -28,6 +28,7 @@ values: \forlistloop{$|$\getVal}{\testlist}$|$ \par
 pairs: \forlistloop{\getPrettyPair}{\testlist} \par
 \getPrettyPairs{guk=1,hek = \def\hek#1{{\bf#1}}\hek{kek}}\par
 \storePair{/kek/color/.ini = deep red with bits of blue}
+\fboxsep=1pt
 \fbox{\getByKey{/kek/color/.ini}}\par
 \storePairs{sigma = $\sigma$, exit = no way, coding in = \TeX}
 \fbox{\getByKeys{sigma,exit, coding in}} \par
@@ -72,7 +73,7 @@ pairs: \forlistloop{\getPrettyPair}{\testlist} \par
 \storePairDef{note=\footnote}
 \edef\foo{
 \noexpand\toks0={\getByKey{note}}
-}\the\toks0{and this}
+}want to mention that\the\toks0{and this}
 % \def \defhelper#1{
 %   \getByKey{notes/#1}
 % }

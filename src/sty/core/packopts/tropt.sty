@@ -111,19 +111,6 @@
   }
 }
 
-% #1 -- string
-% #2 -- separator
-% #3 -- toks to spoil
-\def \trt@str@sepcar#1#2->T#3{%
-  \begingroup
-  \def\splitter##1#2##2\@nil{\endgroup #3={##1}}
-  \splitter#1\@nil
-}
-\def \trt@str@sepcdr#1#2->T#3{%
-  \begingroup
-  \def\splitter##1#2##2\@nil{\endgroup #3={##2}}
-  \splitter#1\@nil
-}
 \tro@hnd@new{\DeclCompOpt}{
   \ex@f\trt@str@sepcar\ex@f{\@opt}{<>}->T{\toks@}
   \edef\@optleft{\the\toks@}

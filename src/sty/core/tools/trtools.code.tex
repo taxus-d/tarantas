@@ -152,6 +152,21 @@
   \def\procbeg#2##1\@nil{\endgroup #3={##1}}%
   \procbeg#1\@nil%
 }
+%=========================
+% extract parts of string
+% #1 -- string
+% #2 -- separator
+% #3 -- toks to spoil
+\def \trt@str@sepcar#1#2->T#3{%
+  \begingroup
+  \def\splitter##1#2##2\@nil{\endgroup #3={##1}}
+  \splitter#1\@nil
+}
+\def \trt@str@sepcdr#1#2->T#3{%
+  \begingroup
+  \def\splitter##1#2##2\@nil{\endgroup #3={##2}}
+  \splitter#1\@nil
+}
 
 %==========================
 % list-like arguments
