@@ -45,14 +45,14 @@
 \newcommand*{\ov}[1]{%
   \dictget{math hats}{#1}%
 }
-
+% \ov~a --> \widetilde{a}
 %   \PackageError{trmath}{Undefined option to ov: `#1'}%
 
 \newcommand*{\und}[2]{%
   \providecommand\EqCase[3]{\ifstrequal{#1}{##1}{##2}{##3}}%
   \EqCase{-}{\underline{#2}}     {% 
-{\PackageError{trmath}{Undefined option to ov: `#1'}} }%
-}%
+  {\PackageError{trmath}{Undefined option to ov: `#1'}} }%
+}
 
 %\RequirePackage{xstring}
 %\IfEqCase{..}[..default..]
@@ -111,4 +111,13 @@
 \input{trmstat.def}
 
 
+\newcommand{\declareMathLetterTransform}[2]{%
+  \edef \@trt@temp@cmdexpansion{{\noexpand\mathcode`#1=\the\mathcode`#1 \noexpand#2{#1}}}
+  \begingroup%
+  \lccode`~=`#1 %
+  \lowercase{\endgroup%
+    \edef~{\expandonce{\@trt@temp@cmdexpansion}}%
+  }%
+  \mathcode`#1="8000 %
+}
 
