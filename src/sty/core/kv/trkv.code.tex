@@ -5,7 +5,8 @@
 
 %%% setting variables
 \def \trkv@pair@sepset#1{\def\@trkv@pair@sep{#1} \trkv@kvparser@init}
-
+\newif \iftrkv@debug
+\trkv@debugfalse
 
 %% naming hint
 % pairparser -- entity that assepts a whole pair  (#1<-{a=b})
@@ -42,7 +43,7 @@
 
 %  #1 -- pair, like {alpha=beta}
 %  #2 -- what to get, like \k:\v
-\def \trkv@pair@declparse#1#2{%
+\def \trkv@pair@parse#1#2{%
   \if\relax\detokenize{#1}\relax%
   \PackageError{trkv}{\noexpand\trkv@pair@parse Nothing to parse}%
   {Provide a nonempty string. Or invent a workaround}%
@@ -59,57 +60,164 @@
   \fi%
 }
 
+\def \trkv@pairparser@cs@kvparse#1{\csname trkv@pp\ex@f\@gobble\string#1@kvparse\endcsname}
+\def \trkv@pairparser@cs@singular#1{\csname trkv@pp\ex@f\@gobble\string#1@singular\endcsname}
+\def \trkv@pairparser@cs@list#1{\csname trkv@pp\ex@f\@gobble\string#1@listparser\endcsname}
+\def \trkv@pairparser@code#1{\csname trkv@pp\ex@f\@gobble\string#1@code\endcsname}
+
+% {<tl>/pair-sep/} {<tl>/list-sep/} {<cs>/parser name/} {<tl>/code/}
+% \def \trkv@pairparser@declare#1#2#3#4{
+%   %singular parser
+%   %\def \trkv@aux@cur@singular{trkv@aux@\ex@f\@gobble\detokenize{#1}@singular}
+%   %\def \trkv@aux@cur@list{trkv@aux@\ex@f\@gobble\detokenize{#1}@listparser}
+%   %
+%   \def \trkv@kvparser@def#1#2
+%   \ex@f \def\trkv@pairparser@name@kvparse{#3}##1#1##2#1##3\@nil{%
+%     \trt@str@trim{##1}->T{\kT}%
+%     \trt@str@trim{##2}->T{\vT}%
+%   }
+%   \ex@f \def\trkv@pairparser@name@singular{#3}##1{
+%     \if\relax\detokenize{##1}\relax%
+%       \PackageError{trkv}{\string\trkv@pair@parse Nothing to parse}%
+%         {Provide a nonempty string. Or invent a workaround}%
+%     \else%
+%     \begingroup%
+%       % holders of key and value
+%       \let\kT\trkv@pair@kT%
+%       \let\vT\trkv@pair@vT%
+%       \trkv@pairparser@name@kvparse{#3}##1#1#1\@nil%
+%       \def\k{\the\kT}%
+%       \def\v{\the\vT}%
+%       #3% <-- user code
+%     \endgroup%
+%     \fi%
+%   }
+%   %list parser
+%   \ex@f\trkv@arglistparser@def\ex@f%
+%     {\csname\trkv@pairparser@name@list{#3}\endcsname}
+%     {#2}
+%
+% }
+
+\def \trkv@pairparser@new{%
+  \@ifnextchar[%]
+    {\trkv@pairparser@declare}%
+    {\trkv@pairparser@declare[{=}{,}]}%
+}
+\def \trkv@pairparser@declare[#1#2]#3{%
+  \@ifnextchar[%]
+    {\trkv@pairparser@def[#1#2]#3}%
+    {\trkv@pairparser@def[#1#2]#3[1]}% 1 arg by default
+}
+
+% [{<tl>/pair-sep/} {<tl>/list-sep/}] {<cs>/parser name/} [<num>/number of args/] {<tl>/code/}
+\def \trkv@pairparser@def[#1#2]#3[#4]#5{%
+  \iftrkv@debug\trt@arg@debug{pp([#1#2]#3[#4]#5)}\fi%
+  % kvparser, lowlevel one
+  \trkv@kvparser@def{#1}{#3}%
+  \iftrkv@debug\ex@f\ex@f\ex@f \show \trkv@pairparser@cs@kvparse{#3}\fi%
+  % singular pair parser, parses a single pair
+  \trkv@singularpairparser@def{#1}{#3}%
+  \iftrkv@debug\ex@f\ex@f\ex@f \show \trkv@pairparser@cs@singular{#3}\fi%
+  %list parser
+  \ex@f\ex@f\ex@f\trkv@arglistparser@def\ex@f\ex@f\ex@f%
+    {\trkv@pairparser@cs@list{#3}}%
+    {#2}%
+%
+  \iftrkv@debug\ex@f\ex@f\ex@f \show\trkv@pairparser@cs@list{#3}\fi%
+  % final user command
+  \edef \trt@exphandler{
+    \unexpanded{\newcommand{#3}[#4]}{%
+      \def \ex@f\expandonce\ex@f{\trkv@pairparser@code{#3}{#5}}%
+      \ex@f\expandonce\ex@f{\trkv@pairparser@cs@list{#3}}{%
+      \ex@f\expandonce\ex@f{\trkv@pairparser@cs@singular{#3}}}%
+      {#####4}%
+    }%
+  }\trt@exphandler%
+  \iftrkv@debug\show #3\fi%
+}
+
+% {<tl>/pair-sep/} {<cs>/parser name/}
+%% aaa=bbb=ccc\@nil. Called as <pair>==\@nil
+%% <pair> is a=b ==> #1 <- 'a', #2 <- 'b', #3 <- '='
+%% <pair> is a   ==> #1 <- 'a', #2 <- '' , #3 <- ''
+\def \trkv@kvparser@def#1#2{%
+  \ex@f\ex@f\ex@f \def\trkv@pairparser@cs@kvparse{#2}##1#1##2#1##3\@nil{%
+    \trt@str@trim{##1}->T{\kT}%
+    \trt@str@trim{##2}->T{\vT}%
+  }%
+}% small slowdown \iftrkv@debug \trt@arg@debug{kv:[##1]=[##2]}\fi%
+
+% {<tl>/pair-sep/} {<cs>/parser name/} {<tl>/code/}
+\def \trkv@singularpairparser@def#1#2{%
+  \ex@f\ex@f\ex@f \def\trkv@pairparser@cs@singular{#2}##1{%
+    \if\relax\detokenize{##1}\noexpand\relax%
+      \PackageError{trkv}{\string\trkv@pair@parse Nothing to parse}%
+        {Provide a nonempty string. Or invent a workaround}%
+    \else%
+    \begingroup%
+      % holders of key and value
+      \let\kT\trkv@pair@kT%
+      \let\vT\trkv@pair@vT%
+      \trkv@pairparser@cs@kvparse{#2}##1#1#1\@nil%
+      \def\k{\the\kT}%
+      \def\v{\the\vT}%
+      \trkv@pairparser@code{#2}% <-- user code
+    \endgroup%
+    \fi%
+  }%
+}
 
 % pair parser definitions factory..\sour
 % {<str>/macro name/} {<tl>/code/} ->
 %    new pair parser definition
-\def \trkv@pairparser@defhelper#1#2{
-  \csdef{#1}##1{%
-    \@ifnextchar[%]
-    {\csuse{#1@i}{##1}}%
-    {\csuse{#1@i}{##1}[{1}]}%
-  }
-  \csdef{#1@i}##1[##2]##3{%
-    \newcommand*{##1}[##2]{#2}%
-  }%
-}
-
-\trkv@pairparser@defhelper{trkv@pairparser@def}{%
-  \trkv@pair@parse{###2}{#3}%
-}
-\trkv@pairparser@defhelper{trkv@epairparser@def}{%
-  \trt@macro@fullexpand{###2}->T{\toks@}%
-  \ex@f\trkv@pair@parse\ex@f{\the\toks@}{#3}%
-}
-\trkv@pairparser@defhelper{trkv@pairsparser@def}{%
-  \def\do####1{\trkv@pair@parse{####1}{#3}}%
-  \dokvlist{###2}%
-}
-\trkv@pairparser@defhelper{trkv@epairsparser@def}{%
-  \trt@macro@fullexpand{###2}->T{\toks@}%
-  \def\do####1{\trkv@pair@parse{####1}{#3}}%
-  \ex@f\dokvlist\ex@f{\the\toks@}%
-}
-
-
-
-% #1-#4 --- parser names
-% #5 --- code
-\def \trkv@fullpairparser@def#1#2#3#4#5{
-  \trkv@pairparser@def{#1}#5
-  \trkv@pairsparser@def{#2}#5
-  \trkv@epairparser@def{#3}#5
-  \trkv@epairsparser@def{#4}#5
-}
-
-\def \trkv@mulpairparser@def#1#2#3{
-  \trkv@pairsparser@def{#1}#3
-  \trkv@epairsparser@def{#2}#3
-}
-\def \trkv@singpairparser@def#1#2#3{
-  \trkv@pairparser@def{#1}#3
-  \trkv@epairparser@def{#2}#3
-}
+% \def \trkv@pairparser@defhelper#1#2{
+%   \csdef{#1}##1{%
+%     \@ifnextchar[%]
+%     {\csuse{#1@i}{##1}}%
+%     {\csuse{#1@i}{##1}[{1}]}%
+%   }
+%   \csdef{#1@i}##1[##2]##3{%
+%     \newcommand*{##1}[##2]{#2}%
+%   }%
+% }
+%
+% \trkv@pairparser@defhelper{trkv@pairparser@def}{%
+%   \trkv@pair@parse{###2}{#3}%
+% }
+% \trkv@pairparser@defhelper{trkv@epairparser@def}{%
+%   \trt@macro@fullexpand{###2}->T{\toks@}%
+%   \ex@f\trkv@pair@parse\ex@f{\the\toks@}{#3}%
+% }
+% \trkv@pairparser@defhelper{trkv@pairsparser@def}{%
+%   \def\do####1{\trkv@pair@parse{####1}{#3}}%
+%   \dokvlist{###2}%
+% }
+% \trkv@pairparser@defhelper{trkv@epairsparser@def}{%
+%   \trt@macro@fullexpand{###2}->T{\toks@}%
+%   \def\do####1{\trkv@pair@parse{####1}{#3}}%
+%   \ex@f\dokvlist\ex@f{\the\toks@}%
+% }
+%
+%
+%
+% % #1-#4 --- parser names
+% % #5 --- code
+% \def \trkv@fullpairparser@def#1#2#3#4#5{
+%   \trkv@pairparser@def{#1}#5
+%   \trkv@pairsparser@def{#2}#5
+%   \trkv@epairparser@def{#3}#5
+%   \trkv@epairsparser@def{#4}#5
+% }
+%
+% \def \trkv@mulpairparser@def#1#2#3{
+%   \trkv@pairsparser@def{#1}#3
+%   \trkv@epairsparser@def{#2}#3
+% }
+% \def \trkv@singpairparser@def#1#2#3{
+%   \trkv@pairparser@def{#1}#3
+%   \trkv@epairparser@def{#2}#3
+% }
 
 
 % vim: ft=plaintex

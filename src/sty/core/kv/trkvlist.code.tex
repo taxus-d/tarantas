@@ -8,7 +8,7 @@
 \edef\trt@ampcode{\the\catcode`\&}
 \catcode`\&=3
 
-\def\trkv@defparser@do#1#2{%
+\def\trkv@dolistparser@def#1#2{%
   \begingroup
   \edef\@tempa{\endgroup
     \long\def\noexpand#1####1{%
@@ -24,7 +24,8 @@
 	 \space####2}&}}%
   \@tempa}
 
-\def\trkv@defparser@arg#1#2{%
+% {<cs>/parser name/} {<tl>/list sep/}
+\def\trkv@arglistparser@def#1#2{%
   \begingroup
   \edef\@tempa{\endgroup
     \long\def\noexpand#1####1####2{%
@@ -42,16 +43,17 @@
 
 \catcode`\&=\trt@ampcode
 
+\def \trkv@listparser@def{\@ifstar \trkv@arglistparser@def \trkv@dolistparser@def}
 \def \trkv@list@sepset#1{%
-  \let \etb@defparser@do@old=\etb@defparser@do
-  \let \etb@defparser@arg@old=\etb@defparser@arg
-  \let \etb@defparser@do=\trkv@defparser@do
-  \let \etb@defparser@arg=\trkv@defparser@arg
+%   \let \etb@defparser@do@old=\etb@defparser@do
+%   \let \etb@defparser@arg@old=\etb@defparser@arg
+%   \let \etb@defparser@do=\trkv@dolistparser@def
+%   \let \etb@defparser@arg=\trkv@arglistparser@def
   \let \dokvlist=\relax 
   \let \forkvlist=\relax
-  \DeclareListParser{\dokvlist}{#1}%
-  \DeclareListParser*{\forkvlist}{#1}%
-  \let \etb@defparser@do=\etb@defparser@do@old
-  \let \etb@defparser@arg=\etb@defparser@arg@old
+  \trkv@dolistparser@def{\dokvlist}{#1}%
+  \trkv@arglistparser@def{\forkvlist}{#1}%
+%   \let \etb@defparser@do=\etb@defparser@do@old
+%   \let \etb@defparser@arg=\etb@defparser@arg@old
 }
 % vim: ft=plaintex
