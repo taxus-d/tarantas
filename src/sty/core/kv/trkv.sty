@@ -22,8 +22,13 @@
 % A kind of public API
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\let \setPairSep=\trkv@pair@sepset
-\let \setKvListSep=\trkv@list@sepset
+% universal list parsers
+
+\trkv@dolistparser@def{\dokvlist}{,}%
+\trkv@arglistparser@def{\forkvlist}{,}%
+
+% \let \setPairSep=\trkv@pair@sepset
+% \let \setKvListSep=\trkv@list@sepset
 
 % \let \newPairParser=\trkv@pairparser@def
 % \let \newPairsParser=\trkv@pairsparser@def
@@ -40,7 +45,7 @@
 \newPairParser{\getKey}{\k}
 \newPairParser{\getVal}{\v}
 
-\input{trkv.def}
+% \input{trkv.def}
 
 \endinput
 % vim:ft=tex

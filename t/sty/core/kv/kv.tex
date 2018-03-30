@@ -53,13 +53,13 @@ pairs: \forlistloop{\getPrettyPair}{\testlist} \par
 \getPrettyPairs{aa,bb, =aaa, \#=jjj}
 
 % multitoken separator is supported, to
-\setPairSep{->}
-\setKvListSep{;}
+% \setPairSep{->}
+% \setKvListSep{;}
 \getPrettyPairs{ with `=' sign->can store them!; and this-> too}
 
 \storePairDef{sigma-> $\sigma\!\sigma$}
 \storePairsDef{sigme -> $\sigma\!e$; sigmo -> $\sigma\!o$}
-\setPairSep{:}
+% \setPairSep{:}
 \getPairsByKey{sigme, sigma, sigmo}
 
 \storePair{
@@ -69,7 +69,7 @@ pairs: \forlistloop{\getPrettyPair}{\testlist} \par
  one: }  
 \par
 
-\input{trkv.def}
+% \input{trkv.def}
 
 \newPairsParser{\getKeysList}{
   \expandafter\listgadd\expandafter\keylist \expandafter{\romannumeral-`X\k}
@@ -79,10 +79,10 @@ pairs: \forlistloop{\getPrettyPair}{\testlist} \par
 \getPrettyPairs{$\sin'$=$\cos$, $\tan'$=$\frac{1}{\cos^2}$}
 \getKeysList{$\sin'$=$\cos$, $\tan'$ = $\frac{1}{\cos^2}$}
 
-\storePairDef{note=\footnote}
-\edef\foo{
-\noexpand\toks0={\getByKey{note}}
-}want to mention that\the\toks0{and this}
+% \storePairDef{note=\footnote}
+% \edef\foo{
+% \noexpand\toks0={\getByKey{note}}
+% }want to mention that\the\toks0{and this}
 % \def \defhelper#1{
 %   \getByKey{notes/#1}
 % }
