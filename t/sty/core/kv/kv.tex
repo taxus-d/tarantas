@@ -13,7 +13,7 @@
 
 \def\prettylist{$=\!$[\k$\to$\v]$\!=\!$}
 \newPairParser{\getPrettyPair}{\prettylist}
-\newPairsParser{\getPrettyPairs}{$=\!$[\k$\to$\v]$\!=\!$}%\prettylist}
+\newPairsParser{\getPrettyPairs}{\prettylist}
 \def\testlist{}
 % coerced etoolbox to produce special list parser for trkv
 % no braces problem now
@@ -25,6 +25,11 @@ $b$  ,                   {  c .= lf}
 {d<<=>>k l}, \TeX    =\TeX}
 \makeatletter
 \newPairParser{\storeto}[2]{
+  \kT=\ex@f\ex@f\ex@f{\ex@f\detokenize\ex@f{\the\kT}}%
+  \csedef{#1\k}{\v}%
+  \cssmuggle{#1\k}%
+}
+\newEpairParser{\estoreto}[2]{
   \kT=\ex@f\ex@f\ex@f{\ex@f\detokenize\ex@f{\the\kT}}%
   \csedef{#1\k}{\v}%
   \cssmuggle{#1\k}%
@@ -50,12 +55,16 @@ pairs: \forlistloop{\getPrettyPair}{\testlist} \par
 \relax
 
 % And a stressful one
-\getPrettyPairs{aa,bb, =aaa, \#=jjj}
+\getPrettyPairs{aa,bb, =aaa, \string#=jjj}
+% we can use hashes in parser arguments, but here we were trying 
+% to typeset it. Therefore, \string
 
 % multitoken separator is supported, to
 % \setPairSep{->}
 % \setKvListSep{;}
-\getPrettyPairs{ with `=' sign->can store them!; and this-> too}
+\newPairsParser[{->};]{\procEqualPairs}{\prettylist}
+
+\procEqualPairs{ with `=' sign->can store them!; and this-> too}
 
 \storePairDef{sigma-> $\sigma\!\sigma$}
 \storePairsDef{sigme -> $\sigma\!e$; sigmo -> $\sigma\!o$}
@@ -89,7 +98,10 @@ pairs: \forlistloop{\getPrettyPair}{\testlist} \par
 % \expandafter \defhelper \getByKey{note}
 
 \storeto{eleven crabs}{next crab=taxus}
-\rawgetByKey{eleven crabs}{next crab}
+\def \severalbitsoftimefreedom{when = not today}
+\estoreto{eleven crabs}{\severalbitsoftimefreedom}
+\textbf{\rawgetByKey{eleven crabs}{next crab}} will do it 
+\textit{\rawgetByKey{eleven crabs}{when}}
 
 
 \end{document}

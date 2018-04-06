@@ -2,8 +2,12 @@
 \ProvidesPackage{trkv}[2017/07/10
   Key=Val parser for `tarantas' bundle]
 
+
 \RequirePackage{trtools}
 
+\newbool{trkv@debug}
+
+\DeclareOption{debug}{\booltrue{trkv@debug}}
 %% Fallback                                  
 \DeclareOption*{
   \PackageError{trkv}{does not know about `\CurrentOption'.
@@ -30,6 +34,7 @@
 % \let \setPairSep=\trkv@pair@sepset
 % \let \setKvListSep=\trkv@list@sepset
 
+
 % \let \newPairParser=\trkv@pairparser@def
 % \let \newPairsParser=\trkv@pairsparser@def
 % \let \newEpairParser=\trkv@epairparser@def
@@ -38,8 +43,11 @@
 % \let \newSingleParser=\trkv@singpairparser@def
 % \let \newMultParser=\trkv@mulpairparser@def
 
-\let \newPairParser=\trkv@pairparser@new
-\let \newPairsParser=\trkv@pairparser@new
+\newcommand \newPairParser{\trkv@expandfalse\trkv@pairparser@new}
+\let \newPairsParser=\newPairParser
+\def \newEpairParser{\trkv@expandtrue\trkv@pairparser@new}
+%need an extra bit of work
+
 
 %% just an example
 \newPairParser{\getKey}{\k}
