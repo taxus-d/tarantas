@@ -15,9 +15,9 @@
 
 \newcommand\plholdev[1]{\texttt{<+{#1}+>}} 
 \newcommand\intrng{\mathbin{..}} 
-\newcommand\that{\ensuremath\:::\:}
+\newcommand\holds{\ensuremath\:::\:}
+\newcommand\that{\ensuremath :\:}
 \newcommand\gprov{(!) } % докажем, что
-\let\holds\that
 \newcommand\convex{\ensuremath\mathop{\underline\cup}}
 \newcommand\concave{\ensuremath\mathop{\overline\cap}}
 
