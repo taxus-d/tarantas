@@ -72,6 +72,17 @@
 % fixes a small inconvinience
 \edef\bigcup{\bigcup\limits}
 \edef\bigcap{\bigcap\limits}
+\def\*{\discretionary{\thinspace \the \textfont 2\char 2}{}{0}} %small space is better than none
+% a weird hack, use carefully
+% for unknown reasons tex cannot handle empty non-break text in math discretionary
+\def\*{%
+{}$% end math mode
+\discretionary%
+{\hbox{$\thinspace \the \textfont 2\char 2$}}%
+{\hbox{$\the \textfont 2\char 2 \thinspace$}}%
+{\hbox{$\thinspace$}}%
+${}%continue math mode
+}
 
 % \v command to rule vectors and \v* for linear forms
 \let\old@v=\v
@@ -81,6 +92,7 @@
 \def\v@vec#1{\boldsymbol{#1}}
 \def\v@lin#1{\mathrm{#1}}
 
+\def \abs#1{\ensuremath\left\lvert#1\right\rvert}
 % symbolic operators
 
 %% patched arrows
@@ -106,6 +118,29 @@
 }
 \let \derfrac=\gen@der@fr
 \input{trmcalc.def}
+
+% something about manifolds
+\newcommand{\tangentspace}{\ensuremath%
+\@ifstar \trm@cotansp \trm@tansp}
+\newcommand{\tangentbundle}{\ensuremath%
+\@ifstar \trm@cotanbund \trm@tanbund}
+% #1 -- star (or whaterver your like), 
+% #2 -- manifold, #3 -- point
+\def \trm@gentang#1#2#3{%
+  \ifstrempty{#3}{%
+\mathrm{T}^{#1}\mkern -2mu{#2}%
+  }{%
+\mathrm{T}^{#1}_{#3}\mkern -0mu{#2}}}
+%
+
+\newcommand{\trm@tansp}[2]{\trm@gentang{}{#1}{#2}}
+\newcommand{\trm@cotansp}[2]{\trm@gentang{*}{#1}{#2}}
+\newcommand{\trm@tanbund}[1]{\trm@gentang{}{#1}{}}
+\newcommand{\trm@cotanbund}[1]{\trm@gentang{*}{#1}{}}
+
+\let \tansp = \tangentspace
+\let \tanbnd = \tangentbundle 
+
 
 % probability theory
 \input{trmstat.def}
