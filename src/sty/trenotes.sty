@@ -175,5 +175,5 @@
 \enotelinkstrue
 % and patches by taxus, finally
 \AtEndDocument{
-  \ifnumcomp{\value{endnote}}{>}{0}{\theendnotes}{}
+  \ifnumcomp{\value{endnote}}{>}{0}{\newpage\vfill\theendnotes}{}
 }
