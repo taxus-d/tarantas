@@ -2,5 +2,6 @@
   2017/08/03 Collection of logic-related symbols]
 
 % `arrows'
-\let \iff=\Leftrightarrow
+\def \iff{\ensuremath{\;\Leftrightarrow\;}}
+\def \so{\ensuremath{\;\Rightarrow\;}}
 % vim:ft=tex

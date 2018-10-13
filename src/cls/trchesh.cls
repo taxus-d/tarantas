@@ -103,9 +103,13 @@ balanced=multicols, unbalanced=multicols*}
 \everymath{\displaystyle}
 \pagenumbering{gobble}
 
+\iftoggle{exam}{
+  \counterwithout*{paragraph}{section}
+  \renewcommand{\theparagraph}{№\thinspace\arabic{paragraph}}
+}{}
 
 \edef \trt@exphandler{
-\noexpand\AtBeginDocument{\noexpand\begin{\@trch@mulcolenv@name}{\trch@columnsquantity}}
+\noexpand\AtBeginDocument{\noexpand\begin{\@trch@mulcolenv@name}{\trch@columnsquantity}\noexpand \raggedright}
 \noexpand\AtEndDocument{\noexpand\end{\@trch@mulcolenv@name}}
 }\trt@exphandler
 \endinput

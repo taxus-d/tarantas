@@ -1,5 +1,6 @@
 \dictdef{ebook readers screen size}{
-  pbtouch2 = {paperwidth=90mm, paperheight=115mm}
+  pbtouch2 = {paperwidth=90mm, paperheight=115mm},
+  test = {paperwidth=10cm, paperheight=12cm}
 }
 
 % vim:ft=tex

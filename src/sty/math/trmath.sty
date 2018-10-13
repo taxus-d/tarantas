@@ -9,6 +9,7 @@
 }
 \ProcOpts
 
+% \RequirePackage{accents}  % extra syms above another syms
 % leaking abstractions, here they come
 % crutchy fix for amsmath error
 %-----%<-------
@@ -22,7 +23,6 @@
 \RequirePackage{esint} %AAA overrides my limits setup :(
 \RequirePackage{bbm}      %} more math fonts
 \RequirePackage{mathrsfs} %}
-\RequirePackage{accents}  % extra syms above another syms
 \RequirePackage{nicefrac}
 
 % \RequirePackage{trthm}
@@ -65,9 +65,9 @@
 \def\dsum{\displaystyle\sum}
 
 % make dots a bit more visible
-\renewcommand*{\dot}[1]{\accentset{\mbox{\bfseries .}}{#1}}
-\renewcommand*{\ddot}[1]{\accentset{\mbox{\bfseries .\hspace{-0.1ex}.}}{#1}}
-\renewcommand*{\dddot}[1]{\accentset{\mbox{\bfseries .\hspace{-0.1ex}.\hspace{-0.1ex}.}}{#1}}
+% \renewcommand*{\dot}[1]{\accentset{\mbox{\bfseries .}}{#1}}
+% \renewcommand*{\ddot}[1]{\accentset{\mbox{\bfseries .\hspace{-0.1ex}.}}{#1}}
+% \renewcommand*{\dddot}[1]{\accentset{\mbox{\bfseries .\hspace{-0.1ex}.\hspace{-0.1ex}.}}{#1}}
 
 % fixes a small inconvinience
 \edef\bigcup{\bigcup\limits}

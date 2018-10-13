@@ -10,9 +10,11 @@
 \ProcessOptions*\relax
 
 \RequirePackage{etoolbox}
+\RequirePackage{iftex}
 
 % `code'
 \input{trtools.code.tex}
+
 
 % `api'
 \def\smuggle#1{\trt@macro@smuggle{#1}\as {#1}\drop }

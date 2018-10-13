@@ -20,4 +20,6 @@
 \DeclareMathOperator\End{End}
 \DeclareMathOperator\Hom{Hom}
 \DeclareMathOperator\Ker{Ker}
+
+\DeclareMathOperator\sign{sgn}
 % vim:ft=tex

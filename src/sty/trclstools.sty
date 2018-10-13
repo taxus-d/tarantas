@@ -11,11 +11,43 @@
 }
 \ProcessOptions*\relax
 
+% setting compiler variables
+\newbool{trcl@compiler@isunicode}
+\def \@trcl@compiler@name{tex}
+
+\ifboolexpr{bool{XeTeX} or bool{LuaTeX}}%
+  {\booltrue{trcl@compiler@isunicode}}%
+  {\boolfalse{trcl@compiler@isunicode}}
+%
+
+
+\ifLuaTeX
+  \def \@trcl@compiler@name{luatex}
+\else 
+  \ifXeTeX
+  \def \@trcl@compiler@name{xetex}
+  \else 
+    \ifPDFTeX
+    \def \@trcl@compiler@name{pdftex}
+    \fi
+  \fi
+\fi
+
 \listdef \@trcl@packpack{}
+\def \@trcl@suffix{ppk}
+
+%! {<tl>/compiler-name/} {<tl>/package name/} 
+% reversing to expand properly
+\def \trcl@pack@typeload#1#2{
+  \IfFileExists{#2-#1.\@trcl@suffix}%
+    {\input{#2-#1.\@trcl@suffix}}%
+    {\input{#2.\@trcl@suffix}}
+}
 \newcommand*{\usepackagepack}[1]{%
   \ifinlist\@trcl@packpack{#1}{}
-    {\input{#1.ppk}\listadd \@trcl@packpack{#1}}
-}
+    {\ex@f\trcl@pack@typeload\ex@f{\@trcl@compiler@name}{#1}%
+     \listadd \@trcl@packpack{#1}}}
+
 \let \RequirePackagePack=\usepackagepack
 \@onlypreamble \usepackagepack
 
@@ -37,6 +69,8 @@
   }
 }
  
+
+\newcommand*{\addcompatiblelayout}[1]{\listadd{\@complyt}{#1}}
 
 \endinput
 % vim:nofoldenable

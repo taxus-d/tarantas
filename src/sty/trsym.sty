@@ -23,6 +23,10 @@
 \iftoggle{draft}
   {\providecommand\texorpdfstring[2]{#1}}
   {}
+% \ifLuaTeX
+%   \let \texorpdfstring \relax
+%   \newcommand{\texorpdfstring}[2]{#1}
+% \fi
 
 \newcommand{\createSubstSym}[3]{%
   \newcommand{#1}{\texorpdfstring{#2}{#3}}% texorpdfstring is defined correctly

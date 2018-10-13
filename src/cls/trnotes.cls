@@ -15,12 +15,6 @@
 \RequirePackage{trly}
 \RequirePackage{trclstools}
 
-%%% =================
-%%% language packages
-%%% =================
-
-\RequirePackagePack{trulang}
-
 %%% ===========
 %%%  Variables
 %%% ===========
@@ -45,6 +39,15 @@
 
 \LoadCls{\@baseclass}
 
+%%% =================
+%%% language packages
+%%% =================
+
+\RequirePackagePack{trulang}
+
+%%% =================
+%%% fancy text blocks
+%%% =================
 \RequirePackage{verbatim}
 \RequirePackage{epigraph}
 

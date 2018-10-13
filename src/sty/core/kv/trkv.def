@@ -1,7 +1,5 @@
-\ProvidesFile{trkv.def}[2017/07/10
-  Key=Val parser defaults for `tarantas' bundle]
-
-\setPairSep{=}
-\setKvListSep{,}
-
+\newcommand \newPairParser{\trkv@expandfalse\trkv@pairparser@new}
+\let \newPairsParser=\newPairParser
+\def \newEpairParser{\trkv@expandtrue\trkv@pairparser@new}
+%need an extra bit of work
 % vim:ft=tex
