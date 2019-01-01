@@ -73,6 +73,7 @@
 
 % we do not need to redefine chapters a lot
 \let \enotesectiontype=\chapter
+
 \renewcommand{\theparagraph}{\S\thinspace\arabic{paragraph}}
 \def\@seccntformat#1{%
   \unexpanded{\csuse{#1labelformat}}
@@ -83,7 +84,6 @@
 }
 \newcommand{\paragraphheadsep}{1.4ex}
 \newcommand{\paragraphlabelformat}{\Large}
-\counterwithin*{paragraph}{chapter}
 \renewcommand{\paragraph}{
   \@startsection{paragraph}{2}{\z@}%
   {3.25ex \@plus1ex \@minus.2ex}%
@@ -96,7 +96,7 @@
 %   \edef\@trr@cursect@name{\ex@f\@gobble\detokenize{#1}}
 %   \renewcommand{#1}{
 %   \@startsection{}{2}{\z@}%
-%   {3.25ex \@plus1ex \@minus.2ex}%
+%   {3.25e \@plus1ex \@minus.2ex}%
 %   {3ex}%
 %   {\normalfont\large\bfseries}
 %   }

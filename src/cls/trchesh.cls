@@ -16,18 +16,13 @@
 \RequirePackage{trclstools}
 \RequirePackage{trkvdict}
 
-%%% =================
-%%% language packages
-%%% =================
-
-\RequirePackagePack{trulang}
 
 %%% ===========
 %%%  Variables
 %%% ===========
 
 \def\@baseclass{article}
-\listdef \@complyt{hardcopy} % compatible layouts
+\listdef \@complyt{hardcopy,ebook} % compatible layouts
 \dictdef \@multicolmodes{
 *=multicols*, =multicols, 
 balanced=multicols, unbalanced=multicols*}
@@ -51,6 +46,11 @@ balanced=multicols, unbalanced=multicols*}
 \ProcOpts
 
 \LoadCls{\@baseclass}
+
+%%% =================
+%%% language packages
+%%% =================
+\RequirePackagePack{trulang}
 
 \RequirePackage{verbatim}
 \RequirePackage{epigraph}
@@ -108,9 +108,15 @@ balanced=multicols, unbalanced=multicols*}
   \renewcommand{\theparagraph}{№\thinspace\arabic{paragraph}}
 }{}
 
-\edef \trt@exphandler{
-\noexpand\AtBeginDocument{\noexpand\begin{\@trch@mulcolenv@name}{\trch@columnsquantity}\noexpand \raggedright}
-\noexpand\AtEndDocument{\noexpand\end{\@trch@mulcolenv@name}}
-}\trt@exphandler
+% \edef \trt@exphandler{
+%   \noexpand\AtBeginDocument{\noexpand\begin{\@trch@mulcolenv@name}{\trch@columnsquantity}\noexpand \raggedright}
+%   \noexpand\AtEndDocument{\noexpand\end{\@trch@mulcolenv@name}}
+% }\trt@exphandler
+
+\AtBeginDocument{\begin{\@trch@mulcolenv@name}{\trch@columnsquantity}\raggedright}
+\AtEndDocument{\end{\@trch@mulcolenv@name}}
+
+
+
 \endinput
 % vim: nofoldenable

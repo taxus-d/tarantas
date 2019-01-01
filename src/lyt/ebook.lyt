@@ -24,6 +24,8 @@
 \estorePairs{\ebooksize}
 
 \geometry{
+  reset,
+  landscape,
   paperwidth=\getByKey{paperwidth},
   paperheight=\getByKey{paperheight},
   top=0.3cm,
@@ -35,5 +37,8 @@
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{1ex plus 0.6ex minus 0.4ex}
 
+\newenvironment{trt@id}{}{}
+\def\trch@columnsquantity{\relax}
+\def\@trch@mulcolenv@name{trt@id}
 \endinput
 % vim: ft=tex

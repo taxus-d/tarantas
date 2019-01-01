@@ -223,4 +223,33 @@
   \csundef{trt@case@default}%
 }
 
+% setting compiler variables
+\newbool{trt@compiler@isunicode}
+\def \@trt@compiler@name{tex}
+
+\ifboolexpr{bool{XeTeX} or bool{LuaTeX}}%
+  {\booltrue{trt@compiler@isunicode}}%
+  {\boolfalse{trt@compiler@isunicode}}
+%
+
+
+\ifLuaTeX
+  \def \@trt@compiler@name{luatex}
+\else 
+  \ifXeTeX
+  \def \@trt@compiler@name{xetex}
+  \else 
+    \ifPDFTeX
+    \def \@trt@compiler@name{pdftex}
+    \fi
+  \fi
+\fi
+
+%! {<tl>/name/} {/suffix/}
+% reversing to expand properly
+\edef \trt@file@compilerawareload#1#2{
+  \noexpand\IfFileExists{#1-\@trt@compiler@name.#2}%
+    {\noexpand\input{#1-\@trt@compiler@name.#2}}%
+    {\noexpand\input{#1.#2}}
+}
 % vim:ft=plaintex
