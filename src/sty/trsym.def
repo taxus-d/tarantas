@@ -21,6 +21,8 @@
 \newcommand\convex{\ensuremath\mathop{\underline\cup}}
 \newcommand\concave{\ensuremath\mathop{\overline\cap}}
 
+\newcommand*{\solmass}{{\ensuremath \mathfrak{M}_\astrosun}}
+
 % (=>) but better
 \newcommand{\circlearound}[1]{%
   \trsym@boxes@center{#1}{\ensuremath \bigcirc}%

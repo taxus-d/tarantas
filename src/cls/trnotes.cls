@@ -52,7 +52,8 @@
 \RequirePackage{epigraph}
 
 \RequirePackagePack{trtables}
-\RequirePackage[shortlabels]{enumitem}
+\RequirePackage{enumerate}
+\RequirePackage[shortlabels,inline]{enumitem}
 \RequirePackagePack{trgraphics}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
