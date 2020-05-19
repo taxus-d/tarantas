@@ -22,7 +22,6 @@
 
 
 \counterwithin*{rem}{thrm}
-\counterwithin*{equation}{paragraph}
 
 \listdef\@allstatements{thrm,lem,stat,prop,imp,cor,defn,exmp,rem}
 \listdef\@independentstatements{thrm,defn,exmp}
